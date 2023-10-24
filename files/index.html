@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Showroom</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="split.css">
+    <link rel="stylesheet" type="text/css" href="tabs.css">
+  </head>
+  <body>
+    <div class="content">
+      <div class="split left">
+        {{- if .Values.content.url }}
+        <iframe id="doc"  src="{{ .Values.content.url }}" width="100%" style="border:none;"></iframe>
+        {{- else }}
+        <!-- make this the content service -->
+        <iframe id="doc"  src="{{ include "showroom.route"  (list "content" .Values) }}" width="100%" style="border:none;"></iframe>
+        {{- end }}
+      </div>
+      <div class="split right">
+        <div class="tab">
+          <button class="tablinks" onclick="openTerminal(event, 'terminal_tab')" id="defaultOpen" tabindex="0">Terminal</button>
+          {{- if .Values.codeserver }}
+          <button class="tablinks" onclick="openTerminal(event, 'codeserver_tab')">VS Code</button>
+          {{- end }}
+          {{- range .Values.services }}
+          <button class="tablinks" onclick="openTerminal(event, 'svc_{{ .name }}_tab')">{{ .name }}</button>
+          {{- end }}
+        </div>
+        <div id="terminal_tab" class="tabcontent">
+          <iframe id="terminal_01" src="{{ include "showroom.route"  (list "terminal" .Values) }}" width="100%" style="border:none;"></iframe>
+        </div>
+        {{- if .Values.codeserver }}
+        <div id="codeserver_tab" class="tabcontent">
+          <iframe id="codeserver" src="{{ include "showroom.route"  (list "codeserver" .Values) }}" width="100%" style="border:none;"></iframe>
+        </div>
+        {{- end }}
+        {{- range .Values.services }}
+        <div id="svc_{{ .name }}_tab" class="tabcontent">
+          <iframe id="svc_{{ .name }}" src="{{ .url }}" height="100%" width="100%" style="border:none;"></iframe>
+        </div>
+        {{- end }}
+      </div>
+    </div>
+    <script>
+      document.getElementById("defaultOpen").click();
+      function openTerminal(evt, cityName) {
+        // Declare all variables
+        var i, tabcontent, tablinks;
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+        }
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += "active";
+      }
+    </script>
+    <script src="https://unpkg.com/split.js/dist/split.min.js"></script>
+    <script>
+      Split(['.left', '.right'], {
+        sizes: [45,55],
+      });
+    </script>
+  </body>
+</html>

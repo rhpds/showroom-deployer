@@ -1,0 +1,92 @@
+apiVersion: v1
+data:
+  nginx.conf: |
+    #daemon off;
+    events {
+    }
+    error_log /dev/stdout info;
+    http {
+      proxy_cache off;
+      expires -1;
+      proxy_cache_path /dev/null keys_zone=mycache:10m;
+
+      map $http_upgrade $connection_upgrade {
+          default upgrade;
+          '' close;
+      }
+
+
+      server {
+          listen 8080;
+
+          absolute_redirect off;
+
+          location /ocp {
+
+            # not working, don't know why
+            # keeps looking for assets on / of the nginx
+
+            proxy_pass https://console.openshift-console:443;
+            rewrite ^/ocp/(.*)$ /$1  break;
+
+            expires off;
+            proxy_cache off;
+            proxy_pass_request_headers on;
+            proxy_set_header Accept-Encoding "gzip";
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+          }
+
+
+          location /content/ {
+
+            proxy_pass http://showroom-content:8000;
+            rewrite ^/content/(.*)$ /$1  break;
+
+            expires off;
+            proxy_cache off;
+            proxy_pass_request_headers on;
+            proxy_set_header Accept-Encoding "gzip";
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+          }
+
+
+          location /terminal/ws {
+            # terminal's websocket
+            proxy_pass http://terminal:8080;
+            rewrite /terminal/ws /ws  break;
+
+            expires off;
+            proxy_cache off;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "Upgrade";
+          }
+
+          location /terminal/ {
+            # terminal's HTML
+            proxy_pass http://terminal:8080;
+            rewrite /terminal/(.*) /$1  break;
+
+            expires off;
+            proxy_cache off;
+            proxy_set_header Accept-Encoding "gzip";
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+          }
+
+          location /{
+            expires off;
+            proxy_cache off;
+            proxy_pass http://showroom:8080;
+          }
+
+      }
+    }
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: showroom-proxy
+    # namespace: {{- template "namespace.name" . }}
+  namespace: {{- template "namespace.name" . }}

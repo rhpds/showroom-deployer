@@ -1,0 +1,84 @@
+# Default values for showroom.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+general:
+  guid: nnnn
+  namespace: showroom
+  catalogItem: test
+
+deployer:
+  domain: cluster-krmfl.krmfl.sandbox1221.opentlc.com
+
+proxy:
+  image: quay.io/rhpds/showroom-nginx:latest
+
+home:
+  image: registry.redhat.io/ubi8/httpd-24:latest
+  contentMount: /var/www/html/
+  contentConfig: showroom-html
+  resources:
+    limits:
+      memory: 64Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+
+#
+# Use this to reference an external url for the documentation.
+#
+# documentation:
+#   url: https://my-documentation.external.com
+
+#
+# Ignored if using {"documentation":{"url":"..."}}
+#
+content:
+  repoUrl: https://github.com/rhpds/aro-ilt.git
+  repoRevision: main
+  userdataName: showroom-userdata
+  antora:
+    image: quay.io/rhpds/showroom-content:latest
+    # image: docker.io/antora/antora:latest
+  resources:
+    limits:
+      memory: 64Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+  user_data: |
+    bastion_password: from_helm
+
+#
+# Remove it to hide.
+#
+terminal:
+  image: quay.io/rhpds/showroom-terminal
+  name: terminal
+  serviceAccount: showroom-terminal
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+
+# Remove it to hide.
+#
+# codeserver:
+#   image: docker.io/codercom/code-server:latest
+#   resources:
+#     limits:
+#       memory: 512Mi
+#     requests:
+#       cpu: 500m
+#       memory: 512Mi
+
+#
+# Services to be shown as tabs on the right panel.
+#
+services:
+  - name: codeserver
+    url: https://codeserver-codeserver.apps.cluster-guid.sandbox.opentlc.com
+  # - name: myservice
+  #   url: http://myservice.com/hello2

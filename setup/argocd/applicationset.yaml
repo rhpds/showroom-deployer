@@ -1,0 +1,39 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: showroom
+  namespace: openshift-gitops
+spec:
+  generators:
+  - list:
+      elements:
+      - user: user1
+      - user: user2
+      - user: user3
+      - user: user4
+      - user: user5
+  template:
+    metadata:
+      name: showroom-{{user}}
+      namespace: openshift-gitops
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/newgoliath/showroom
+        targetRevision: main
+        path: helm
+        helm:
+          values: |
+            namespace: showroom-{{user}}
+            deployer:
+              domain: apps.cluster-guid.sandbox.opentlc.com
+            documentation:
+              repoUrl: https://github.com/tonykay/showroom-poc-2023-06.git
+            terminal:
+              serviceAccount: showroom-{{user}}
+      destination:
+        namespace: showroom-{{user}}
+        server: https://kubernetes.default.svc
+      syncPolicy:
+        automated: {}

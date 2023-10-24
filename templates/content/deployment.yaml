@@ -1,0 +1,49 @@
+{{- if not .Values.content.url }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: showroom-content
+  namespace: {{- template "namespace.name" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: showroom-content
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: showroom-content
+    spec:
+      containers:
+      - name: showroom-content
+        image: quay.io/rhpds/showroom-content:latest
+        imagePullPolicy: Always
+        env:
+          - name: GIT_REPO_URL
+            value: "https://github.com/rhpds/aro-ilt.git"
+          - name: ANTORA_PLAYBOOK
+            value: "site.yml"
+        volumeMounts:
+          - name: user-data
+            mountPath: /user_data/
+          - name: showroom
+            mountPath: /showroom/
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+      volumes:
+      - name: showroom
+        emptyDir: {}
+      - name: user-data
+        configMap:
+          name: {{ .Values.content.userdataName }}
+{{- end }}

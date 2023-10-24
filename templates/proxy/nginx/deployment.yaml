@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: showroom-proxy
+  namespace: {{- template "namespace.name" . }}
+  labels:
+    app.kubernetes.io/name: showroom-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: showroom-proxy
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: showroom-proxy
+    spec:
+      containers:
+      - name: nginx
+        image: quay.io/rhpds/showroom-nginx:latest
+        imagePullPolicy: Always
+        args:
+          - nginx
+          - -c
+          - '/showroom/nginx.conf'
+          - -g
+          - 'daemon off;'
+        volumeMounts:
+          - name: nginx-config
+            mountPath: /showroom
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        ports:
+        - name: web
+          containerPort: 8080
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: showroom-proxy
+              #      securityContext:
+              #        allowPrivilegeEscalation: true
+              #        capabilities:
+              #          drop: ["ALL"]
+              #        securityContext:
+              #          runAsNonRoot: false
+              #        seccompProfile:
+              #          type: RuntimeDefault

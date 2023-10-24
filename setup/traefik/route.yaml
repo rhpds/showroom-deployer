@@ -1,0 +1,16 @@
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: traefik
+    # namespace: {{- template "namespace.name" . }}
+  namespace: {{- template "namespace.name" . }}
+spec:
+  to:
+    kind: Service
+    name: traefik
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+  wildcardPolicy: None

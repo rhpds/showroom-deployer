@@ -1,0 +1,25 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: showroom
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/juliaaano/showroom
+    targetRevision: main
+    path: helm
+    helm:
+      values: |
+        namespace:
+          showroom
+        deployer:
+          domain: apps.cluster-guid.sandbox.opentlc.com
+        documentation:
+          repoUrl: https://github.com/tonykay/showroom-poc-2023-06.git
+  destination:
+    namespace: showroom
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated: {}

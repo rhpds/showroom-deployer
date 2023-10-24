@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{- template "namespace.name" . }}
+  annotations:
+    openshift.io/display-name: "Showroom"
+    openshift.io/description: "Showroom namespace description."
