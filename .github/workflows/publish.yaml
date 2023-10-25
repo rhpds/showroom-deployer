@@ -38,26 +38,6 @@ jobs:
           echo "IMAGE_TAGS=latest ${VERSION%.*} ${VERSION}" >> $GITHUB_OUTPUT
         fi
 
-    - name: Buildah Action
-      id: buildah-build
-      if: steps.image_tags.outputs.IMAGE_TAGS
-      uses: redhat-actions/buildah-build@v2
-      with:
-        image: ${{ vars.IMAGE_NAME }}
-        tags: ${{ steps.image_tags.outputs.IMAGE_TAGS }}
-        containerfiles: Containerfile
-
-    - name: Push image to registry
-      id: push-to-registry
-      if: steps.image_tags.outputs.IMAGE_TAGS
-      uses: redhat-actions/push-to-registry@v2
-      with:
-        image: ${{ steps.buildah-build.outputs.image }}
-        tags: ${{ steps.buildah-build.outputs.tags }}
-        registry: ${{ vars.IMAGE_REGISTRY }}/${{ vars.IMAGE_REPOSITORY }}
-        username: ${{ secrets.IMAGE_REGISTRY_USERNAME }}
-        password: ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
-
   publish-helm-charts:
     needs: publish
     runs-on: ubuntu-latest
@@ -85,8 +65,8 @@ jobs:
       run: |
         helm dep up helm/
         helm package helm/
-        mv ${{ vars.IMAGE_NAME }}-*.tgz gh-pages
-        helm repo index --url https://rhpds.github.io/${{ vars.IMAGE_NAME }} gh-pages
+        mv showroom-*.tgz gh-pages
+        helm repo index --url https://rhpds.github.io/showroom }} gh-pages
 
     - name: Push Changes to GH Pages
       run: |
