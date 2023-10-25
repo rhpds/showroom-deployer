@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: terminal
-  namespace: {{- template "namespace.name" . }}
+  namespace: {{- template "showroom-deployer.namespace.name" . }}
 spec:
   replicas: 1
   selector:

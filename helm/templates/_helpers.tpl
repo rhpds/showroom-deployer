@@ -1,17 +1,28 @@
-{{- define "namespace.labels" }}
+{{/* vim: set filetype=mustache: */}}
+
+{{- define "showroom-deployer.namespace.labels" }}
   labels:
     catalogItem: "{{ .Values.general.catalogItem | toString | lower }}"
     guid: "{{ .Values.general.guid | toString | lower }}"
     app: "showroom"
 {{- end }}
 
-{{- define "namespace.name" }} {{ .Values.general.namespace | toString | lower }}-{{ .Values.general.guid | toString | lower }}-{{ .Values.general.catalogItem | toString | lower }}
+{{/*
+Create a namespace name from namespacename-guid-catalogItem
+*/}}
+{{- define "showroom-deployer.namespace.name" }} {{ .Values.general.namespace | toString | lower }}-{{ .Values.general.guid | toString | lower }}-{{ .Values.general.catalogItem | toString | lower }}
 {{- end }}
 
-{{- define "htmlnamespace.name" }}{{ .general.namespace | toString | lower }}-{{ .general.guid | toString | lower }}-{{ .general.catalogItem | toString | lower }}
+{{/*
+The HTML files need a differently scoped set of the same values as above
+*/}}
+{{- define "showroom-deployer.htmlnamespace.name" }}{{ .general.namespace | toString | lower }}-{{ .general.guid | toString | lower }}-{{ .general.catalogItem | toString | lower }}
 {{- end }}
 
-{{- define "showroom.route" }}
+{{/*
+Create a showroom route for the HTML page
+*/}}
+{{- define "showroom-deployer.showroom.route" }}
 {{- $service := index . 0 -}}
 {{- $values := index . 1 -}}
 {{- $tmpnamespace := include "htmlnamespace.name" $values -}}
