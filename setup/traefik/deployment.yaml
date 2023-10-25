@@ -3,8 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: traefik
-    #namespace: {{- template "namespace.name" . }}
-  namespace: {{- template "namespace.name" . }}
+    #namespace: {{- template "showroom-deployer.namespace.name" . }}
+  namespace: {{- template "showroom-deployer.namespace.name" . }}
   labels:
     app.kubernetes.io/name: traefik
 spec:

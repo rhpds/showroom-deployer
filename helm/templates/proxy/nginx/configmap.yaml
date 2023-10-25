@@ -88,5 +88,5 @@ kind: ConfigMap
 metadata:
   creationTimestamp: null
   name: showroom-proxy
-    # namespace: {{- template "namespace.name" . }}
-  namespace: {{- template "namespace.name" . }}
+    # namespace: {{- template "showroom-deployer.namespace.name" . }}
+  namespace: {{- template "showroom-deployer.namespace.name" . }}
