@@ -1,8 +1,9 @@
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: RoleBinding
 metadata:
   name: edit-{{ .Values.terminal.serviceAccount }}
+  namespace: {{- template "namespace.name" . }}
   labels:
     app.kubernetes.io/instance: {{- template "namespace.name" . }}
 roleRef:
