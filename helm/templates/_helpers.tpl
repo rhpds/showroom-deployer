@@ -14,7 +14,8 @@ Create a namespace name from namespacename-guid-catalogItem
 {{- end }}
 
 {{/*
-The HTML files need a differently scoped set of the same values as above
+The HTML files need a differently scoped set of the same values as above,
+used in the showroom-deployer.showroom.route template below.
 */}}
 {{- define "showroom-deployer.htmlnamespace.name" }}{{ .general.namespace | toString | lower }}-{{ .general.guid | toString | lower }}-{{ .general.catalogItem | toString | lower }}
 {{- end }}
