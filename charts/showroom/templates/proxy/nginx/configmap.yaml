@@ -1,3 +1,8 @@
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: showroom-proxy
+  namespace: {{ template "showroom-deployer.namespace.name" . }}
 apiVersion: v1
 data:
   nginx.conf: |
@@ -84,9 +89,3 @@ data:
 
       }
     }
-kind: ConfigMap
-metadata:
-  creationTimestamp: null
-  name: showroom-proxy
-    # namespace: {{- template "showroom-deployer.namespace.name" . }}
-  namespace: {{- template "showroom-deployer.namespace.name" . }}

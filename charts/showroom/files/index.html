@@ -13,7 +13,7 @@
         <iframe id="doc"  src="{{ .Values.content.url }}" width="100%" style="border:none;"></iframe>
         {{- else }}
         <!-- make this the content service -->
-        <iframe id="doc"  src="{{ include "showroom-deployer.showroom.route"  (list "content" .Values) }}" width="100%" style="border:none;"></iframe>
+        <iframe id="doc"  src="{{ include "showroom-deployer.showroom.route" (list "content" .Values) }}" width="100%" style="border:none;"></iframe>
         {{- end }}
       </div>
       <div class="split right">

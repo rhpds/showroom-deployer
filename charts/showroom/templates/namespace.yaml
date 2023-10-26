@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{- template "showroom-deployer.namespace.name" . }}
+  name: {{ template "showroom-deployer.namespace.name" . }}
   annotations:
     openshift.io/display-name: "Showroom Deployer"
     openshift.io/description: "Showroom namespace description."

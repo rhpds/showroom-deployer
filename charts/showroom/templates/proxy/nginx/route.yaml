@@ -2,10 +2,8 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  #name: showroom-proxy
   name: showroom-proxy
-  namespace: {{- template "showroom-deployer.namespace.name" . }}
-    #namespace: {{- template "showroom-deployer.namespace.name" . }}
+  namespace: {{ template "showroom-deployer.namespace.name" . }}
   labels:
     app.kubernetes.io/name: showroom-proxy
 spec:
