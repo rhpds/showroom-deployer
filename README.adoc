@@ -24,33 +24,57 @@ Indicate `--set namespace.create=false` in your execution of this command to avo
 Typically, user interface namespace names have been just `bookbag-GUID` or `showroom-GUID`.
 This makes management and cleanup a bit difficult.
 
-=== Build docs from source
+=== Deploy Showroom - Parameters
 
-In this scenario you have a Git repo URL with an Antora website and want OpenShift to build and deploy
-the documentation from the source code.
 
-Now you're ready to install showroom by just providing the documentation source repository:
+In this scenario you have:
 
+* a Git repo URL with an Antora website and want OpenShift to build and deploy
+* login as an OpenShift user that can create cluster resources (namespaces, etc) like cluster-admin
+* FQDN of your default OpenShift route.
+Example: apps.shared-410.openshift.redhatworkshops.io
+* Namespace
+** A Namespace name like `showroom-test`: `namespace.name=test`
++
+or
++
+** <namespace>-<guid> composed of `general.namespace=showroom` and `general.guid=test`.
+Defaults to `showroom-test`
+
+.Deploy as cluster-admin with `helm template` *RECOMMENDED*
 ```
-helm template ./charts \
---set deployer.domain=apps.cluster-guid.sandbox.opentlc.com \
+git clone https://github.com/rhpds/showroom-deployer
+cd ./showroom-deployer/charts
+
+helm template ./showroom \
+--set deployer.domain=apps.shared-410.openshift.redhatworkshops.io \
 --set general.guid=GUID \
---set general.catalogitemname=sample \
---set_file content.user_data=<path to your user-data.yaml> \
---set documentation.repoUrl=https://github.com/rhpds/showroom_template_default | oc apply -f -
+--set-file content.user_data=<path-to-user-data.yaml> \
+--set documentation.repoUrl=https://github.com/rhpds/showroom_template_default \
+| oc apply -f -
 ```
 
-=== Bring your own docs
-
-In this scenario you have the docs served externally with a public URL:
-
+.Deploy as cluster-admin with `helm install`
 ```
-helm template ./charts \
---set deployer.domain=apps.cluster-guid.sandbox.opentlc.com \
+ helm repo add rhpds https://rhpds.github.io/showroom-deployer
+```
+. Refresh them
+
+ helm repo update
+
+. Install the latest
+```
+ helm install myshowroom rhpds/showroom
+--create-namespace \
+--set deployer.domain=apps.shared-410.openshift.redhatworkshops.io \
 --set general.guid=GUID \
---set general.catalogitemname=sample
---set documentation.url=https://my-documentation.external.com | oc apply -f -
+--set-file content.user_data=<path-to-user-data.yaml> \
+--set documentation.repoUrl=https://github.com/rhpds/showroom_template_default
+
+helm install myshowroom myrhpds/showroom --set deployer.domain=apps.shared-410.openshift.redhatworkshops.io --set general.guid=test --set-file content.user_data=/Users/jmaltin/tmp/azure-user-data.yaml --debug --create-namespace --set namespace.create=false
 ```
+
+NOTE: The above creates the namespace `showroom-test` where the helm release exists, AND creates the namespace `showroom-test2` there the actual application is deployed.
 
 == ArgoCD - *Work in Progress* - BROKEN
 
