@@ -7,23 +7,22 @@ Welcome to the showroom OpenShift application.
 A basic installation will vary depending if you have a docs site running or you want to build and serve
 the documentation from the source code.
 
+=== Namespace creation
+
+. Deploying as cluster-admin (default)
+
+By default, this Helm Chart attempts to create a Namespace for showroom.
+As cluster-admin can create and manage cluster resources like Namespaces
+
+. Deploying as Service Account
+
+If you will be deploying this Helm Chart as a service account, you must create the Namespace in advance.
+Indicate `--set namespace.create=false` in your execution of this command to avoid RBAC errors.
+
 === Namespace name generation
 
 Typically, user interface namespace names have been just `bookbag-GUID` or `showroom-GUID`.
 This makes management and cleanup a bit difficult.
-
-New Pattern:
-
-`showroom-nnn-test`
-
-.The namespace is now a combination as follows:
-* namespace: (default) showroom
-* guid: (default) nnnn
-* catalogItem: (default) test
-
-And a route for the `showroom-proxy` pod:
-
-`showroom-proxy-showroom-nnnn-test.apps.shared-410.openshift.redhatworkshops.io/`
 
 === Build docs from source
 
@@ -36,8 +35,9 @@ Now you're ready to install showroom by just providing the documentation source 
 helm template ./charts \
 --set deployer.domain=apps.cluster-guid.sandbox.opentlc.com \
 --set general.guid=GUID \
---set general.catalogitemname=sample
---set documentation.repoUrl=https://github.com/tonykay/showroom-poc-2023-06 | oc apply -f -
+--set general.catalogitemname=sample \
+--set_file content.user_data=<path to your user-data.yaml> \
+--set documentation.repoUrl=https://github.com/rhpds/showroom_template_default | oc apply -f -
 ```
 
 === Bring your own docs
@@ -52,16 +52,16 @@ helm template ./charts \
 --set documentation.url=https://my-documentation.external.com | oc apply -f -
 ```
 
-== ArgoCD - Work in Progress
+== ArgoCD - *Work in Progress* - BROKEN
 
-It is possible to deploy the helm chart with ArgoCD. This repo provides an ArgoCD/Application for
-your convenience.
+It is possible to deploy the helm chart with ArgoCD.
+This repo provides an ArgoCD/Application for your convenience.
 
 ```
-oc create -f ./argocd/application.yaml
+oc create -f ./setup/argocd/application.yaml
 ```
 
-== Multi-user installation - Work in Progress
+== Multi-user installation - *Work in Progress* - BROKEN
 
 The chart can be installed multiple times in one namespace per user. You control this in helm values.yaml.
 
@@ -71,7 +71,7 @@ An easy way to setup and manage a multi-user deployment is via the ArgoCD/Applic
 oc create -f ./argocd/applicationset.yaml
 ```
 
-== Use \https://rhpds.github.io/ as Helm Repo for your git repo
+== Use \https://rhpds.github.io/ in your git repo as Helm Repo
 
 === Prereqs
 
@@ -106,9 +106,13 @@ Just like you'd use any Helm repo
 
  helm repo add myrhpds https://rhpds.github.io/showroom-deployer
 
-. Refresh thems
+. Refresh them
 
  helm repo update
+
+. Install the latest
+
+ helm install showroom <lots of parameters>
 
 == TODO
 
