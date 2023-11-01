@@ -12,10 +12,10 @@ namespace:
 general:
   guid: nnnn
   namespace: showroom
-  catalogItem: test
+  catalogItem: test  # unused at present
 
 deployer:
-  domain: cluster-krmfl.krmfl.sandbox1221.opentlc.com
+  domain: cluster-GUID.GUID.sandboxNUMBERS.opentlc.com
 
 proxy:
   image: quay.io/rhpds/showroom-nginx:latest
