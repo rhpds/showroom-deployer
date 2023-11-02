@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: showroom-content
-  namespace: {{ template "showroom-deployer.namespace.name" . }}
+  namespace: {{ .Values.namespace.name }}
 spec:
   replicas: 1
   selector:

@@ -1,6 +1,6 @@
-{{- if .Values.namespace.create -}}
+{{- if .Values.namespace_create -}}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ template "showroom-deployer.namespace.name" . }}
+  name: {{ .Values.namespace.name }}
 {{- end -}}

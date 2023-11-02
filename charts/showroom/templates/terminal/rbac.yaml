@@ -3,9 +3,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: edit-{{ .Values.terminal.serviceAccount }}
-  namespace: {{ template "showroom-deployer.namespace.name" . }}
+  namespace: {{ .Values.namespace.name }}
   labels:
-    app.kubernetes.io/instance: {{ template "showroom-deployer.namespace.name" . }}
+    app.kubernetes.io/instance: {{ .Values.namespace.name }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -13,4 +13,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: {{ .Values.terminal.serviceAccount }}
-  namespace: {{ template "showroom-deployer.namespace.name" . }}
+  namespace: {{ .Values.namespace.name }}

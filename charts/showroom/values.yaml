@@ -8,12 +8,9 @@
 
 namespace:
   create: true
-    #name: showroom
+  name: showroom
 
-general:
-  guid: nnnn
-  namespace: showroom
-  catalogItem: test  # unused at present
+guid: nnnn
 
 deployer:
   domain: cluster-GUID.GUID.sandboxNUMBERS.opentlc.com

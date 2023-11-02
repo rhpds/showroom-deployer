@@ -2,7 +2,7 @@ kind: ConfigMap
 metadata:
   creationTimestamp: null
   name: showroom-proxy
-  namespace: {{ template "showroom-deployer.namespace.name" . }}
+  namespace: {{ .Values.namespace.name }}
 apiVersion: v1
 data:
   nginx.conf: |
