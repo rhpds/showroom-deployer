@@ -33,18 +33,21 @@ cd $WORKDIR
 # you'll have to mount the user_data.yaml into /showroom
 # OpenShift will do it with a configMap
 
-USER_DATA_FILE: "/user_data/user_data.yml"
-
 echo "Original user_data in content/antora.yml"
 cat $WORKDIR/content/antora.yml
 
+if [ -z "$USER_DATA_FILE" ]; then
+  echo "USER_DATA_FILE not defined.  Falling back to USER_DATA_FILE=/user_data/user_data.yml"
+  USER_DATA_FILE: "/user_data/user_data.yml"
+fi
+
 if test -r ${USER_DATA_FILE}
 then
-  echo "NOW editing ${USER_DATA_FILE}"}
+  echo "Merging ${USER_DATA_FILE} and antora.yml"}
   yq -i '.asciidoc.attributes *= load("${USER_DATA_FILE}")' $WORKDIR/content/antora.yml
   echo "new user_data in content/antora.yml"
 else
-  echo "No ${USER_DATA_FILE} found."
+  echo "USER_DATA_FILE: ${USER_DATA_FILE} not found."
 fi
 cat $WORKDIR/content/antora.yml
 echo
