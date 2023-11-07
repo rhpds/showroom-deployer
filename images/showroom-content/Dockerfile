@@ -3,7 +3,7 @@
 FROM registry.access.redhat.com/ubi9
 
 # Copy the entrypoint script into the container
-COPY ./images/showroom-content/entrypoint.sh /entrypoint.sh
+COPY ./entrypoint.sh /entrypoint.sh
 
 # Install necessary tools
 RUN dnf install --quiet -y \

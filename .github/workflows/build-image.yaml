@@ -33,6 +33,7 @@ jobs:
         with:
           image: showroom-content
           tags: latest ${{ github.ref_name }}
+          context: images/showroom-content/
           containerfiles: |
             ./images/showroom-content/Dockerfile
           build-args: |
