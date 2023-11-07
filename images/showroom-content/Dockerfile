@@ -22,7 +22,7 @@ RUN useradd -u 1001 -ms /bin/bash antora && \
     chown -R antora:antora /antora
 
 # Copy the entrypoint script into the container
-COPY entrypoint.sh /entrypoint.sh
+COPY ./entrypoint.sh /entrypoint.sh
 
 # Make the entrypoint script executable
 RUN chmod +x /entrypoint.sh
