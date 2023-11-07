@@ -1,4 +1,5 @@
 # Use Red Hat UBI9 as the base image
+# No AuthN necessary to this docker registry
 FROM registry.access.redhat.com/ubi9
 
 # Install necessary tools
