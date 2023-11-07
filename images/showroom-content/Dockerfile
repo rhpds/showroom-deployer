@@ -9,8 +9,8 @@ RUN dnf install -y \
     wget && \
     dnf clean all
 
-RUN wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
-    chmod +x /usr/bin/yq
+RUN wget -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 \
+    -O /usr/bin/yq && chmod +x /usr/bin/yq
 
 
 RUN npm install -g gulp @antora/cli@2.3.4 @antora/site-generator-default@2.3.4
