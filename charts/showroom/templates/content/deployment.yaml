@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: showroom-content
-        image: quay.io/rhpds/showroom-content:latest
+        image: ghcr.io/rhpds/showroom-content:latest
         imagePullPolicy: Always
         env:
           - name: GIT_REPO_URL
