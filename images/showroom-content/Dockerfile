@@ -2,8 +2,11 @@
 # No AuthN necessary to this docker registry
 FROM registry.access.redhat.com/ubi9
 
+# Copy the entrypoint script into the container
+COPY ./images/showroom-content/entrypoint.sh /entrypoint.sh
+
 # Install necessary tools
-RUN dnf install -y \
+RUN dnf install --quiet -y \
     git \
     nodejs \
     wget && \
@@ -21,8 +24,6 @@ RUN useradd -u 1001 -ms /bin/bash antora && \
     mkdir -p /antora && \
     chown -R antora:antora /antora
 
-# Copy the entrypoint script into the container
-COPY ./entrypoint.sh /entrypoint.sh
 
 # Make the entrypoint script executable
 RUN chmod +x /entrypoint.sh
