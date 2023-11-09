@@ -17,23 +17,33 @@ spec:
     metadata:
       name: showroom-{{user}}
       namespace: openshift-gitops
+      finalizers:
+      - resources-finalizer.argocd.argoproj.io
     spec:
       project: default
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        automated:
+          prune: false
+          selfHeal: false
       source:
-        repoURL: https://github.com/newgoliath/showroom
+        repoURL: https://github.com/rhpds/showroom-deployer.git
         targetRevision: main
-        path: helm
+        path: charts/showroom
         helm:
           values: |
-            namespace: showroom-{{user}}
+            namespace:
+              create: false
+              name: showroom-{{user}}
             deployer:
-              domain: apps.cluster-guid.sandbox.opentlc.com
-            documentation:
-              repoUrl: https://github.com/tonykay/showroom-poc-2023-06.git
-            terminal:
-              serviceAccount: showroom-{{user}}
+              domain: apps.shared-410.openshift.redhatworkshops.io
+            general:
+              guid: 2222
+            content:
+              repoUrl: https://github.com/rhpds/aro-ilt.git
+              user_data: |
+                bastion_ssh_password: farts
       destination:
         namespace: showroom-{{user}}
         server: https://kubernetes.default.svc
-      syncPolicy:
-        automated: {}
