@@ -44,10 +44,10 @@ RUN useradd -u 1001 -ms /bin/bash lab-user && \
     mkdir -p /lab-user && \
     chown -R lab-user:lab-user /home/lab-user
 
-RUN echo 'if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then exec tmux; fi' \
-    >> /home/lab-user/.bashrc && \
-    chown lab-user:lab-user /home/lab-user/.bashrc
+#RUN echo 'if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then exec tmux; fi' \
+#    >> /home/lab-user/.bashrc && \
+#    chown lab-user:lab-user /home/lab-user/.bashrc
 
 USER 1001
 
-CMD ["ttyd", "-p 8080", "bash"]
+CMD ["ttyd", "-p 8080", "tmux"]
