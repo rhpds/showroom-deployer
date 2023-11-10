@@ -7,7 +7,7 @@ on:
     tags:
       - "v*"
     paths:
-      - "images/showroom-content/**"
+      - "images/showroom-content/"
 
 permissions:
   packages: write
