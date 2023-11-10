@@ -34,8 +34,8 @@ jobs:
           image: showroom-content
           tags: latest ${{ github.ref_name }}
           context: images/showroom-terminal/
-          containerfiles: |
-            ./images/showroom-terminal/Dockerfile
+          containerFiles: |
+            ./images/showroom-terminal/Containerfile
           build-args: |
             CREATED_AT=${{ env.datetime }}
             GITHUB_SHA=${{ github.sha }}
