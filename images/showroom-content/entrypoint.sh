@@ -6,34 +6,18 @@ if [ -z "$GIT_REPO_URL" ]; then
 fi
 
 if [ -z "$ANTORA_PLAYBOOK" ]; then
-  echo "ANTORA_PLAYBOOK not defined.  Falling back to ANTORA_PLAYBOOK=site.yml"
-  ANTORA_PLAYBOOK="site.yml"
+  echo "ANTORA_PLAYBOOK not defined.  Falling back to ANTORA_PLAYBOOK=default-site.yml"
+  ANTORA_PLAYBOOK="default-site.yml"
 fi
-# Setup working directory for cloning and rendering
 
-# WORKDIR=/home/antora/repo
+
 WORKDIR=/showroom/repo/
-#mkdir -p $WORKDIR
+test -d $WORKDIR && rm -rfv ${WORKDIR}
 
 echo
-rm -rfv ${WORKDIR}
 echo "git clone the $GIT_REPO_URL into $WORKDIR"
 git clone $GIT_REPO_URL $WORKDIR
 cd $WORKDIR
-
-
-# Extract the name of the repository to use as the working directory
-# REPO_NAME=$(basename $GIT_REPO .git)
-
-# Change working directory to cloned repository
-# cd $REPO_NAME
-#
-# Download file with wget
-# wget $URL
-
-# Merge user_data.yml into component's antora.yml
-# you'll have to mount the user_data.yaml into /showroom
-# OpenShift will do it with a configMap
 
 echo
 echo "Original user_data in content/antora.yml"
@@ -59,12 +43,12 @@ fi
 cat $WORKDIR/content/antora.yml
 echo
 
+WWW_ROOT=/showroom/www/
+test -d $WWW_ROOT || mkdir $WWW_ROOT
+
 # Run antora command (adjust the playbook file as needed)
 echo
-echo "Run antora site.yml"
-WWW_ROOT=/showroom/www/
-
-test -d $WWW_ROOT || mkdir $WWW_ROOT
+echo "Run antora $ANTORA_PLAYBOOK"
 
 antora --to-dir=$WWW_ROOT $ANTORA_PLAYBOOK
 
