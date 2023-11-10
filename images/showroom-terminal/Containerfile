@@ -25,7 +25,10 @@ RUN curl -L https://github.com/tsl0922/ttyd/releases/download/1.7.3/ttyd.x86_64 
     chmod +x /tmp/ttyd.x86_64 && \
     mv /tmp/ttyd.x86_64 /usr/bin/ttyd
 
-RUN dnf -y install unzip
+RUN dnf -y install unzip ncurses git
+
+RUN rpm -ivh http://galaxy4.net/repo/RHEL/9/x86_64/tmux-3.3a-1.el9.x86_64.rpm
+
 
 RUN curl -s -L "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
     -o "awscliv2.zip" && \
@@ -35,6 +38,15 @@ RUN curl -s -L "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
 RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && \
     chmod 700 get_helm.sh && \
     ./get_helm.sh
+
+
+RUN useradd -u 1001 -ms /bin/bash lab-user && \
+    mkdir -p /lab-user && \
+    chown -R lab-user:lab-user /home/lab-user
+
+RUN echo 'if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then exec tmux; fi' \
+    >> /home/lab-user/.bashrc && \
+    chown lab-user:lab-user /home/lab-user/.bashrc
 
 USER 1001
 
