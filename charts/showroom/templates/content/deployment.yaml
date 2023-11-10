@@ -17,13 +17,13 @@ spec:
     spec:
       containers:
       - name: showroom-content
-        image: ghcr.io/rhpds/showroom-content:latest
+        image: {{ .Values.content.image }}
         imagePullPolicy: Always
         env:
           - name: GIT_REPO_URL
-            value: "https://github.com/rhpds/aro-ilt.git"
+            value: {{ .Values.content.repoUrl }}
           - name: ANTORA_PLAYBOOK
-            value: "site.yml"
+            value: {{ .Values.content.antoraPlaybook }}
         volumeMounts:
           - name: user-data
             mountPath: /user_data/

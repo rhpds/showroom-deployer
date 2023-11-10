@@ -39,7 +39,9 @@ home:
 # Ignored if using {"documentation":{"url":"..."}}
 #
 content:
+  image: ghcr.io/rhpds/showroom-content:latest
   repoUrl: https://github.com/rhpds/aro-ilt.git
+  antoraPlaybook: site.yml
   repoRevision: main
   userdataName: showroom-userdata
   antora:
@@ -58,7 +60,7 @@ content:
 # Remove it to hide.
 #
 terminal:
-  image: quay.io/rhpds/showroom-terminal
+  image: ghcr.io/rhpds/showroom-terminal:latest
   name: terminal
   serviceAccount: showroom-terminal
   resources:
