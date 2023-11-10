@@ -40,7 +40,7 @@ home:
 #
 content:
   image: ghcr.io/rhpds/showroom-content:latest
-  repoUrl: https://github.com/rhpds/aro-ilt.git
+  repoUrl: https://github.com/rhpds/showroom_default_template.git
   antoraPlaybook: site.yml
   repoRevision: main
   userdataName: showroom-userdata
