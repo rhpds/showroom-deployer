@@ -16,7 +16,7 @@ RUN wget -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_am
     -O /usr/bin/yq && chmod +x /usr/bin/yq
 
 
-RUN npm install -g gulp @antora/cli@2.3.4 @antora/site-generator-default@2.3.4
+RUN npm install --quiet -g gulp @antora/cli@2.3.4 @antora/site-generator-default@2.3.4
 
 # Create a user named 'antora'
 # RUN useradd -ms /bin/bash antora
