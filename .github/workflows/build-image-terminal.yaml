@@ -8,7 +8,7 @@ on:
     tags:
       - "v*"
     paths:
-      - "images/showroom-terminal/"
+      - "images/showroom-terminal/**"
 
 permissions:
   packages: write
