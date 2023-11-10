@@ -41,8 +41,8 @@ home:
 content:
   image: ghcr.io/rhpds/showroom-content:latest
   repoUrl: https://github.com/rhpds/showroom_default_template.git
+  repoRef: main
   antoraPlaybook: default-site.yml
-  repoRevision: main
   userdataName: showroom-userdata
   antora:
     image: quay.io/rhpds/showroom-content:latest

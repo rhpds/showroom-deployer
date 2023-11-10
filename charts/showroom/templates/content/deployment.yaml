@@ -22,6 +22,8 @@ spec:
         env:
           - name: GIT_REPO_URL
             value: {{ .Values.content.repoUrl }}
+          - name: GIT_REPO_REF
+            value: {{ .Values.content.repoRef }}
           - name: ANTORA_PLAYBOOK
             value: {{ .Values.content.antoraPlaybook }}
         volumeMounts:
