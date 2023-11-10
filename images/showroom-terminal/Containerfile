@@ -8,12 +8,12 @@ LABEL org.opencontainers.image.revision="$GITHUB_SHA"
 
 LABEL org.opencontainers.image.title="Showroom Terminal"
 LABEL org.opencontainers.image.description="Web terminal access from the browser."
-LABEL org.opencontainers.image.url="https://github.com/juliaaano/showroom"
-LABEL org.opencontainers.image.source="git@github.com:juliaaano/showroom"
-LABEL org.opencontainers.image.documentation="https://github.com/juliaaano/showroom"
-LABEL org.opencontainers.image.authors="juliaaano"
-LABEL org.opencontainers.image.vendor="juliaaano"
-LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.url="https://github.com/rhpds/showroom-deployer"
+LABEL org.opencontainers.image.source="git@github.com:rhpds/showroom-deployer"
+LABEL org.opencontainers.image.documentation="https://github.com/rhpds/showroom-deployer"
+LABEL org.opencontainers.image.authors="rhpds"
+LABEL org.opencontainers.image.vendor="rhpds"
+LABEL org.opencontainers.image.licenses="GPL3+"
 LABEL org.opencontainers.image.version="1.0.0"
 
 RUN curl -L https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz \
