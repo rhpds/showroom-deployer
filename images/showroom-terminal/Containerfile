@@ -25,10 +25,9 @@ RUN curl -L https://github.com/tsl0922/ttyd/releases/download/1.7.3/ttyd.x86_64 
     chmod +x /tmp/ttyd.x86_64 && \
     mv /tmp/ttyd.x86_64 /usr/bin/ttyd
 
-RUN dnf -y install unzip ncurses git
+RUN dnf --quiet -y install unzip ncurses git
 
-RUN rpm -ivh http://galaxy4.net/repo/RHEL/9/x86_64/tmux-3.3a-1.el9.x86_64.rpm
-
+RUN rpm --quiet -ih http://galaxy4.net/repo/RHEL/9/x86_64/tmux-3.3a-1.el9.x86_64.rpm
 
 RUN curl -s -L "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
     -o "awscliv2.zip" && \
