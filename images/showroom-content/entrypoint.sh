@@ -12,12 +12,13 @@ fi
 # Setup working directory for cloning and rendering
 
 # WORKDIR=/home/antora/repo
-WORKDIR=/showroom/repo
+WORKDIR=/showroom/repo/
 #mkdir -p $WORKDIR
 
 echo
+rm -rfv ${WORKDIR}
 echo "git clone the $GIT_REPO_URL into $WORKDIR"
-git clone $GIT_REPO_URL $WORKDIR || cd $WORKDIR && git pull
+git clone $GIT_REPO_URL $WORKDIR
 cd $WORKDIR
 
 
