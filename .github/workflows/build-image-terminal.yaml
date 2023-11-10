@@ -32,7 +32,7 @@ jobs:
         id: build-image
         uses: redhat-actions/buildah-build@v2
         with:
-          image: showroom-content
+          image: showroom-terminal
           tags: latest ${{ github.ref_name }}
           context: images/showroom-terminal/
           containerFiles: |
