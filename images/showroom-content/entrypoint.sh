@@ -46,9 +46,15 @@ echo
 WWW_ROOT=/showroom/www/
 test -d $WWW_ROOT || mkdir $WWW_ROOT
 
+echo
+echo "Antora version"
+antora --version
+
 # Run antora command (adjust the playbook file as needed)
 echo
 echo "Run antora $ANTORA_PLAYBOOK"
+
+
 
 antora --to-dir=$WWW_ROOT $ANTORA_PLAYBOOK
 
