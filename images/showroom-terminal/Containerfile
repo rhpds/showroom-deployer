@@ -38,15 +38,8 @@ RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/s
     chmod 700 get_helm.sh && \
     ./get_helm.sh
 
-
-RUN useradd -u 1001 -ms /bin/bash lab-user && \
-    mkdir -p /lab-user && \
-    chown -R lab-user:lab-user /home/lab-user
-
 #RUN echo 'if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then exec tmux; fi' \
 #    >> /home/lab-user/.bashrc && \
 #    chown lab-user:lab-user /home/lab-user/.bashrc
 
-USER 1001
-
-CMD ["ttyd", "-p 8080", "tmux"]
+CMD ["ttyd", "-p 8080", "ssh shared-410-bastion.openshift.redhatworkshops.io"]
