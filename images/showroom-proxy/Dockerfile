@@ -1,5 +1,6 @@
 # Use Red Hat Universal Base Image (UBI) 9 with the ubi9/nginx-122 image as the base image
-FROM registry.access.redhat.com/ubi9/nginx-122
+#FROM registry.access.redhat.com/ubi9/nginx-122
+FROM nginx:1.24
 
 # Copy Nginx configuration
 # Commented out: we now get our nginx config from configMap
