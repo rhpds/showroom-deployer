@@ -13,6 +13,6 @@ ENV NGINX_DEFAULT_CONF_PATH=/showroom/
 ENV NGINX_CONF_PATH=/showroom/
 ENV NGINX_CONFIGURATION_PATH=/showroom/
 # Set the user to run Nginx as a non-root user
-
+#
 # Start Nginx
 CMD ["nginx", "-c", "/showroom/nginx.conf", "-g", "daemon off;"]
