@@ -18,17 +18,15 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: quay.io/rhpds/showroom-nginx:latest
+        image: {{ .Values.proxy.image }}
         imagePullPolicy: Always
-        args:
-          - nginx
-          - -c
-          - '/showroom/nginx.conf'
-          - -g
-          - 'daemon off;'
         volumeMounts:
-          - name: nginx-config
-            mountPath: /showroom
+        - mountPath: /etc/nginx
+          name: nginx-config
+        - mountPath: /var/cache/nginx
+          name: nginx-cache
+        - mountPath: /var/run
+          name: nginx-pid
         env:
         - name: NAMESPACE
           valueFrom:
@@ -38,9 +36,14 @@ spec:
         - name: web
           containerPort: 8080
       volumes:
-        - name: nginx-config
-          configMap:
-            name: showroom-proxy
+      - configMap:
+          defaultMode: 420
+          name: showroom-proxy
+        name: nginx-config
+      - emptyDir: {}
+        name: nginx-pid
+      - emptyDir: {}
+        name: nginx-cache
               #      securityContext:
               #        allowPrivilegeEscalation: true
               #        capabilities:

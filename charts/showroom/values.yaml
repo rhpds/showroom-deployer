@@ -16,7 +16,7 @@ deployer:
   domain: cluster-GUID.GUID.sandboxNUMBERS.opentlc.com
 
 proxy:
-  image: quay.io/rhpds/showroom-nginx:latest
+  image: nginx:1.24
 
 home:
   image: registry.redhat.io/ubi8/httpd-24:latest
