@@ -3,6 +3,16 @@ entries:
   showroom:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2023-11-14T21:53:10.542357405Z"
+    description: A Helm chart for Kubernetes
+    digest: 715e94128ec25d892d5710455206be5e3918a6a2ed4f1758e51dd389559819c4
+    name: showroom
+    type: application
+    urls:
+    - https://github.com/rhpds/showroom-deployer/releases/download/showroom-0.4.2/showroom-0.4.2.tgz
+    version: 0.4.2
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2023-11-14T20:37:45.35957765Z"
     description: A Helm chart for Kubernetes
     digest: 35eec77091fc4af128bac07ca89dace1f5d8e1fff9716bc746a113db5d5bfbc5
@@ -131,4 +141,4 @@ entries:
     urls:
     - https://github.com/rhpds/showroom-deployer/releases/download/showroom-0.1.4/showroom-0.1.4.tgz
     version: 0.1.4
-generated: "2023-11-14T20:37:45.359683337Z"
+generated: "2023-11-14T21:53:10.542454067Z"
