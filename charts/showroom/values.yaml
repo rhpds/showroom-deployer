@@ -60,8 +60,18 @@ content:
 # Remove it to hide.
 #
 terminal:
-  image: ghcr.io/rhpds/showroom-terminal:latest
+  image: docker.io/wettyoss/wetty
+  # image: ghcr.io/rhpds/showroom-terminal:latest # for when we return to custom built
   name: terminal
+  wetty:
+    base: '/wetty/'
+    port: 8080
+    sshHost: shared-410-bastion.openshift.redhatworkshops.io
+    sshPort: 22
+    sshUser: ec2-user
+    sshAuth: password
+    sshPass: password
+    # sshKey: keyfile  -- not yet supported
   serviceAccount: showroom-terminal
   resources:
     limits:

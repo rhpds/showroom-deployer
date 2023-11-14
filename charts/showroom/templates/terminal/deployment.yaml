@@ -2,34 +2,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: showroom-terminal
+  name: showroom-{{ .Values.terminal.name }}
   namespace: {{ .Values.namespace.name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: terminal
+      app.kubernetes.io/name: {{ .Values.terminal.name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: terminal
+        app.kubernetes.io/name: {{ .Values.terminal.name }}
     spec:
       # serviceAccountName: .Values.terminal.serviceAccount
       containers:
-      - name: terminal
+      - name: {{ .Values.terminal.name }}
         image: {{ .Values.terminal.image }}
         imagePullPolicy: Always
         args:
-          - ttyd
-          - -p 8080
-          - bash
+          - --base={{ .Values.terminal.wetty.base }}
+          - --port={{ .Values.terminal.wetty.port }}
+          - --ssh-host={{ .Values.terminal.wetty.sshHost }}
+          - --ssh-port={{ .Values.terminal.wetty.sshPort }}
+          - --ssh-user={{ .Values.terminal.wetty.sshUser }}
+          - --ssh-auth={{ .Values.terminal.wetty.sshAuth }}
+          - --ssh-pass={{ .Values.terminal.wetty.sshPass }}
         env:
         - name: NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        volumeMounts:
+          - name: terminal-secret
+            mountPath: /sshkey/
         ports:
-         - containerPort: 8080
+         - containerPort: {{ .Values.terminal.wetty.port }}
            protocol: TCP
         resources:
           {{- toYaml .Values.terminal.resources | nindent 10 }}
+      volumes:
+      - name: terminal-secret
+        secret:
+          secretName: terminal-secret

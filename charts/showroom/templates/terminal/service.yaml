@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: terminal
+  name: {{ .Values.terminal.name }}
   namespace: {{ .Values.namespace.name }}
 spec:
   type: ClusterIP
   ports:
-  - port: 8080
+  - port: {{ .Values.terminal.wetty.port }}
     protocol: TCP
-    targetPort: 8080
+    targetPort: {{ .Values.terminal.wetty.port }}
   selector:
-    app.kubernetes.io/name: terminal
+    app.kubernetes.io/name: {{ .Values.terminal.name }}

@@ -27,7 +27,7 @@
           {{- end }}
         </div>
         <div id="terminal_tab" class="tabcontent">
-          <iframe id="terminal_01" src="{{ include "showroom-deployer.showroom.route" (list "terminal" .Values) }}" width="100%" style="border:none;"></iframe>
+          <iframe id="terminal_01" src="{{ include "showroom-deployer.showroom.route" (list "wetty" .Values) }}" width="100%" style="border:none;"></iframe>
         </div>
         {{- if .Values.codeserver }}
         <div id="codeserver_tab" class="tabcontent">
