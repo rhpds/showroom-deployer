@@ -22,11 +22,13 @@ spec:
         args:
           - --base={{ .Values.terminal.wetty.base }}
           - --port={{ .Values.terminal.wetty.port }}
+          {{- if .Values.terminal.autoSshToBastion -}}
           - --ssh-host={{ .Values.terminal.wetty.sshHost }}
           - --ssh-port={{ .Values.terminal.wetty.sshPort }}
           - --ssh-user={{ .Values.terminal.wetty.sshUser }}
           - --ssh-auth={{ .Values.terminal.wetty.sshAuth }}
           - --ssh-pass={{ .Values.terminal.wetty.sshPass }}
+          {{- end -}}
         env:
         - name: NAMESPACE
           valueFrom:
@@ -34,7 +36,7 @@ spec:
               fieldPath: metadata.namespace
         volumeMounts:
           - name: terminal-secret
-            mountPath: /sshkey/
+            mountPath: /sshkey/ # not implemented
         ports:
          - containerPort: {{ .Values.terminal.wetty.port }}
            protocol: TCP
