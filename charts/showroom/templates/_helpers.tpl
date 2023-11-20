@@ -1,11 +1,5 @@
 {{/* vim: set filetype=mustache: */}}
 
-{{- define "showroom-deployer.namespace.labels" }}
-  labels:
-    guid: "{{ .Values.guid | toString | lower }}"
-    app: "showroom"
-{{- end -}}
-
 {{/*
 Create a showroom route for the HTML page
 */}}
