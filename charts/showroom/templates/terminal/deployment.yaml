@@ -22,13 +22,13 @@ spec:
         args:
           - --base={{ .Values.terminal.wetty.base }}
           - --port={{ .Values.terminal.wetty.port }}
-          {{- if .Values.terminal.autoSshToBastion -}}
+{{- if .Values.terminal.autoSshToBastion -}}
           - --ssh-host={{ .Values.terminal.wetty.sshHost }}
           - --ssh-port={{ .Values.terminal.wetty.sshPort }}
           - --ssh-user={{ .Values.terminal.wetty.sshUser }}
           - --ssh-auth={{ .Values.terminal.wetty.sshAuth }}
           - --ssh-pass={{ .Values.terminal.wetty.sshPass }}
-          {{- end -}}
+{{- end }}
         env:
         - name: NAMESPACE
           valueFrom:
