@@ -7,7 +7,7 @@
 # when launched as showroom-deployer user, chart CANNOT create namespaces
 
 namespace:
-  create: true
+  create: "true"
   name: showroom
 
 guid: nnnn
@@ -64,7 +64,7 @@ terminal:
   # image: ghcr.io/rhpds/showroom-terminal:latest # for when we return to custom built
   name: terminal
   wetty:
-    autoSshToBastion: false
+    autoSshToBastion: "false"
     base: '/wetty/'
     port: 8080
     sshHost: shared-410-bastion.openshift.redhatworkshops.io
