@@ -22,7 +22,7 @@ spec:
         args:
           - --base={{ .Values.terminal.wetty.base }}
           - --port={{ .Values.terminal.wetty.port }}
-{{- if eq .Values.terminal.wetty.autoSshToBastion "true" }}
+{{- if .Values.terminal.wetty.autoSshToBastion }}
           - --ssh-host={{ .Values.terminal.wetty.sshHost }}
           - --ssh-port={{ .Values.terminal.wetty.sshPort }}
           - --ssh-user={{ .Values.terminal.wetty.sshUser }}
