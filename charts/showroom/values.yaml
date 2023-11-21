@@ -60,7 +60,7 @@ content:
 # Remove it to hide.
 #
 terminal:
-  image: docker.io/wettyoss/wetty
+  image: docker.io/wettyoss/wetty:latest
   # image: ghcr.io/rhpds/showroom-terminal:latest # for when we return to custom built
   name: terminal
   wetty:
