@@ -1,0 +1,83 @@
+---
+# Default values for showroom.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# when launched as cluster-admin, chart can create namespaces
+# when launched as showroom-deployer user, chart CANNOT create namespaces
+
+namespace:
+  create: true
+  name: showroom
+
+deployer:
+  domain: cluster-GUID.GUID.sandboxNUMBERS.opentlc.com
+
+proxy:
+  image: docker.io/library/nginx:1.25
+  imagePullPolicy: IfNotPresent
+  indexHtmlConfigMap: showroom-index
+  nginxConfigMap: showroom-proxy-config
+
+content:
+  image: ghcr.io/rhpds/showroom-content:latest
+  imagePullPolicy: IfNotPresent
+  repoUrl: https://github.com/rhpds/showroom_template_default.git
+  repoRef: main
+  antoraPlaybook: default-site.yml
+  userdataName: showroom-userdata
+  antora:
+    image: quay.io/rhpds/showroom-content:latest
+    # image: docker.io/antora/antora:latest
+  resources:
+    limits:
+      memory: 64Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+  user_data: |
+    bastion_password: from_helm
+
+#
+# Remove it to hide.
+#
+terminal:
+  image: docker.io/wettyoss/wetty:latest
+  # image: ghcr.io/rhpds/showroom-terminal:latest # for when we return to custom built
+  name: terminal
+  wetty:
+    autoSshToBastion: false
+    base: '/wetty/'
+    sshHost: shared-410-bastion.openshift.redhatworkshops.io
+    sshPort: 22
+    sshUser: ec2-user
+    sshAuth: password
+    sshPass: password
+    # sshKey: keyfile  -- not yet supported
+  serviceAccount: showroom-terminal
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+
+# Remove it to hide.
+#
+# codeserver:
+#   image: docker.io/codercom/code-server:latest
+#   resources:
+#     limits:
+#       memory: 512Mi
+#     requests:
+#       cpu: 500m
+#       memory: 512Mi
+
+#
+# Services to be shown as tabs on the right panel.
+#
+services:
+- name: codeserver
+  url: https://codeserver-codeserver.apps.cluster-guid.sandbox.opentlc.com
+# - name: myservice
+#   url: http://myservice.com/hello2
