@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: showroom
+  namespace: {{ .Release.Namespace}}
 spec:
   replicas: 1
   selector:
@@ -104,7 +105,7 @@ spec:
       - name: lab-user-home
 {{- if .Values.terminal.storage.setup }}
         persistentVolumeClaim:
-          claimName: lab-user-home
+          claimName: showroom-lab-user-home
 {{- else }}
         emptyDir: {}
 {{- end }}

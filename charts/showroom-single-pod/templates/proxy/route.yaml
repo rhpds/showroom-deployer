@@ -3,6 +3,7 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: showroom
+  namespace: {{ .Release.Namespace}}
 spec:
   to:
     kind: Service

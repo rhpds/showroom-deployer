@@ -2,6 +2,7 @@
 kind: ConfigMap
 metadata:
   name: {{ .Values.proxy.nginxConfigMap }}
+  namespace: {{ .Release.Namespace}}
 apiVersion: v1
 data:
   nginx.conf: |

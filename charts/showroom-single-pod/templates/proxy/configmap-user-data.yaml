@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.content.userdataName }}
+  namespace: {{ .Release.Namespace}}
 data:
   user_data.yml: |
 {{ .Values.content.user_data | indent 4 }}
