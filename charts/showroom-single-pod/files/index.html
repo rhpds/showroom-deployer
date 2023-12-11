@@ -30,7 +30,7 @@
           <iframe id="terminal_01" src="{{ include "showroom-deployer.showroom.route" (list "wetty" .Values) }}" width="100%" style="border:none;"></iframe>
           <!-- <iframe id="terminal_01" src="http://localhost:8081/wetty" width="100%" style="border:none;"></iframe> -->
         </div>
-        {{- if .Values.codeserver }}
+        {{- if .Values.codeserver.setup }}
         <div id="codeserver_tab" class="tabcontent">
           <iframe id="codeserver" src="{{ include "showroom-deployer.showroom.route"  (list "codeserver" .Values) }}" width="100%" style="border:none;"></iframe>
         </div>

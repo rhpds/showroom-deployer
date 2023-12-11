@@ -3,9 +3,6 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: showroom
-  namespace: {{ .Values.namespace.name }}
-  labels:
-    app.kubernetes.io/name: showroom
 spec:
   to:
     kind: Service
