@@ -42,17 +42,17 @@ spec:
         image: {{ .Values.content.image }}
         imagePullPolicy: {{ .Values.content.imagePullPolicy }}
         env:
-          - name: GIT_REPO_URL
-            value: {{ .Values.content.repoUrl }}
-          - name: GIT_REPO_REF
-            value: {{ .Values.content.repoRef }}
-          - name: ANTORA_PLAYBOOK
-            value: {{ .Values.content.antoraPlaybook }}
+        - name: GIT_REPO_URL
+          value: {{ .Values.content.repoUrl }}
+        - name: GIT_REPO_REF
+          value: {{ .Values.content.repoRef }}
+        - name: ANTORA_PLAYBOOK
+          value: {{ .Values.content.antoraPlaybook }}
         volumeMounts:
-          - name: user-data
-            mountPath: /user_data/
-          - name: showroom
-            mountPath: /showroom/
+        - name: user-data
+          mountPath: /user_data/
+        - name: showroom
+          mountPath: /showroom/
         ports:
         - containerPort: 8000
           protocol: TCP
@@ -68,17 +68,6 @@ spec:
       - name: terminal
         image: {{ .Values.terminal.image }}
         imagePullPolicy: IfNotPresent
-#         args:
-#           - --base={{ .Values.terminal.wetty.base }}
-#           - --port=8001
-#           - --allow-iframe
-# {{- if .Values.terminal.wetty.autoSshToBastion }}
-#           - --ssh-host={{ .Values.terminal.wetty.sshHost }}
-#           - --ssh-port={{ .Values.terminal.wetty.sshPort }}
-#           - --ssh-user={{ .Values.terminal.wetty.sshUser }}
-#           - --ssh-auth={{ .Values.terminal.wetty.sshAuth }}
-#           - --ssh-pass={{ .Values.terminal.wetty.sshPass }}
-# {{- end }}
         env:
         - name: NAMESPACE
           valueFrom:
@@ -87,11 +76,11 @@ spec:
         - name: GUID
           value: "{{ .Values.guid }}"
         volumeMounts:
-          - name: lab-user-home
-            mountPath: /home/lab-user
+        - name: lab-user-home
+          mountPath: /home/lab-user
         ports:
-         - containerPort: 7681
-           protocol: TCP
+        - containerPort: 7681
+          protocol: TCP
         resources:
           {{- toYaml .Values.terminal.resources | nindent 10 }}
 
