@@ -33,7 +33,7 @@ data:
 
         location /content/ {
           proxy_pass http://localhost:8000;
-          rewrite ^/content/(.*)$ /$1  break;
+          rewrite ^/content/(.*)$ /$1 break;
 
           expires off;
           proxy_cache off;
@@ -43,8 +43,10 @@ data:
           proxy_set_header X-Forwarded-Proto $scheme;
         }
 
-        location ^~ /terminal {
-          proxy_pass http://localhost:7681/;
+        location /terminal/ {
+          proxy_pass http://localhost:7681;
+          rewrite ^/terminal/(.*)$ /$1 break;
+
           proxy_http_version 1.1;
           proxy_set_header Upgrade $http_upgrade;
           proxy_set_header Connection "upgrade";
@@ -61,7 +63,7 @@ data:
           # keeps looking for assets on / of the nginx
 
           proxy_pass https://console.openshift-console:443;
-          rewrite ^/ocp/(.*)$ /$1  break;
+          rewrite ^/ocp/(.*)$ /$1 break;
 
           expires off;
           proxy_cache off;

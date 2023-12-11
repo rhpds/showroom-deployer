@@ -9,22 +9,14 @@
   <body>
     <div class="content">
       <div class="split left">
-        {{- if .Values.content.url }}
-        <iframe id="doc" src="{{ .Values.content.url }}" width="100%" style="border:none;"></iframe>
-        {{- else }}
-        <!-- make this the content service -->
         <iframe id="doc" src="https://showroom.{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/content" width="100%" style="border:none;"></iframe>
-        {{- end }}
       </div>
       <div class="split right">
         <div class="tab">
           <button class="tablinks" onclick="openTerminal(event, 'terminal_tab')" id="defaultOpen" tabindex="0">Terminal</button>
           {{- if .Values.codeserver.setup }}
-          <button class="tablinks" onclick="openTerminal(event, 'codeserver_tab')">VS Code</button>
+          <button class="tablinks" onclick="openTerminal(event, 'codeserver_tab')">Code Server</button>
           {{- end }}
-          <!-- {{- range .Values.services }}
-          <button class="tablinks" onclick="openTerminal(event, 'svc_{{ .name }}_tab')">{{ .name }}</button>
-          {{- end }} -->
         </div>
         <div id="terminal_tab" class="tabcontent">
           <iframe id="terminal_01" src="https://showroom.{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/terminal" width="100%" style="border:none;"></iframe>
@@ -32,11 +24,6 @@
         {{- if .Values.codeserver.setup }}
         <div id="codeserver_tab" class="tabcontent">
           <iframe id="codeserver" src="https://showroom.{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/codeserver" width="100%" style="border:none;"></iframe>
-        </div>
-        {{- end }}
-        {{- range .Values.services }}
-        <div id="svc_{{ .name }}_tab" class="tabcontent">
-          <iframe id="svc_{{ .name }}" src="{{ .url }}" height="100%" width="100%" style="border:none;"></iframe>
         </div>
         {{- end }}
       </div>

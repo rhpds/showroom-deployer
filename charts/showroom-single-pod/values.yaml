@@ -58,12 +58,3 @@ codeserver:
     requests:
       cpu: 500m
       memory: 512Mi
-
-#
-# Services to be shown as tabs on the right panel.
-#
-services:
-- name: codeserver
-  url: https://codeserver-codeserver.apps.cluster-guid.sandbox.opentlc.com
-# - name: myservice
-#   url: http://myservice.com/hello2
