@@ -118,4 +118,4 @@ spec:
           claimName: lab-user-home
 {{- else }}
         emptyDir: {}
-{{- endif }}
+{{- end }}
