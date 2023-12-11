@@ -102,7 +102,7 @@ spec:
       - name: nginx-cache
         emptyDir: {}
       - name: lab-user-home
-{{- if .Values.storage.setup }}
+{{- if .Values.terminal.storage.setup }}
         persistentVolumeClaim:
           claimName: lab-user-home
 {{- else }}
