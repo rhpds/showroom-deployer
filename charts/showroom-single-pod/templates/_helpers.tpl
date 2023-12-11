@@ -1,8 +1,4 @@
-{{/* vim: set filetype=mustache: */}}
-
-{{/*
-Create a showroom route for the HTML page
-*/}}
+{{ $release := .Release }}
 {{- define "showroom-deployer.showroom.route" }}
 {{- $service := index . 0 -}}
 {{- $values := index . 1 -}}
