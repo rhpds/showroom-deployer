@@ -10,3 +10,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: {{ .Values.terminal.serviceAccount }}
+  name: {{ .Release.Namespace }}
