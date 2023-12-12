@@ -81,7 +81,7 @@ spec:
         - name: terminal-lab-user-home
           mountPath: /home/lab-user
         ports:
-        - containerPort: {{ .values.terminal.port }}
+        - containerPort: {{ .Values.terminal.port }}
           protocol: TCP
         resources:
           {{- toYaml .Values.terminal.resources | nindent 10 }}
@@ -94,7 +94,7 @@ spec:
         args:
         - --base=/{{ .Values.wetty.base }}/
         - --port={{ .Values.wetty.port }}
-{{-   if .Values.wetty.wetty.autoSshToBastion }}
+{{-   if .Values.wetty.ssh.autoSshToBastion }}
         - --ssh-host={{ .Values.wetty.ssh.sshHost }}
         - --ssh-port={{ .Values.wetty.ssh.sshPort }}
         - --ssh-user={{ .Values.wetty.ssh.sshUser }}
