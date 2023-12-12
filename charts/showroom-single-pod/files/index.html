@@ -9,7 +9,7 @@
   <body>
     <div class="content">
       <div class="split left">
-        <iframe id="doc" src="https://showroom.{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/content" width="100%" style="border:none;"></iframe>
+        <iframe id="doc" src="https://showroom-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/content" width="100%" style="border:none;"></iframe>
       </div>
       <div class="split right">
         <div class="tab">
@@ -19,11 +19,11 @@
           {{- end }}
         </div>
         <div id="terminal_tab" class="tabcontent">
-          <iframe id="terminal_01" src="https://showroom.{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/terminal" width="100%" style="border:none;"></iframe>
+          <iframe id="terminal_01" src="https://showroom-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/terminal" width="100%" style="border:none;"></iframe>
         </div>
         {{- if .Values.codeserver.setup }}
         <div id="codeserver_tab" class="tabcontent">
-          <iframe id="codeserver" src="https://showroom.{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/codeserver" width="100%" style="border:none;"></iframe>
+          <iframe id="codeserver" src="https://showroom-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/codeserver" width="100%" style="border:none;"></iframe>
         </div>
         {{- end }}
       </div>
