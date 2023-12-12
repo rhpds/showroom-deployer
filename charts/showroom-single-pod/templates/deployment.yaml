@@ -66,7 +66,7 @@ spec:
             path: /
             port: 8000
 
-{{- if eq .Values.terminal.setup 'true' }}
+{{- if eq .Values.terminal.setup "true" }}
       - name: terminal
         image: {{ .Values.terminal.image }}
         imagePullPolicy: IfNotPresent
