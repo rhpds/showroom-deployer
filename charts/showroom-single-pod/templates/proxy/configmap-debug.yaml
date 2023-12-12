@@ -20,17 +20,17 @@ data:
     deployer:
       domain: {{ .Values.deployer.domain }}
 
-{{- if eq .Values.content.contentOnly true }}
+{{- if eq .Values.content.contentOnly 'true' }}
     contentOnly is true
 {{- else}}
     contentOnly is false
 {{- end }}
-{{- if eq .Values.terminal.setup true }}
+{{- if eq .Values.terminal.setup 'true' }}
     terminal.setup is true
 {{- else}}
     terminal.setup is false
 {{- end }}
-{{- if eq .Values.wetty.setup true }}
+{{- if eq .Values.wetty.setup 'true' }}
     wetty.setup is true
 {{- else }}
     wetty.setup is false
