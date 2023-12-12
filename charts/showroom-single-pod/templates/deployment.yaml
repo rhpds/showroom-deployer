@@ -81,7 +81,7 @@ spec:
         - name: terminal-lab-user-home
           mountPath: /home/lab-user
         ports:
-        - containerPort: 7681
+        - containerPort: {{ .values.terminal.port }}
           protocol: TCP
         resources:
           {{- toYaml .Values.terminal.resources | nindent 10 }}
@@ -92,14 +92,14 @@ spec:
         image: {{ .Values.wetty.image }}
         imagePullPolicy: IfNotPresent
         args:
-          - --base={{ .Values.wetty.wetty.base }}
-          - --port={{ .Values.wetty.wetty.port }}
+        - --base=/{{ .Values.wetty.base }}/
+        - --port={{ .Values.wetty.port }}
 {{-   if .Values.wetty.wetty.autoSshToBastion }}
-          - --ssh-host={{ .Values.wetty.wetty.sshHost }}
-          - --ssh-port={{ .Values.wetty.wetty.sshPort }}
-          - --ssh-user={{ .Values.wetty.wetty.sshUser }}
-          - --ssh-auth={{ .Values.wetty.wetty.sshAuth }}
-          - --ssh-pass={{ .Values.wetty.wetty.sshPass }}
+        - --ssh-host={{ .Values.wetty.ssh.sshHost }}
+        - --ssh-port={{ .Values.wetty.ssh.sshPort }}
+        - --ssh-user={{ .Values.wetty.ssh.sshUser }}
+        - --ssh-auth={{ .Values.wetty.ssh.sshAuth }}
+        - --ssh-pass={{ .Values.wetty.ssh.sshPass }}
 {{-   end }}
         env:
         - name: NAMESPACE
@@ -109,7 +109,7 @@ spec:
         - name: GUID
           value: "{{ .Values.guid }}"
         ports:
-        - containerPort: 7681
+        - containerPort: {{ .Values.wetty.port }}
           protocol: TCP
         resources:
           {{- toYaml .Values.wetty.resources | nindent 10 }}
