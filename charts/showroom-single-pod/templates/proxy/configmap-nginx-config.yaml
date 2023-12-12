@@ -1,7 +1,7 @@
 ---
 kind: ConfigMap
 metadata:
-  name: {{ .Values.proxy.nginxConfigMap }}
+  name: {{ .Release.Name }}-proxy-config
   namespace: {{ .Release.Namespace}}
 apiVersion: v1
 data:
@@ -58,7 +58,7 @@ data:
           proxy_set_header X-NginX-Proxy true;
         }
 
-        location /ocp {
+        location /ocp/ {
           # not working, don't know why
           # keeps looking for assets on / of the nginx
 

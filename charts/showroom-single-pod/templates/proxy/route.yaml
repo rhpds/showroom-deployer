@@ -2,12 +2,12 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: showroom
+  name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace}}
 spec:
   to:
     kind: Service
-    name: showroom
+    name: {{ .Release.Name }}
   port:
     targetPort: 8080
   tls:

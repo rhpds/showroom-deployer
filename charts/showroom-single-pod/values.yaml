@@ -11,16 +11,15 @@ deployer:
 proxy:
   image: docker.io/library/nginx:1.25
   imagePullPolicy: IfNotPresent
-  indexHtmlConfigMap: showroom-index
-  nginxConfigMap: showroom-proxy-config
 
 content:
+  # Only create a content pane, no other tabs will be available
+  content_only: false
   image: ghcr.io/rhpds/showroom-content:latest
   imagePullPolicy: IfNotPresent
   repoUrl: https://github.com/rhpds/showroom_template_default.git
   repoRef: main
   antoraPlaybook: default-site.yml
-  userdataName: showroom-userdata
   antora:
     image: quay.io/rhpds/showroom-content:latest
     # image: docker.io/antora/antora:latest
@@ -37,16 +36,17 @@ terminal:
   setup: true
   image: quay.io/rhpds/openshift-showroom-terminal-ocp:latest
   name: terminal
-  serviceAccount: showroom-terminal
   resources:
     limits:
       memory: 256Mi
     requests:
       cpu: 500m
       memory: 256Mi
+  # Set up persistent storage for the lab-user's home directory
   storage:
     setup: true
     pvcSize: 5Gi
+    # Use default Storage Class when empty
     storageClass: ""
 
 codeserver:

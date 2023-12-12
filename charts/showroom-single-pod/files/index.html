@@ -8,29 +8,37 @@
   </head>
   <body>
     <div class="content">
+{{- if .Values.content.content_only }}
+      <iframe id="doc" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/content" width="100%" style="border:none;"></iframe>
+{{- else }}
       <div class="split left">
-        <iframe id="doc" src="https://showroom-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/content" width="100%" style="border:none;"></iframe>
+        <iframe id="doc" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/content" width="100%" style="border:none;"></iframe>
       </div>
       <div class="split right">
         <div class="tab">
+{{-   if .Values.terminal.setup }}
           <button class="tablinks" onclick="openTerminal(event, 'terminal_tab')" id="defaultOpen" tabindex="0">Terminal</button>
-          {{- if .Values.codeserver.setup }}
+{{-   end }}
+{{-   if .Values.codeserver.setup }}
           <button class="tablinks" onclick="openTerminal(event, 'codeserver_tab')">Code Server</button>
-          {{- end }}
+{{-   end }}
         </div>
+{{-   if .Values.terminal.setup }}
         <div id="terminal_tab" class="tabcontent">
-          <iframe id="terminal_01" src="https://showroom-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/terminal" width="100%" style="border:none;"></iframe>
+          <iframe id="terminal_01" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/terminal" width="100%" style="border:none;"></iframe>
         </div>
-        {{- if .Values.codeserver.setup }}
+{{-   end }}
+{{-   if .Values.codeserver.setup }}
         <div id="codeserver_tab" class="tabcontent">
-          <iframe id="codeserver" src="https://showroom-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/codeserver" width="100%" style="border:none;"></iframe>
+          <iframe id="codeserver" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/codeserver" width="100%" style="border:none;"></iframe>
         </div>
-        {{- end }}
+{{-   end }}
       </div>
+{{- end }}
     </div>
     <script>
       document.getElementById("defaultOpen").click();
-      function openTerminal(evt, cityName) {
+      function openTerminal(evt, tabName) {
         // Declare all variables
         var i, tabcontent, tablinks;
         // Get all elements with class="tabcontent" and hide them
@@ -44,7 +52,7 @@
           tablinks[i].className = tablinks[i].className.replace(" active", "");
         }
         // Show the current tab, and add an "active" class to the button that opened the tab
-        document.getElementById(cityName).style.display = "block";
+        document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += "active";
       }
     </script>

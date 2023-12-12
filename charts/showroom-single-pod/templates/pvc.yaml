@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: showroom-lab-user-home
+  name: {{ .Release.Name }}-terminal-lab-user-home
   namespace: {{ .Release.Namespace}}
 spec:
   accessModes:

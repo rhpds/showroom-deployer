@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: showroom
+  name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace}}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: showroom
+      app.kubernetes.io/name: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: showroom
+        app.kubernetes.io/name: {{ .Release.Name }}
     spec:
-      serviceAccountName: {{ .Values.terminal.serviceAccount }}
+      serviceAccountName: {{ .Release.Name }}
       containers:
 
       - name: nginx
@@ -65,7 +65,7 @@ spec:
           httpGet:
             path: /
             port: 8000
-
+      {{- if .Values.terminal.setup }}
       - name: terminal
         image: {{ .Values.terminal.image }}
         imagePullPolicy: IfNotPresent
@@ -77,35 +77,38 @@ spec:
         - name: GUID
           value: "{{ .Values.guid }}"
         volumeMounts:
-        - name: lab-user-home
+        - name: terminal-lab-user-home
           mountPath: /home/lab-user
         ports:
         - containerPort: 7681
           protocol: TCP
         resources:
           {{- toYaml .Values.terminal.resources | nindent 10 }}
+      {{- end }}
 
       volumes:
       - name: showroom
         emptyDir: {}
       - name: user-data
         configMap:
-          name: {{ .Values.content.userdataName }}
+          name: {{ .Release.Name }}-userdata
       - name: content
         configMap:
-          name: {{ .Values.proxy.indexHtmlConfigMap }}
+          name: {{ .Release.Name }}-index
       - name: nginx-config
         configMap:
           defaultMode: 420
-          name: {{ .Values.proxy.nginxConfigMap }}
+          name: {{ .Release.Name }}-proxy-config
       - name: nginx-pid
         emptyDir: {}
       - name: nginx-cache
         emptyDir: {}
-      - name: lab-user-home
-{{- if .Values.terminal.storage.setup }}
+{{- if .Values.terminal.setup }}
+      - name: terminal-lab-user-home
+{{-   if .Values.terminal.storage.setup }}
         persistentVolumeClaim:
-          claimName: showroom-lab-user-home
-{{- else }}
+          claimName: {{ .Release.Name }}-terminal-lab-user-home
+{{-   else }}
         emptyDir: {}
+{{-   end }}
 {{- end }}
