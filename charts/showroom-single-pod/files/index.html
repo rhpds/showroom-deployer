@@ -8,7 +8,7 @@
   </head>
   <body>
     <div class="content">
-{{- if .Values.content.contentOnly }}
+{{- if eq .Values.content.contentOnly true }}
       <iframe id="doc" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/content" width="100%" style="border:none;"></iframe>
 {{- else }}
       <div class="split left">
@@ -16,27 +16,27 @@
       </div>
       <div class="split right">
         <div class="tab">
-{{-   if .Values.terminal.setup }}
+{{-   if eq .Values.terminal.setup true }}
           <button class="tablinks" onclick="openTerminal(event, 'terminal_tab')" id="defaultOpen" tabindex="0">Terminal</button>
 {{-   end }}
-{{-   if .Values.wetty.setup }}
+{{-   if eq .Values.wetty.setup true }}
           <button class="tablinks" onclick="openTerminal(event, 'terminal_tab')" id="defaultOpen" tabindex="0">SSH Terminal</button>
 {{-   end }}
-{{-   if .Values.codeserver.setup }}
+{{-   if eq .Values.codeserver.setup true }}
           <button class="tablinks" onclick="openTerminal(event, 'codeserver_tab')">Code Server</button>
 {{-   end }}
         </div>
-{{-   if .Values.terminal.setup }}
+{{-   if eq .Values.terminal.setup true }}
         <div id="terminal_tab" class="tabcontent">
           <iframe id="terminal_01" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/terminal" width="100%" style="border:none;"></iframe>
         </div>
 {{-   end }}
-{{-   if .Values.wetty.setup }}
+{{-   if eq .Values.wetty.setup true }}
         <div id="terminal_tab" class="tabcontent">
           <iframe id="terminal_01" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/wetty" width="100%" style="border:none;"></iframe>
         </div>
 {{-   end }}
-{{-   if .Values.codeserver.setup }}
+{{-   if eq .Values.codeserver.setup true }}
         <div id="codeserver_tab" class="tabcontent">
           <iframe id="codeserver" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/codeserver" width="100%" style="border:none;"></iframe>
         </div>

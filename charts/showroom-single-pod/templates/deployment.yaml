@@ -66,7 +66,7 @@ spec:
             path: /
             port: 8000
 
-{{- if .Values.terminal.setup }}
+{{- if eq .Values.terminal.setup true }}
       - name: terminal
         image: {{ .Values.terminal.image }}
         imagePullPolicy: IfNotPresent
@@ -87,14 +87,14 @@ spec:
           {{- toYaml .Values.terminal.resources | nindent 10 }}
 {{- end }}
 
-{{- if .Values.wetty.setup }}
+{{- if eq .Values.wetty.setup true }}
       - name: wetty
         image: {{ .Values.wetty.image }}
         imagePullPolicy: IfNotPresent
         args:
         - --base=/{{ .Values.wetty.base }}/
         - --port={{ .Values.wetty.port }}
-{{-   if .Values.wetty.ssh.autoSshToBastion }}
+{{-   if eq .Values.wetty.ssh.autoSshToBastion true }}
         - --ssh-host={{ .Values.wetty.ssh.sshHost }}
         - --ssh-port={{ .Values.wetty.ssh.sshPort }}
         - --ssh-user={{ .Values.wetty.ssh.sshUser }}
@@ -132,9 +132,9 @@ spec:
         emptyDir: {}
       - name: nginx-cache
         emptyDir: {}
-{{- if .Values.terminal.setup }}
+{{- if eq .Values.terminal.setup true }}
       - name: terminal-lab-user-home
-{{-   if .Values.terminal.storage.setup }}
+{{-   if eq .Values.terminal.storage.setup true }}
         persistentVolumeClaim:
           claimName: {{ .Release.Name }}-terminal-lab-user-home
 {{-   else }}
