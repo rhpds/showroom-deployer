@@ -87,7 +87,7 @@ spec:
           {{- toYaml .Values.terminal.resources | nindent 10 }}
 {{- end }}
 
-{{- if eq .Values.wetty.setup 'true' }}
+{{- if eq .Values.wetty.setup "true" }}
       - name: wetty
         image: {{ .Values.wetty.image }}
         imagePullPolicy: IfNotPresent
@@ -132,9 +132,9 @@ spec:
         emptyDir: {}
       - name: nginx-cache
         emptyDir: {}
-{{- if eq .Values.terminal.setup 'true' }}
+{{- if eq .Values.terminal.setup "true" }}
       - name: terminal-lab-user-home
-{{-   if eq .Values.terminal.storage.setup 'true' }}
+{{-   if eq .Values.terminal.storage.setup "true" }}
         persistentVolumeClaim:
           claimName: {{ .Release.Name }}-terminal-lab-user-home
 {{-   else }}
