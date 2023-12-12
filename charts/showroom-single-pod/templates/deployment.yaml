@@ -65,7 +65,8 @@ spec:
           httpGet:
             path: /
             port: 8000
-      {{- if .Values.terminal.setup }}
+
+{{- if .Values.terminal.setup }}
       - name: terminal
         image: {{ .Values.terminal.image }}
         imagePullPolicy: IfNotPresent
@@ -84,7 +85,35 @@ spec:
           protocol: TCP
         resources:
           {{- toYaml .Values.terminal.resources | nindent 10 }}
-      {{- end }}
+{{- end }}
+
+{{- if .Values.wetty.setup }}
+      - name: wetty
+        image: {{ .Values.wetty.image }}
+        imagePullPolicy: IfNotPresent
+        args:
+          - --base={{ .Values.wetty.wetty.base }}
+          - --port={{ .Values.wetty.wetty.port }}
+{{-   if .Values.wetty.wetty.autoSshToBastion }}
+          - --ssh-host={{ .Values.wetty.wetty.sshHost }}
+          - --ssh-port={{ .Values.wetty.wetty.sshPort }}
+          - --ssh-user={{ .Values.wetty.wetty.sshUser }}
+          - --ssh-auth={{ .Values.wetty.wetty.sshAuth }}
+          - --ssh-pass={{ .Values.wetty.wetty.sshPass }}
+{{-   end }}
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: GUID
+          value: "{{ .Values.guid }}"
+        ports:
+        - containerPort: 7681
+          protocol: TCP
+        resources:
+          {{- toYaml .Values.wetty.resources | nindent 10 }}
+{{- end }}
 
       volumes:
       - name: showroom

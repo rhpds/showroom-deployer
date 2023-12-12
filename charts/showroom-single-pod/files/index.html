@@ -19,6 +19,9 @@
 {{-   if .Values.terminal.setup }}
           <button class="tablinks" onclick="openTerminal(event, 'terminal_tab')" id="defaultOpen" tabindex="0">Terminal</button>
 {{-   end }}
+{{-   if .Values.wetty.setup }}
+          <button class="tablinks" onclick="openTerminal(event, 'terminal_tab')" id="defaultOpen" tabindex="0">Terminal</button>
+{{-   end }}
 {{-   if .Values.codeserver.setup }}
           <button class="tablinks" onclick="openTerminal(event, 'codeserver_tab')">Code Server</button>
 {{-   end }}
@@ -26,6 +29,11 @@
 {{-   if .Values.terminal.setup }}
         <div id="terminal_tab" class="tabcontent">
           <iframe id="terminal_01" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/terminal" width="100%" style="border:none;"></iframe>
+        </div>
+{{-   end }}
+{{-   if .Values.wetty.setup }}
+        <div id="terminal_tab" class="tabcontent">
+          <iframe id="terminal_01" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/wetty" width="100%" style="border:none;"></iframe>
         </div>
 {{-   end }}
 {{-   if .Values.codeserver.setup }}

@@ -49,6 +49,26 @@ terminal:
     # Use default Storage Class when empty
     storageClass: ""
 
+wetty:
+  setup: false
+  image: docker.io/wettyoss/wetty:latest
+  name: wetty
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+  wetty:
+    autoSshToBastion: false
+    base: '/wetty/'
+    port: 8001
+    sshHost: shared-410-bastion.openshift.redhatworkshops.io
+    sshPort: 22
+    sshUser: ec2-user
+    sshAuth: password
+    sshPass: password
+
 codeserver:
   setup: false
   image: docker.io/codercom/code-server:latest
@@ -58,3 +78,7 @@ codeserver:
     requests:
       cpu: 500m
       memory: 512Mi
+
+# To be fully implemented
+ocpConsole:
+  setup: false
