@@ -19,3 +19,19 @@ data:
     guid: {{ .Values.guid }}
     deployer:
       domain: {{ .Values.deployer.domain }}
+
+{{- if .Values.content.contentOnly }}
+    contentOnly is true
+{{- else}}
+    contentOnly is false
+{{- end }}
+{{- if .Values.terminal.setup }}
+    terminal.setup is true
+{{- else}}
+    terminal.setup is false
+{{- end }}
+{{- if .Values.wetty.setup }}
+    wetty.setup is true
+{{- else }}
+    wetty.setup is false
+{{- end }}
