@@ -14,7 +14,7 @@ proxy:
 
 content:
   # Only create a content pane, no other tabs will be available
-  content_only: false
+  contentOnly: false
   image: ghcr.io/rhpds/showroom-content:latest
   imagePullPolicy: IfNotPresent
   repoUrl: https://github.com/rhpds/showroom_template_default.git

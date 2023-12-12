@@ -8,7 +8,7 @@
   </head>
   <body>
     <div class="content">
-{{- if .Values.content.content_only }}
+{{- if .Values.content.contentOnly }}
       <iframe id="doc" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/content" width="100%" style="border:none;"></iframe>
 {{- else }}
       <div class="split left">
