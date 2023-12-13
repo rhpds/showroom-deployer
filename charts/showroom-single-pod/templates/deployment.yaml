@@ -92,7 +92,7 @@ spec:
         image: {{ .Values.wetty.image }}
         imagePullPolicy: IfNotPresent
         args:
-        - --base=/{{ .Values.wetty.base }}/
+        - --base="/{{ .Values.wetty.base }}/"
         - --port={{ .Values.wetty.port }}
 {{-   if eq .Values.wetty.ssh.autoSshToBastion "true" }}
         - --ssh-host={{ .Values.wetty.ssh.sshHost }}

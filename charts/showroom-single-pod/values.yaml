@@ -69,6 +69,7 @@ wetty:
     sshAuth: password
     sshPass: password
 
+# To be fully implemented
 codeserver:
   setup: "false"
   image: docker.io/codercom/code-server:latest
