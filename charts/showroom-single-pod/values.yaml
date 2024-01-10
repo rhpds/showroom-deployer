@@ -38,10 +38,11 @@ terminal:
   port: 7681
   resources:
     limits:
-      memory: 256Mi
+      cpu: 500m
+      memory: 1Gi
     requests:
       cpu: 500m
-      memory: 256Mi
+      memory: 512Mi
   # Set up persistent storage for the lab-user's home directory
   storage:
     setup: "true"
