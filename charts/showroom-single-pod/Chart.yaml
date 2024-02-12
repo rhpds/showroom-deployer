@@ -1,5 +1,5 @@
 apiVersion: v2
-name: showroom-single-pod-ocpconsole
+name: showroom-single-pod
 description: Deploys the Showroom front-end in a single pod
 
 type: application
