@@ -46,7 +46,7 @@
 {{-   end }}
 {{-   if eq .Values.webconsole.setup "true" }}
         <div id="webconsole_tab" class="tabcontent">
-          <iframe id="codeserver" src="https://console-openshift-console.{{ .Values.deployer.domain }}" width="100%" style="border:none;"></iframe>
+          <iframe id="webconsole" src="https://console-openshift-console.{{ .Values.deployer.domain }}" width="100%" style="border:none;"></iframe>
         </div>
 {{-   end }}
       </div>
