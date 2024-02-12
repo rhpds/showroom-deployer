@@ -25,6 +25,9 @@
 {{-   if eq .Values.codeserver.setup "true" }}
           <button class="tablinks" onclick="openTerminal(event, 'codeserver_tab')">Code Server</button>
 {{-   end }}
+{{-   if eq .Values.webconsole.setup "true" }}
+          <button class="tablinks" onclick="openTerminal(event, 'webconsole_tab')">OCP Web Console</button>
+{{-   end }}
         </div>
 {{-   if eq .Values.terminal.setup "true" }}
         <div id="terminal_tab" class="tabcontent">
@@ -39,6 +42,11 @@
 {{-   if eq .Values.codeserver.setup "true" }}
         <div id="codeserver_tab" class="tabcontent">
           <iframe id="codeserver" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/codeserver" width="100%" style="border:none;"></iframe>
+        </div>
+{{-   end }}
+{{-   if eq .Values.webconsole.setup "true" }}
+        <div id="webconsole_tab" class="tabcontent">
+          <iframe id="webconsole" src="https://console-openshift-console.{{ .Values.deployer.domain }}" width="100%" style="border:none;"></iframe>
         </div>
 {{-   end }}
       </div>
