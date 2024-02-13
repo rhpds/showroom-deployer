@@ -57,11 +57,11 @@ spec:
         ports:
         - containerPort: 8000
           protocol: TCP
-        livenessprobe:
+        livenessProbe:
           httpget:
             path: /
             port: 8000
-        readinessprobe:
+        readinessProbe:
           httpget:
             path: /
             port: 8000
@@ -112,11 +112,11 @@ spec:
         ports:
         - containerPort: 9000
           protocol: TCP
-        livenessprobe:
+        livenessProbe:
           httpget:
             path: /
             port: 9000
-        readinessprobe:
+        readinessProbe:
           httpget:
             path: /
             port: 9000
