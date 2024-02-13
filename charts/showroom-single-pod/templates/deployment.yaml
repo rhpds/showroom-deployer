@@ -58,11 +58,11 @@ spec:
         - containerPort: 8000
           protocol: TCP
         livenessProbe:
-          httpget:
+          httpGet:
             path: /
             port: 8000
         readinessProbe:
-          httpget:
+          httpGet:
             path: /
             port: 8000
 
@@ -113,11 +113,11 @@ spec:
         - containerPort: 9000
           protocol: TCP
         livenessProbe:
-          httpget:
+          httpGet:
             path: /
             port: 9000
         readinessProbe:
-          httpget:
+          httpGet:
             path: /
             port: 9000
 {{- end }}
