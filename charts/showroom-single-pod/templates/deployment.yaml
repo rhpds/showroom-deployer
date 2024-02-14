@@ -114,11 +114,11 @@ spec:
           protocol: TCP
         livenessProbe:
           httpGet:
-            path: /
+            path: /console/
             port: 9000
         readinessProbe:
           httpGet:
-            path: /
+            path: /console/
             port: 9000
 {{- end }}
 
