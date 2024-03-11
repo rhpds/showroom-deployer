@@ -82,5 +82,5 @@ codeserver:
       memory: 512Mi
 
 # To be fully implemented
-ocpConsole:
+ocpconsole:
   setup: "false"
