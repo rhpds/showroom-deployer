@@ -150,6 +150,22 @@ spec:
           {{- toYaml .Values.wetty.resources | nindent 10 }}
 {{- end }}
 
+{{- if eq .Values.novnc.setup "true" }}
+      - name: novnc
+        image: {{ .Values.novnc.image }}
+        imagePullPolicy: IfNotPresent
+        args:
+        - websockify
+        - --web=/www
+        - 127.0.0.1:{{ .Values.novnc.port }}
+        - "{{ .Values.novnc.vncServer }}"
+        ports:
+        - containerPort: {{ .Values.novnc.port }}
+          protocol: TCP
+        resources:
+          {{- toYaml .Values.novnc.resources | nindent 10 }}
+{{- end }}
+
       volumes:
       - name: showroom
         emptyDir: {}
