@@ -1,69 +1,85 @@
 = SHOWROOM
 
-Welcome to the showroom OpenShift application.
+Welcome to the Showroom OpenShift application.
 
-== Install
+== Namespace Creation
 
-A basic installation will vary depending if you have a docs site running or you want to build and serve
-the documentation from the source code.
+Showroom has flexible namespace creation to accomodate deployment as cluster-admin, regular users, or service accounts.
 
-=== Namespace creation
-
-. Deploying as cluster-admin (default)
-
+. Deploying the Helm Chart as cluster-admin (default)
++
 By default, this Helm Chart attempts to create a Namespace for showroom.
-As cluster-admin can create and manage cluster resources like Namespaces
+Cluster-admin can create and manage cluster resources like Namespaces.
 
 . Deploying as Service Account
-
++
 If you will be deploying this Helm Chart as a service account, you must create the Namespace in advance.
 Indicate `--set namespace.create=false` in your execution of this command to avoid RBAC errors.
 
-=== Namespace name generation
-
-Typically, user interface namespace names have been just `bookbag-GUID` or `showroom-GUID`.
-This makes management and cleanup a bit difficult.
-
-=== Deploy Showroom - Parameters
-
-
-In this scenario you have:
-
-* a Git repo URL with an Antora website and want OpenShift to build and deploy
-* login as an OpenShift user that can create cluster resources (namespaces, etc) like cluster-admin
-* FQDN of your default OpenShift route.
-Example: apps.shared-410.openshift.redhatworkshops.io
-* Namespace
-** A Namespace name like `showroom-test`: `namespace.name=test`
+. Namespace name generation
 +
-or
-+
-** <namespace>-<guid> composed of `general.namespace=showroom` and `general.guid=test`.
+By default, namespace names are generated as `showroom-GUID`.
+This may be overriden in your helm execution.
+
+== Deploy Showroom - Requirements
+
+To deploy Showroom you'll need:
+
+* A GUID, indicated to helm as `guid`
+* A Git repo URL with an Antora website and want OpenShift to build and deploy.
+Indicated to helm in `documentation.repoUrl`
+** example: https://github.com/rhpds/showroom_template_default
+* Login as an OpenShift user that can create cluster resources (namespaces, etc) like *cluster-admin*
+* FQDN of your default OpenShift route, indicated to helm in `deployer.domain`
+** Example: apps.shared-410.openshift.redhatworkshops.io
+* Namespace name will always be prefixed as `showroom-`, and the suffix will be `guid`.
 Defaults to `showroom-test`
+** You can override these with helm by indicating `general.namespace=bookbag` and `general.guid=test`.
+* Optional: To provide sample asciidoc attributes to Showroom content, indicate a yaml file with sample user data.
+`content.user_data=<path-to-user-data.yaml>`
+** Example
++
+.$HOME/sample_site/user_data.yaml
+[source,yaml]
+----
+---
+bastion_hostname: my.bastion.hostname.example.com
+bastion_username: eugenedebbs
+----
 
-.Deploy as cluster-admin with `helm template` *RECOMMENDED*
-```
+== Deploy Showoom - Procedure
+
+=== Deploy as cluster-admin with `helm template` *RECOMMENDED*
+
+. Run `helm template` with parameters
++
+----
 git clone https://github.com/rhpds/showroom-deployer
 cd ./showroom-deployer/charts
 
-helm template ./showroom \
+helm template ./showroom-single-pod \
 --set deployer.domain=apps.shared-410.openshift.redhatworkshops.io \
 --set general.guid=GUID \
 --set-file content.user_data=<path-to-user-data.yaml> \
 --set documentation.repoUrl=https://github.com/rhpds/showroom_template_default \
 | oc apply -f -
-```
+----
 
-.Deploy as cluster-admin with `helm install`
-```
- helm repo add rhpds https://rhpds.github.io/showroom-deployer
-```
-. Refresh them
+=== Deploy as cluster-admin with `helm install`
+
+. Add the helm repo
++
+----
+helm repo add rhpds https://rhpds.github.io/showroom-deployer
+----
+
+. Refresh the repo
 
  helm repo update
 
 . Install the latest
-```
++
+----
  helm install myshowroom rhpds/showroom
 --create-namespace \
 --set deployer.domain=apps.shared-410.openshift.redhatworkshops.io \
@@ -72,30 +88,11 @@ helm template ./showroom \
 --set documentation.repoUrl=https://github.com/rhpds/showroom_template_default
 
 helm install myshowroom myrhpds/showroom --set deployer.domain=apps.shared-410.openshift.redhatworkshops.io --set general.guid=test --set-file content.user_data=/Users/jmaltin/tmp/azure-user-data.yaml --debug --create-namespace --set namespace.create=false
-```
+----
 
 NOTE: The above creates the namespace `showroom-test` where the helm release exists, AND creates the namespace `showroom-test2` there the actual application is deployed.
 
-== ArgoCD - *Work in Progress* - BROKEN
-
-It is possible to deploy the helm chart with ArgoCD.
-This repo provides an ArgoCD/Application for your convenience.
-
-```
-oc create -f ./setup/argocd/application.yaml
-```
-
-== Multi-user installation - *Work in Progress* - BROKEN
-
-The chart can be installed multiple times in one namespace per user. You control this in helm values.yaml.
-
-An easy way to setup and manage a multi-user deployment is via the ArgoCD/ApplicationSet.
-
-```
-oc create -f ./argocd/applicationset.yaml
-```
-
-== Use \https://rhpds.github.io/ in your git repo as Helm Repo
+== Hosting Helm Repo with on \https://rhpds.github.io/
 
 === Prereqs
 
@@ -104,7 +101,7 @@ I added a few actions to the rhpds github org.
 * helm/chart-releaser-action@v1.5.0
 * helm/chart-testing-action@master
 
-=== Setup
+=== Set Up
 
 . Setup a branch in your repo which gh-pages will host.
 Call it `gh-pages`
@@ -118,8 +115,8 @@ git push
 . Get gh-pages working for your repo.
 .. Go to the `settings` page on your repository and set the `source branch` to the `gh-pages` branch you just created.
 . Check out the github workflows in this repo for
-.. link:.github/workflows/ci.yaml[.github/workflows/ci.yaml]: PRs to `/charts` automatically Lint and Test Charts
-... [NOTE] Should be upgraded per: https://github.com/marketplace/actions/helm-chart-testing
+// TODO .. link:.github/workflows/ci.yaml[.github/workflows/ci.yaml]: PRs to `/charts` automatically Lint and Test Charts
+// ... [NOTE] Should be upgraded per: https://github.com/marketplace/actions/helm-chart-testing
 .. link:.github/workflows/release-helm.yaml[.github/workflows/release-helm.yaml]: Commits to `/charts` triggering a release to \https://rhpds.github.io/<your repo name>
 
 === Testing your new Chart Repo
@@ -136,11 +133,30 @@ Just like you'd use any Helm repo
 
 . Install the latest
 
- helm install showroom <lots of parameters>
+ helm install showroom-single-pod <lots of parameters>
 
 == TODO
 
 . Basic AgD Integration
 . Test applicationSet
 . for dedicated OCP cluster, just install helm chart (?)
-. ssh to bastion automatically if set
+
+== ArgoCD - *Work in Progress* - BROKEN :(
+
+It is possible to deploy the helm chart with ArgoCD.
+This repo provides an ArgoCD/Application for your convenience.
+
+----
+oc create -f ./setup/argocd/application.yaml
+----
+
+== Argo CD - Multi-user installation - *Work in Progress* - BROKEN :(
+
+The chart can be installed multiple times in one namespace per user. You control this in helm values.yaml.
+
+An easy way to setup and manage a multi-user deployment is via the ArgoCD/ApplicationSet.
+
+----
+oc create -f ./argocd/applicationset.yaml
+----
+
