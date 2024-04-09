@@ -84,3 +84,16 @@ codeserver:
 # To be fully implemented
 ocpconsole:
   setup: "false"
+
+novnc:
+  setup: "false"
+  image: ghcr.io/rhpds/showroom-novnc:latest
+  port: 6080
+  vncServer: 127.0.0.1:5900
+  password: password
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 500m
+      memory: 256Mi

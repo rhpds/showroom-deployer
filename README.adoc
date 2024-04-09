@@ -92,6 +92,19 @@ helm install myshowroom myrhpds/showroom --set deployer.domain=apps.shared-410.o
 
 NOTE: The above creates the namespace `showroom-test` where the helm release exists, AND creates the namespace `showroom-test2` there the actual application is deployed.
 
+==== Deploy noVNC
+
+For deploying showroom with noVNC, you need to have a host with a VNC server configured and running.
+
+. Using Helm
+----
+helm install
+...
+--set novnc.setup=true \
+--set novnc.vncServer=my.host.local:5900 \
+--set novnc.password=secret123
+----
+
 == Hosting Helm Repo with on \https://rhpds.github.io/
 
 === Prereqs

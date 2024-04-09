@@ -1,0 +1,20 @@
+FROM registry.access.redhat.com/ubi9:9.2-722
+
+ARG CREATED_AT=none
+ARG GITHUB_SHA=none
+
+LABEL org.opencontainers.image.created="$CREATED_AT"
+LABEL org.opencontainers.image.revision="$GITHUB_SHA"
+
+RUN curl -L https://github.com/novnc/websockify/archive/refs/tags/v0.11.0.tar.gz \
+  --output websockify.tar.gz && \
+  tar xzf websockify.tar.gz && \
+  cd /websockify-0.11.0 && python3 setup.py install
+
+RUN curl -L https://github.com/novnc/noVNC/archive/refs/tags/v1.4.0.tar.gz \
+  --output noVNC.tar.gz && \
+  mkdir -p /www/novnc && \
+  tar xzf noVNC.tar.gz --strip-components 1 -C /www/novnc
+
+#
+CMD ["websockify"]
