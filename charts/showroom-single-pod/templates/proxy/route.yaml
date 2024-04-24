@@ -4,6 +4,9 @@ kind: Route
 metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace}}
+  annotations:
+    haproxy.router.openshift.io/timeout: 1h
+    haproxy.router.openshift.io/timeout-tunnel: 1h
 spec:
   to:
     kind: Service
