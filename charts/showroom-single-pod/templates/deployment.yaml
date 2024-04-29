@@ -14,10 +14,10 @@ spec:
       labels:
         app.kubernetes.io/name: {{ .Release.Name }}
     spec:
-      strategy: Recreate
+      strategy:
+        type: Recreate
       serviceAccountName: {{ .Release.Name }}
       containers:
-
       - name: nginx
         image: {{ .Values.proxy.image }}
         imagePullPolicy: {{ .Values.proxy.imagePullPolicy }}
