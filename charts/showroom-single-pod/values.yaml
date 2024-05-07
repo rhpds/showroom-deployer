@@ -49,7 +49,7 @@ terminal:
     setup: "true"
     pvcSize: 5Gi
     # Use default Storage Class when empty
-    storageClass: "gp2"
+    storageClass: ""
 
 wetty:
   setup: "false"
