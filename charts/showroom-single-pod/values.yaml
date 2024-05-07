@@ -9,7 +9,8 @@ deployer:
   domain: cluster-GUID.GUID.sandboxNUMBERS.opentlc.com
 
 proxy:
-  image: docker.io/library/nginx:1.25
+  image: quay.io/rhpds/nginx:1.25
+  #  image: docker.io/library/nginx:1.25
   imagePullPolicy: IfNotPresent
 
 content:
@@ -48,11 +49,11 @@ terminal:
     setup: "true"
     pvcSize: 5Gi
     # Use default Storage Class when empty
-    storageClass: ""
+    storageClass: "gp2"
 
 wetty:
   setup: "false"
-  image: docker.io/wettyoss/wetty:latest
+  image: quay.io/rhpds/wetty:latest
   name: wetty
   port: 8001
   base: "wetty"
@@ -73,7 +74,7 @@ wetty:
 # To be fully implemented
 codeserver:
   setup: "false"
-  image: docker.io/codercom/code-server:latest
+  image: quay.io/rhpds/code-server:latest
   resources:
     limits:
       memory: 512Mi
