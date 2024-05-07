@@ -65,6 +65,15 @@ helm template ./showroom-single-pod \
 | oc apply -f -
 ----
 
+NOTE: If the above doesn't work, the following worked for me:
++
+---
+helm template showroom showroom-single-pod \
+--set deployer.domain=apps.shared-410.openshift.redhatworkshops.io \
+--set general.guid=my-test \
+--set documentation.repoUrl=https://github.com/rhpds/showroom_template_default | oc apply -f -
+---
+
 === Deploy as cluster-admin with `helm install`
 
 . Add the helm repo
@@ -172,4 +181,3 @@ An easy way to setup and manage a multi-user deployment is via the ArgoCD/Applic
 ----
 oc create -f ./argocd/applicationset.yaml
 ----
-
