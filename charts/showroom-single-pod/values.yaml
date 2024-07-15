@@ -32,6 +32,16 @@ content:
   user_data: |
     bastion_password: from_helm
 
+# to have two terminals in one tab
+# set stacked_terminals to "true"
+# and indicate which two terminals you want
+stacked_terminals:
+  setup: "false"
+  name: stacked-terminal
+  display_name: "Stacked Terminal"
+  top: "terminal"
+  bottom: "wetty2"
+
 terminal:
   setup: "true"
   image: quay.io/rhpds/openshift-showroom-terminal-ocp:latest

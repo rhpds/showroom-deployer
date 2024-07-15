@@ -16,18 +16,31 @@
       </div>
       <div class="split right">
         <div class="tab">
-{{-   if eq .Values.terminal.setup "true" }}
-          <button class="tablinks" onclick="openTerminal(event, 'terminal_tab1')" id="defaultOpen" tabindex="0">{{ .Values.terminal.display_name }}</button>
+<!-- tabbed terminals - start -->
+
+{{-   if eq .Values.stacked_terminals.setup "false" }}
+  {{-   if eq .Values.terminal.setup "true" }}
+            <button class="tablinks" onclick="openTerminal(event, 'terminal_tab1')" id="defaultOpen" tabindex="0">{{ .Values.terminal.display_name }}</button>
+  {{-   end }}
+  {{-   if eq .Values.terminal2.setup "true" }}
+            <button class="tablinks" onclick="openTerminal(event, 'terminal_tab2')" id="defaultOpen" tabindex="0">{{ .Values.terminal2.display_name }}</button>
+  {{-   end }}
+  {{-   if eq .Values.wetty.setup "true" }}
+            <button class="tablinks" onclick="openTerminal(event, 'wetty_tab1')" id="defaultOpen" tabindex="0">{{ .Values.wetty.display_name }}</button>
+  {{-   end }}
+  {{-   if eq .Values.wetty2.setup "true" }}
+            <button class="tablinks" onclick="openTerminal(event, 'wetty_tab2')" id="defaultOpen" tabindex="0">{{ .Values.wetty2.display_name }}</button>
+  {{-   end }}
 {{-   end }}
-{{-   if eq .Values.terminal2.setup "true" }}
-          <button class="tablinks" onclick="openTerminal(event, 'terminal_tab2')" id="defaultOpen" tabindex="0">{{ .Values.terminal2.display_name }}</button>
+<!-- tabbed terminals - end -->
+
+<!-- stacked terminals - start -->
+{{-   if eq .Values.stacked_terminals.setup "true" }}
+          <button class="tablinks" onclick="openTerminal(event, 'stacked_terminals')" id="defaultOpen" tabindex="0">{{ .Values.stacked_terminals.display_name }}</button>
 {{-   end }}
-{{-   if eq .Values.wetty.setup "true" }}
-          <button class="tablinks" onclick="openTerminal(event, 'wetty_tab1')" id="defaultOpen" tabindex="0">{{ .Values.wetty.display_name }}</button>
-{{-   end }}
-{{-   if eq .Values.wetty2.setup "true" }}
-          <button class="tablinks" onclick="openTerminal(event, 'wetty_tab2')" id="defaultOpen" tabindex="0">{{ .Values.wetty2.display_name }}</button>
-{{-   end }}
+<!-- stacked terminals - end -->
+
+<!-- other tabs - start -->
 {{-   if eq .Values.codeserver.setup "true" }}
           <button class="tablinks" onclick="openTerminal(event, 'codeserver_tab')">Code Server</button>
 {{-   end }}
@@ -37,32 +50,56 @@
 {{-   if eq .Values.novnc.setup "true" }}
           <button class="tablinks" onclick="openTerminal(event, 'novnc_tab')">Desktop</button>
 {{-   end }}
+<!-- other tabs - end -->
         </div>
-{{-   if eq .Values.terminal.setup "true" }}
-        <div id="terminal_tab1" class="tabcontent">
-          <iframe id="terminal_01" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/terminal" width="100%" style="border:none;"></iframe>
-        </div>
+
+<!-- iframe definition - start -->
+<!-- tabbed terminals iframes - start -->
+{{-   if eq .Values.stacked_terminals.setup "false" }}
+  {{-   if eq .Values.terminal.setup "true" }}
+          <div id="terminal_tab1" class="tabcontent">
+            <iframe id="terminal_01" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/terminal" width="100%" style="border:none;"></iframe>
+          </div>
+  {{-   end }}
+  {{-   if eq .Values.terminal2.setup "true" }}
+          <div id="terminal_tab2" class="tabcontent">
+            <iframe id="terminal_02" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/terminal2" width="100%" style="border:none;"></iframe>
+          </div>
+  {{-   end }}
+  {{-   if eq .Values.wetty.setup "true" }}
+          <div id="wetty_tab1" class="tabcontent">
+            <iframe id="terminal_01" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/wetty" width="100%" style="border:none;"></iframe>
+          </div>
+  {{-   end }}
+  {{-   if eq .Values.wetty2.setup "true" }}
+          <div id="wetty_tab2" class="tabcontent">
+            <iframe id="terminal_02" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/wetty2" width="100%" style="border:none;"></iframe>
+          </div>
+  {{-   end }}
+  {{-   if eq .Values.codeserver.setup "true" }}
+          <div id="codeserver_tab" class="tabcontent">
+            <iframe id="codeserver" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/codeserver" width="100%" style="border:none;"></iframe>
+          </div>
+  {{-   end }}
 {{-   end }}
-{{-   if eq .Values.terminal2.setup "true" }}
-        <div id="terminal_tab2" class="tabcontent">
-          <iframe id="terminal_02" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/terminal2" width="100%" style="border:none;"></iframe>
-        </div>
+<!-- tabbed terminals iframes - end -->
+<!-- stacked terminals iframes - start -->
+{{-   if eq .Values.stacked_terminals.setup "true" }}
+
+<div id="stacked_terminals" class="tabcontent">
+  <div class="split top">
+    <iframe id="{{ .Values.stacked_terminals.top }}" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/{{ .Values.stacked_terminals.top }}" width="100%" style="border:none;"></iframe>
+  </div>
+  <div class="split bottom">
+    <iframe id="{{ .Values.stacked_terminals.bottom }}" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/{{ .Values.stacked_terminals.bottom }}" width="100%" style="border:none;"></iframe>
+  </div>
+</div>
+
 {{-   end }}
-{{-   if eq .Values.wetty.setup "true" }}
-        <div id="wetty_tab1" class="tabcontent">
-          <iframe id="terminal_01" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/wetty" width="100%" style="border:none;"></iframe>
-        </div>
-{{-   end }}
-{{-   if eq .Values.wetty2.setup "true" }}
-        <div id="wetty_tab2" class="tabcontent">
-          <iframe id="terminal_02" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/wetty2" width="100%" style="border:none;"></iframe>
-        </div>
-{{-   end }}
-{{-   if eq .Values.codeserver.setup "true" }}
-        <div id="codeserver_tab" class="tabcontent">
-          <iframe id="codeserver" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/codeserver" width="100%" style="border:none;"></iframe>
-        </div>
-{{-   end }}
+
+<!-- stacked terminals iframes - end -->
+
+
 {{-   if eq .Values.ocpconsole.setup "true" }}
         <div id="ocpconsole_tab" class="tabcontent">
           <iframe id="ocpconsole" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/console/" width="100%" style="border:none;"></iframe>
@@ -76,6 +113,7 @@
       </div>
 {{- end }}
     </div>
+<!-- iframe definition - end -->
     <script>
       document.getElementById("defaultOpen").click();
       function openTerminal(evt, tabName) {
@@ -100,6 +138,10 @@
     <script>
       Split(['.left', '.right'], {
         sizes: [45,55],
+      });
+      Split(['.top', '.bottom'], {
+        sizes: [65,35],
+        direction: 'vertical',
       });
     </script>
   </body>
