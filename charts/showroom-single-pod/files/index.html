@@ -17,10 +17,16 @@
       <div class="split right">
         <div class="tab">
 {{-   if eq .Values.terminal.setup "true" }}
-          <button class="tablinks" onclick="openTerminal(event, 'terminal_tab')" id="defaultOpen" tabindex="0">Terminal</button>
+          <button class="tablinks" onclick="openTerminal(event, 'terminal_tab1')" id="defaultOpen" tabindex="0">{{ .Values.terminal.display_name }}</button>
+{{-   end }}
+{{-   if eq .Values.terminal2.setup "true" }}
+          <button class="tablinks" onclick="openTerminal(event, 'terminal_tab2')" id="defaultOpen" tabindex="0">{{ .Values.terminal2.display_name }}</button>
 {{-   end }}
 {{-   if eq .Values.wetty.setup "true" }}
-          <button class="tablinks" onclick="openTerminal(event, 'terminal_tab')" id="defaultOpen" tabindex="0">SSH Terminal</button>
+          <button class="tablinks" onclick="openTerminal(event, 'wetty_tab1')" id="defaultOpen" tabindex="0">{{ .Values.wetty.display_name }}</button>
+{{-   end }}
+{{-   if eq .Values.wetty2.setup "true" }}
+          <button class="tablinks" onclick="openTerminal(event, 'wetty_tab2')" id="defaultOpen" tabindex="0">{{ .Values.wetty2.display_name }}</button>
 {{-   end }}
 {{-   if eq .Values.codeserver.setup "true" }}
           <button class="tablinks" onclick="openTerminal(event, 'codeserver_tab')">Code Server</button>
@@ -33,13 +39,23 @@
 {{-   end }}
         </div>
 {{-   if eq .Values.terminal.setup "true" }}
-        <div id="terminal_tab" class="tabcontent">
+        <div id="terminal_tab1" class="tabcontent">
           <iframe id="terminal_01" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/terminal" width="100%" style="border:none;"></iframe>
         </div>
 {{-   end }}
+{{-   if eq .Values.terminal2.setup "true" }}
+        <div id="terminal_tab2" class="tabcontent">
+          <iframe id="terminal_02" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/terminal2" width="100%" style="border:none;"></iframe>
+        </div>
+{{-   end }}
 {{-   if eq .Values.wetty.setup "true" }}
-        <div id="terminal_tab" class="tabcontent">
+        <div id="wetty_tab1" class="tabcontent">
           <iframe id="terminal_01" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/wetty" width="100%" style="border:none;"></iframe>
+        </div>
+{{-   end }}
+{{-   if eq .Values.wetty2.setup "true" }}
+        <div id="wetty_tab2" class="tabcontent">
+          <iframe id="terminal_02" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/wetty2" width="100%" style="border:none;"></iframe>
         </div>
 {{-   end }}
 {{-   if eq .Values.codeserver.setup "true" }}
