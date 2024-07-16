@@ -60,41 +60,9 @@ data:
         }
 {{- end }}
 
-{{-   if eq .Values.terminal2.setup "true" }}
-        location /terminal2/ {
-          proxy_pass http://localhost:{{ .Values.terminal2.port }};
-          rewrite ^/terminal2/(.*)$ /$1 break;
-
-          proxy_http_version 1.1;
-          proxy_set_header Upgrade $http_upgrade;
-          proxy_set_header Connection "upgrade";
-          proxy_read_timeout 43200000;
-
-          proxy_set_header X-Real-IP $remote_addr;
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          proxy_set_header Host $http_host;
-          proxy_set_header X-NginX-Proxy true;
-        }
-{{- end }}
-
 {{-   if eq .Values.wetty.setup "true" }}
         location ^~ /wetty {
           proxy_pass http://localhost:{{ .Values.wetty.port }}/{{ .Values.wetty.base }};
-          proxy_http_version 1.1;
-          proxy_set_header Upgrade $http_upgrade;
-          proxy_set_header Connection "upgrade";
-          proxy_read_timeout 43200000;
-
-          proxy_set_header X-Real-IP $remote_addr;
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          proxy_set_header Host $http_host;
-          proxy_set_header X-NginX-Proxy true;
-        }
-{{- end }}
-
-{{-   if eq .Values.wetty2.setup "true" }}
-        location ^~ /wetty2 {
-          proxy_pass http://localhost:{{ .Values.wetty2.port }}/{{ .Values.wetty2.base }};
           proxy_http_version 1.1;
           proxy_set_header Upgrade $http_upgrade;
           proxy_set_header Connection "upgrade";

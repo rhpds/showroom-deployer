@@ -87,26 +87,6 @@ spec:
         resources:
           {{- toYaml .Values.terminal.resources | nindent 10 }}
 {{- end }}
-{{- if eq .Values.terminal2.setup "true" }}
-      - name: terminal2
-        image: {{ .Values.terminal2.image }}
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: GUID
-          value: "{{ .Values.guid }}"
-        volumeMounts:
-        - name: terminal-lab-user-home
-          mountPath: /home/lab-user
-        ports:
-        - containerPort: {{ .Values.terminal2.port }}
-          protocol: TCP
-        resources:
-          {{- toYaml .Values.terminal2.resources | nindent 10 }}
-{{- end }}
 {{- if eq .Values.ocpconsole.setup "true" }}
       - name: console-app
         image: "quay.io/openshift/origin-console:4.14"
@@ -169,34 +149,6 @@ spec:
           protocol: TCP
         resources:
           {{- toYaml .Values.wetty.resources | nindent 10 }}
-{{- end }}
-
-{{- if eq .Values.wetty2.setup "true" }}
-      - name: wetty2
-        image: {{ .Values.wetty2.image }}
-        imagePullPolicy: IfNotPresent
-        args:
-        - --base="/{{ .Values.wetty2.base }}/"
-        - --port={{ .Values.wetty2.port }}
-{{-   if eq .Values.wetty2.ssh.autoSshToBastion "true" }}
-        - --ssh-host={{ .Values.wetty2.ssh.sshHost }}
-        - --ssh-port={{ .Values.wetty2.ssh.sshPort }}
-        - --ssh-user={{ .Values.wetty2.ssh.sshUser }}
-        - --ssh-auth={{ .Values.wetty2.ssh.sshAuth }}
-        - --ssh-pass={{ .Values.wetty2.ssh.sshPass }}
-{{-   end }}
-        env:
-        - name: NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: GUID
-          value: "{{ .Values.guid }}"
-        ports:
-        - containerPort: {{ .Values.wetty2.port }}
-          protocol: TCP
-        resources:
-          {{- toYaml .Values.wetty2.resources | nindent 10 }}
 {{- end }}
 
 {{- if eq .Values.novnc.setup "true" }}
