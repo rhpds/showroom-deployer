@@ -37,7 +37,7 @@ spec:
           values: |
             namespace:
               create: false
-              name: showroom-{{ guid }}-{% raw %}{{user}}{% raw %}
+              name: showroom-{{ guid }}-{% raw %}{{user}}{% endraw %}
             deployer:
               domain: {{ _deployer_domain }}
             general:
