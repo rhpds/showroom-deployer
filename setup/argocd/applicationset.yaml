@@ -44,6 +44,8 @@ spec:
               repoUrl: https://github.com/rhpds/aro-ilt.git
               user_data: |
                 bastion_ssh_password: farts
+              zero_touch_bundle: https://github.com/rhpds/nookbag/releases/download/nookbag-v0.0.4/nookbag-v0.0.4.zip
+              zero_touch_ui_enabled: false
       destination:
         namespace: showroom-{{user}}
         server: https://kubernetes.default.svc
