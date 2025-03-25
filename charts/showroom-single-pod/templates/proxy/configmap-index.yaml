@@ -7,8 +7,7 @@ metadata:
 data:
 {{- range $path, $bytes := .Files.Glob "files/*" }}
 {{-   $subdir := dir $path }}
-{{-   $safeSubdir := default "" $subdir }}
-{{-   $currentFilename := ($path | replace "a" "./" ) }}
+{{-   $currentFilename := replace (printf "%s/" $subdir) "./" $path }}
 {{   $currentFilename | indent 2 }}: |
 {{   tpl ($.Files.Get $path) $ | nindent 4 }}
 {{- end }}
