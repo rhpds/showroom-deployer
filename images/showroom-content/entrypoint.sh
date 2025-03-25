@@ -29,7 +29,7 @@ echo
 echo "Original user_data in content/antora.yml"
 cat ${WORKDIR}/content/antora.yml
 
-if [ -z ${USER_DATA_FILE} ]; then
+if [ -z "${USER_DATA_FILE}" ]; then
   echo
   echo "USER_DATA_FILE not defined.  Falling back to USER_DATA_FILE=/user_data/user_data.yml"
   USER_DATA_FILE="/user_data/user_data.yml"
