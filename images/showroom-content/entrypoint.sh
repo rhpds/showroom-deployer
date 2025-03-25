@@ -1,4 +1,4 @@
-#!/bin/bash -xe
+#!/bin/bash
 
 if [ -z "${GIT_REPO_URL}" ]; then
   echo "GIT_REPO_URL is not set. Exiting."
@@ -25,29 +25,6 @@ else
   git checkout ${GIT_REPO_REF}
 fi
 
-
-### Zero Touch UI integration
-if [ "$ZT_UI_ENABLED" = true ]; then
-  ZT_BUNDLE_NAME="zt_bundle.zip"
-  ZT_BUNDLE_DIR="/showroom/www/"
-
-  echo
-  echo "download $ZT_BUNDLE into $ZT_BUNDLE_DIR"
-  curl --retry 6 --retry-delay 10 -L -o $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME $ZT_BUNDLE
-
-  echo
-  echo "unzip $ZT_BUNDLE into $ZT_BUNDLE_DIR"
-  unzip -o $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME -d $ZT_BUNDLE_DIR 
-
-  echo
-  echo "remove zip after extraction"
-  rm $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME
-
-  echo
-  echo "Symlink zero-touch-config.yml to www/zero-touch-config.yml"
-  ln -sfn /showroom/repo/zero-touch-config.yml $ZT_BUNDLE_DIR/zero-touch-config.yml
-fi
-
 echo
 echo "Original user_data in content/antora.yml"
 cat ${WORKDIR}/content/antora.yml
@@ -72,7 +49,7 @@ fi
 cat ${WORKDIR}/content/antora.yml
 echo
 
-WWW_ROOT=/showroom/www/
+WWW_ROOT=/showroom/www
 test -d ${WWW_ROOT} || mkdir ${WWW_ROOT}
 
 echo
@@ -83,7 +60,29 @@ antora --version
 echo
 echo "Run antora ${ANTORA_PLAYBOOK}"
 
-antora --to-dir=${WWW_ROOT} ${ANTORA_PLAYBOOK}
+antora --to-dir=${WWW_ROOT}/www ${ANTORA_PLAYBOOK}
+
+### Zero Touch UI integration
+if [ "$ZT_UI_ENABLED" = true ]; then
+  ZT_BUNDLE_NAME="zt_bundle.zip"
+  ZT_BUNDLE_DIR="/showroom/www"
+
+  echo
+  echo "download $ZT_BUNDLE into $ZT_BUNDLE_DIR"
+  curl -L -o $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME $ZT_BUNDLE
+
+  echo
+  echo "unzip $ZT_BUNDLE into $ZT_BUNDLE_DIR"
+  unzip $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME -d $ZT_BUNDLE_DIR
+
+  echo
+  echo "remove zip after extraction"
+  rm $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME
+
+  echo
+  echo "Symlink zero-touch-config.yml to www/zero-touch-config.yml"
+  ln -sfn /showroom/repo/zero-touch-config.yml $ZT_BUNDLE_DIR/zero-touch-config.yml
+fi
 
 echo
 echo "Run httpd"
