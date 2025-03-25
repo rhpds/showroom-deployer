@@ -73,7 +73,7 @@ if [ "$ZT_UI_ENABLED" = true ]; then
 
   echo
   echo "unzip $ZT_BUNDLE into $ZT_BUNDLE_DIR"
-  unzip $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME -d $ZT_BUNDLE_DIR
+  unzip -o $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME -d $ZT_BUNDLE_DIR
 
   echo
   echo "remove zip after extraction"
