@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -xe
 
 if [ -z "${GIT_REPO_URL}" ]; then
   echo "GIT_REPO_URL is not set. Exiting."
@@ -33,11 +33,11 @@ if [ "$ZT_UI_ENABLED" = true ]; then
 
   echo
   echo "download $ZT_BUNDLE into $ZT_BUNDLE_DIR"
-  curl -L -o $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME $ZT_BUNDLE
+  curl --retry 6 --retry-delay 10 -L -o $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME $ZT_BUNDLE
 
   echo
   echo "unzip $ZT_BUNDLE into $ZT_BUNDLE_DIR"
-  unzip $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME -d $ZT_BUNDLE_DIR -o
+  unzip -o $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME -d $ZT_BUNDLE_DIR 
 
   echo
   echo "remove zip after extraction"
