@@ -27,17 +27,17 @@ fi
 
 
 ### Zero Touch UI integration
-if [ "$ZT_UI_BUNDLE" = true ]; then
+if [ "$ZT_UI_ENABLED" = true ]; then
   ZT_BUNDLE_NAME="zt_bundle.zip"
-  ZT_BUNDLE_DIR="$WORKDIR/www/"
+  ZT_BUNDLE_DIR="/showroom/www/"
 
   echo
-  echo "download $ZT_BUNDLE into $WORKDIR"
+  echo "download $ZT_BUNDLE into $ZT_BUNDLE_DIR"
   curl -L -o $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME $ZT_BUNDLE
 
   echo
   echo "unzip $ZT_BUNDLE into $ZT_BUNDLE_DIR"
-  unzip $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME -d $ZT_BUNDLE_DIR
+  unzip $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME -d $ZT_BUNDLE_DIR -o
 
   echo
   echo "remove zip after extraction"
@@ -45,7 +45,7 @@ if [ "$ZT_UI_BUNDLE" = true ]; then
 
   echo
   echo "Symlink zero-touch-config.yml to www/zero-touch-config.yml"
-  ln -sfn $ZT_BUNDLE_DIR/zero-touch-config.yml $ZT_BUNDLE_DIR/www/zero-touch-config.yml
+  ln -sfn /showroom/repo/zero-touch-config.yml $ZT_BUNDLE_DIR/zero-touch-config.yml
 fi
 
 echo
