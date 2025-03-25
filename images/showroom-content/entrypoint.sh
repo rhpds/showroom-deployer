@@ -60,7 +60,7 @@ antora --version
 echo
 echo "Run antora ${ANTORA_PLAYBOOK}"
 
-antora --to-dir=${WWW_ROOT}/www ${ANTORA_PLAYBOOK}
+antora --to-dir=${WWW_ROOT} ${ANTORA_PLAYBOOK}
 
 ### Zero Touch UI integration
 if [ "$ZT_UI_ENABLED" = true ]; then
