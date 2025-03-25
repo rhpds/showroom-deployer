@@ -53,7 +53,7 @@ spec:
         - name: ZT_BUNDLE
           value: {{ .Values.content.zero_touch_bundle }}
         - name: ZT_UI_ENABLED
-          value: {{ .Values.content.zero_touch_ui_enabled }}
+          value: "{{ .Values.content.zero_touch_ui_enabled }}"
         volumeMounts:
         - name: user-data
           mountPath: /user_data/
