@@ -82,6 +82,9 @@ if [ "$ZT_UI_ENABLED" = true ]; then
   echo
   echo "Symlink zero-touch-config.yml to www/zero-touch-config.yml"
   ln -sfn /showroom/repo/zero-touch-config.yml $ZT_BUNDLE_DIR/zero-touch-config.yml
+
+  # Hack for showing the content
+  ln -s /showroom/www /showroom/www/www
 fi
 
 echo
