@@ -49,6 +49,8 @@ fi
 cat ${WORKDIR}/content/antora.yml
 echo
 
+
+
 WWW_ROOT=/showroom/www
 test -d ${WWW_ROOT} || mkdir ${WWW_ROOT}
 
@@ -80,8 +82,13 @@ if [ "$ZT_UI_ENABLED" = true ]; then
   rm $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME
 
   echo
-  echo "Symlink zero-touch-config.yml to www/zero-touch-config.yml"
-  ln -sfn /showroom/repo/zero-touch-config.yml $ZT_BUNDLE_DIR/zero-touch-config.yml
+  echo "Copying/evaluating varibles from zero-touch-config.yml to www/zero-touch-config.yml"
+  
+  # Add the environment variables from the attributes
+  if [ "$(yq e '.asciidoc.attributes.environment_variables // {}  | length' ${WORKDIR}/content/antora.yml)" -gt 0 ]; then 
+    export $(yq e '.asciidoc.attributes.environment_variables // {} | to_entries | .[] | "\(.key)=\(.value|@sh)"' ${WORKDIR}/content/antora.yml)
+  fi
+  envsubst < /showroom/repo/zero-touch-config.yml > $ZT_BUNDLE_DIR/zero-touch-config.yml
 
   # Hack for showing the content
   ln -s /showroom/www /showroom/www/www
