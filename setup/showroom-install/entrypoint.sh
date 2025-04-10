@@ -38,8 +38,8 @@ if [ "$ZT_UI_BUNDLE" = true ]; then
   rm $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME
 
   echo
-  echo "Symlink zero-touch-config.yml to www/zero-touch-config.yml"
-  ln -sfn $ZT_BUNDLE_DIR/zero-touch-config.yml $ZT_BUNDLE_DIR/www/zero-touch-config.yml
+  echo "Symlink ui-config.yml to www/ui-config.yml"
+  ln -sfn $ZT_BUNDLE_DIR/ui-config.yml $ZT_BUNDLE_DIR/www/ui-config.yml
 fi
 
 # Extract the name of the repository to use as the working directory

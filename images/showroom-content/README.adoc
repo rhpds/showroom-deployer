@@ -43,7 +43,7 @@ NOTE:  You can change the ANTORA_PLAYBOOK by setting that environemnt variable t
 
 Run as a zerotouch container:
 
-  podman run -d -e GIT_REPO_URL=https://github.com/redhat-gpte-devopsautomation/zt-get-started-ansible-navigator -e ZT_UI_ENABLED=true -e ANTORA_PLAYBOOK=zero-touch-site.yaml -e ZT_BUNDLE=https://github.com/rhpds/nookbag/releases/download/nookbag-v0.0.4/nookbag-v0.0.4.zip -v $PWD/showroom/:/showroom/ -v $PWD/user_data/:/user_data/ -p 8000:8000 -it showroom-allinone
+  podman run -d -e GIT_REPO_URL=https://github.com/redhat-gpte-devopsautomation/zt-get-started-ansible-navigator -e ZT_UI_ENABLED=true -e ANTORA_PLAYBOOK=default-site.yaml -e ZT_BUNDLE=https://github.com/rhpds/nookbag/releases/download/nookbag-v0.0.4/nookbag-v0.0.4.zip -v $PWD/showroom/:/showroom/ -v $PWD/user_data/:/user_data/ -p 8000:8000 -it showroom-allinone
 Access the website:
 
 http://localhost:8000
