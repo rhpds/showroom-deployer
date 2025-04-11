@@ -20,7 +20,7 @@ spec:
       initContainers:
       - resources: {}
         terminationMessagePath: /dev/termination-log
-        name: runner
+        name: setup
         env:
           - name: GIT_REPO_URL
             value: {{ .Values.content.repoUrl }}
@@ -34,10 +34,6 @@ spec:
             value: {{ .Values.wetty.ssh.sshUser }}
           - name: BASTION_PASSWORD
             value: {{ .Values.wetty.ssh.sshPass }}
-        ports:
-          - name: runner
-            containerPort: 8501
-            protocol: TCP
         imagePullPolicy: Always
         volumeMounts:
           - name: runner
