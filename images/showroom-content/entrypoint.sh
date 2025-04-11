@@ -98,5 +98,3 @@ echo
 echo "Run httpd"
 cd ${WWW_ROOT}
 python3 -m http.server
-
-# Additional commands or logic can be added here if needed
