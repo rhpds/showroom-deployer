@@ -31,7 +31,7 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           image: showroom-content
-          tags: latest ${{ github.ref_name }}
+          tags: latest ${{ github.ref_name }} ${{ github.event.number }}
           context: images/showroom-content/
           containerfiles: |
             ./images/showroom-content/Dockerfile
