@@ -17,6 +17,33 @@ spec:
         app.kubernetes.io/name: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ .Release.Name }}
+      initContainers:
+      - resources: {}
+        terminationMessagePath: /dev/termination-log
+        name: runner
+        env:
+          - name: GIT_REPO_URL
+            value: {{ .Values.content.repoUrl }}
+          - name: GIT_REPO_REF
+            value: {{ .Values.content.repoRef }}
+          - name: BASTION_HOST
+            value: {{ .Values.wetty.ssh.sshHost }}
+          - name: BASTION_PORT
+            value: "{{ .Values.wetty.ssh.sshPort }}"
+          - name: BASTION_USER
+            value: {{ .Values.wetty.ssh.sshUser }}
+          - name: BASTION_PASSWORD
+            value: {{ .Values.wetty.ssh.sshPass }}
+        ports:
+          - name: runner
+            containerPort: 8501
+            protocol: TCP
+        imagePullPolicy: Always
+        volumeMounts:
+          - name: runner
+            mountPath: /runner/
+        terminationMessagePolicy: File
+        image: 'quay.io/agonzalezrh/showroom:setup-v0.1'
       containers:
       - resources: {}
         terminationMessagePath: /dev/termination-log
