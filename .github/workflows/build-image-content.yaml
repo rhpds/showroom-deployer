@@ -5,8 +5,6 @@ on:
   push:
     branches:
       - main
-    tags:
-      - "v*"
     paths:
       - "images/showroom-content/**"
 
@@ -33,7 +31,7 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           image: showroom-content
-          tags: latest ${{ github.ref_name }}
+          tags: latest ${{ github.ref_name }} ${{ github.event.number }}
           context: images/showroom-content/
           containerfiles: |
             ./images/showroom-content/Dockerfile
@@ -47,7 +45,7 @@ jobs:
         with:
           image: ${{ steps.build-image.outputs.image }}
           tags: ${{ steps.build-image.outputs.tags }}
-          registry: ghcr.io/rhpds
+          registry: ghcr.io/agonzalezrh
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 

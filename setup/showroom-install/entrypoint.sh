@@ -20,6 +20,28 @@ echo "git clone the $GIT_REPO_URL into $WORKDIR"
 git clone $GIT_REPO_URL $WORKDIR || cd $WORKDIR && git pull
 cd $WORKDIR
 
+### Zero Touch UI integration
+if [ "$ZT_UI_BUNDLE" = true ]; then
+  ZT_BUNDLE_NAME="zt_bundle.zip"
+  ZT_BUNDLE_DIR="$WORKDIR/www/"
+
+  echo
+  echo "download $ZT_BUNDLE into $WORKDIR"
+  curl -L -o $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME $ZT_BUNDLE
+
+  echo
+  echo "unzip $ZT_BUNDLE into $ZT_BUNDLE_DIR"
+  unzip $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME -d $ZT_BUNDLE_DIR
+
+  echo
+  echo "remove zip after extraction"
+  rm $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME
+
+  echo
+  echo "Symlink ui-config.yml to www/ui-config.yml"
+  ln -sfn $ZT_BUNDLE_DIR/ui-config.yml $ZT_BUNDLE_DIR/www/ui-config.yml
+fi
+
 # Extract the name of the repository to use as the working directory
 # REPO_NAME=$(basename $GIT_REPO .git)
 

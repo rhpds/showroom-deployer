@@ -68,7 +68,7 @@
   {{-   end }}
   {{-   if eq .Values.wetty.setup "true" }}
           <div id="wetty_tab1" class="tabcontent">
-            <iframe id="terminal_01" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/wetty" width="100%" style="border:none;"></iframe>
+            <iframe id="terminal_01" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/tty1" width="100%" style="border:none;"></iframe>
           </div>
   {{-   end }}
 {{-   end }}
@@ -83,7 +83,7 @@
   {{-   end }}
   {{-   if eq .Values.wetty.setup "true" }}
           <div id="wetty_tab2" class="tabcontent">
-            <iframe id="terminal_02" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/wetty" width="100%" style="border:none;"></iframe>
+            <iframe id="terminal_02" src="https://{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}/tty1" width="100%" style="border:none;"></iframe>
           </div>
   {{-   end }}
 {{-   end }}

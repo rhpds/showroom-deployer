@@ -49,7 +49,9 @@ fi
 cat ${WORKDIR}/content/antora.yml
 echo
 
-WWW_ROOT=/showroom/www/
+
+
+WWW_ROOT=/showroom/www
 test -d ${WWW_ROOT} || mkdir ${WWW_ROOT}
 
 echo
@@ -62,9 +64,37 @@ echo "Run antora ${ANTORA_PLAYBOOK}"
 
 antora --to-dir=${WWW_ROOT} ${ANTORA_PLAYBOOK}
 
+### Zero Touch UI integration
+if [ "$ZT_UI_ENABLED" = true ]; then
+  ZT_BUNDLE_NAME="zt_bundle.zip"
+  ZT_BUNDLE_DIR="/showroom/www"
+
+  echo
+  echo "download $ZT_BUNDLE into $ZT_BUNDLE_DIR"
+  curl -L -o $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME $ZT_BUNDLE
+
+  echo
+  echo "unzip $ZT_BUNDLE into $ZT_BUNDLE_DIR"
+  unzip -o $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME -d $ZT_BUNDLE_DIR
+
+  echo
+  echo "remove zip after extraction"
+  rm $ZT_BUNDLE_DIR/$ZT_BUNDLE_NAME
+
+  echo
+  echo "Copying/evaluating varibles from ui-config.yml to www/ui-config.yml"
+  
+  # Add the environment variables from the attributes
+  if [ "$(yq e '.asciidoc.attributes.environment_variables // {}  | length' ${WORKDIR}/content/antora.yml)" -gt 0 ]; then 
+    export $(yq e '.asciidoc.attributes.environment_variables // {} | to_entries | .[] | "\(.key)=\(.value|@sh)"' ${WORKDIR}/content/antora.yml)
+  fi
+  envsubst < /showroom/repo/ui-config.yml > $ZT_BUNDLE_DIR/ui-config.yml
+
+  # Hack for showing the content
+  ln -s /showroom/www /showroom/www/www
+fi
+
 echo
 echo "Run httpd"
 cd ${WWW_ROOT}
 python3 -m http.server
-
-# Additional commands or logic can be added here if needed

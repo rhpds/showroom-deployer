@@ -28,6 +28,10 @@ spec:
             value: {{ .Values.content.repoRef }}
           - name: ANTORA_PLAYBOOK
             value: {{ .Values.content.antoraPlaybook }}
+          - name: ZT_BUNDLE
+            value: {{ .Values.content.zero_touch_bundle }}
+          - name: ZT_UI_ENABLED
+            value: {{ .Values.content.zero_touch_ui_enabled }}
         volumeMounts:
           - name: user-data
             mountPath: /user_data/

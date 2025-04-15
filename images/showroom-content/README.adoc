@@ -37,10 +37,13 @@ Here I just create dummy data, because I don't have a file:
 
 Run the container:
 
- podman run -d -e GIT_REPO_URL=https://github.com/rhpds/aro-ilt -e USER_DATA_FILE=user-data.yaml -v $PWD/showroom/:/showroom/ -v $PWD/user_data/:/user_data/ -p8000:8000 -it showroom-allinone
+ podman run -d -e GIT_REPO_URL=https://github.com/rhpds/aro-ilt -e USER_DATA_FILE=user-data.yml -v $PWD/showroom/:/showroom/ -v $PWD/user_data/:/user_data/ -p8000:8000 -it showroom-allinone
 
 NOTE:  You can change the ANTORA_PLAYBOOK by setting that environemnt variable to the filename of the antora playbook in the git repo
 
+Run as a zerotouch container:
+
+  podman run -d -e GIT_REPO_URL=https://github.com/redhat-gpte-devopsautomation/zt-get-started-ansible-navigator -e ZT_UI_ENABLED=true -e ANTORA_PLAYBOOK=default-site.yaml -e ZT_BUNDLE=https://github.com/rhpds/nookbag/releases/download/nookbag-v0.0.4/nookbag-v0.0.4.zip -v $PWD/showroom/:/showroom/ -v $PWD/user_data/:/user_data/ -p 8000:8000 -it showroom-allinone
 Access the website:
 
 http://localhost:8000
