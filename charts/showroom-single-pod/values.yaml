@@ -14,6 +14,7 @@ proxy:
   imagePullPolicy: IfNotPresent
 
 content:
+  title: Showroom
   # Only create a content pane, no other tabs will be available
   contentOnly: "false"
   image: ghcr.io/rhpds/showroom-content:prod

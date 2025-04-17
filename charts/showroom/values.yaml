@@ -39,6 +39,7 @@ home:
 # Ignored if using {"documentation":{"url":"..."}}
 #
 content:
+  title: Showroom
   image: ghcr.io/rhpds/showroom-content:latest
   repoUrl: https://github.com/rhpds/showroom_template_default.git
   repoRef: main
