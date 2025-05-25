@@ -113,3 +113,20 @@ novnc:
     requests:
       cpu: 500m
       memory: 256Mi
+
+cloud:
+  setup: "false"
+  image: quay.io/agonzalezrh/showroom-cloud:v0.0.1
+  port: 9001
+  cloud_provider: ""
+  aws_access_key_id: ""
+  aws_secret_access_key: ""
+  azure_tenant_id: ""
+  azure_client_id: ""
+  azure_secret: ""
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 500m
+      memory: 256Mi

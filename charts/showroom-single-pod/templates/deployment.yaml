@@ -220,6 +220,29 @@ spec:
           {{- toYaml .Values.novnc.resources | nindent 10 }}
 {{- end }}
 
+{{- if eq .Values.cloud.setup "true" }}
+      - name: cloud 
+        image: {{ .Values.cloud.image }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: CLOUD_PROVIDER
+          value: {{ .Values.cloud.cloud_provider }}
+        - name: AWS_ACCESS_KEY_ID
+          value: {{ .Values.cloud.aws_access_key_id }}
+        - name: AWS_SECRET_ACCESS_KEY
+          value: {{ .Values.cloud.aws_secret_access_key }}
+        - name: AZURE_TENANT_ID
+          value: {{ .Values.cloud.azure_tenant_id }}
+        - name: AZURE_CLIENT_ID
+          value: {{ .Values.cloud.azure_client_id }}
+        - name: AZURE_SECRET
+          value: {{ .Values.cloud.azure_secret }}
+        ports:
+        - containerPort: {{ .Values.cloud.port }}
+          protocol: TCP
+{{- end }}
+
+
       volumes:
       - name: runner
         emptyDir: {}
