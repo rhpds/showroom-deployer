@@ -118,7 +118,7 @@ cloud:
   setup: "false"
   image: quay.io/agonzalezrh/showroom-cloud:v0.0.1
   port: 9001
-  ocp_cloud_provider: ""
+  auth_cloud_provider: ""
   aws_access_key_id: ""
   aws_secret_access_key: ""
   azure_subscription: ""

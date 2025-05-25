@@ -226,7 +226,7 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: CLOUD_PROVIDER
-          value: {{ .Values.cloud.cloud_provider }}
+          value: {{ .Values.cloud.auth_cloud_provider }}
         - name: AWS_ACCESS_KEY_ID
           value: {{ .Values.cloud.aws_access_key_id }}
         - name: AWS_SECRET_ACCESS_KEY
