@@ -121,9 +121,11 @@ cloud:
   cloud_provider: ""
   aws_access_key_id: ""
   aws_secret_access_key: ""
-  azure_tenant_id: ""
+  azure_subscription: ""
+  azure_tenant: ""
   azure_client_id: ""
-  azure_secret: ""
+  azure_password: ""
+  azure_resourcegroup: ""
   resources:
     limits:
       memory: 256Mi

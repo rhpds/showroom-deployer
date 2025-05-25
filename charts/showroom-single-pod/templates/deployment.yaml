@@ -231,12 +231,16 @@ spec:
           value: {{ .Values.cloud.aws_access_key_id }}
         - name: AWS_SECRET_ACCESS_KEY
           value: {{ .Values.cloud.aws_secret_access_key }}
-        - name: AZURE_TENANT_ID
-          value: {{ .Values.cloud.azure_tenant_id }}
+        - name: AZURE_SUBSCRIPTION
+          value: {{ .Values.cloud.azure_suscription }}
+        - name: AZURE_TENANT
+          value: {{ .Values.cloud.azure_tenant }}
         - name: AZURE_CLIENT_ID
           value: {{ .Values.cloud.azure_client_id }}
-        - name: AZURE_SECRET
-          value: {{ .Values.cloud.azure_secret }}
+        - name: AZURE_PASSWORD
+          value: {{ .Values.cloud.azure_password }}
+        - name: AZURE_RESOURCEGROUP
+          value: {{ .Values.cloud.azure_resourcegroup }}
         ports:
         - containerPort: {{ .Values.cloud.port }}
           protocol: TCP
