@@ -94,7 +94,8 @@ data:
         }
 {{- end }}
 {{-   if eq .Values.cloud.setup "true" }}
-        location ^~ /cloud{
+        location ^~ /cloud/ {
+          rewrite ^/cloud(/.*)$ $1 break;
           proxy_pass http://localhost:{{ .Values.cloud.port }}/;
           proxy_http_version 1.1;
           proxy_set_header Upgrade $http_upgrade;
