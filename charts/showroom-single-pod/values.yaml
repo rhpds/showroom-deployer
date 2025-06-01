@@ -132,3 +132,13 @@ cloud:
     requests:
       cpu: 500m
       memory: 256Mi
+
+ironrdp:
+  setup: "false"
+  image: quay.io/agonzalezrh/ironrdp:v0.0.2
+  port: 9000
+  server: "windows-rdp"
+  user: "Administrator"
+  password: ""
+  jetserver: "localhost:7171"
+  tokengenserver: "localhost:8081"

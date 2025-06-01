@@ -34,6 +34,10 @@ spec:
             value: {{ .Values.wetty.ssh.sshUser }}
           - name: BASTION_PASSWORD
             value: {{ .Values.wetty.ssh.sshPass }}
+          - name: GUID
+            value: {{ .Values.guid }}
+          - name: DOMAIN
+            value: {{ .Values.deployer.domain }}
         imagePullPolicy: Always
         volumeMounts:
           - name: runner
@@ -243,6 +247,26 @@ spec:
           value: {{ .Values.cloud.azure_resourcegroup }}
         ports:
         - containerPort: {{ .Values.cloud.port }}
+          protocol: TCP
+{{- end }}
+
+{{- if eq .Values.ironrdp.setup "true" }}
+      - name: ironrdp
+        image: {{ .Values.ironrdp.image }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: RDPSERVER
+          value: {{ .Values.ironrdp.server }}
+        - name: RDPUSER
+          value: {{ .Values.ironrdp.user }}
+        - name: RDPPASSWORD
+          value: {{ .Values.ironrdp.password }}
+        - name: JETSERVER
+          value: {{ .Values.ironrdp.jetserver }}
+        - name: TOKENGENSERVER
+          value: {{ .Values.ironrdp.tokengenserver }}
+        ports:
+        - containerPort: {{ .Values.ironrdp.port }}
           protocol: TCP
 {{- end }}
 
