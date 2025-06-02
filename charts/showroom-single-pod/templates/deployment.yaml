@@ -38,6 +38,12 @@ spec:
             value: {{ .Values.guid }}
           - name: DOMAIN
             value: {{ .Values.deployer.domain }}
+          - name: SATELLITE_URL
+            value: {{ .Values.satellite.url }}
+          - name: SATELLITE_ORG
+            value: {{ .Values.satellite.org }}
+          - name: SATELLITE_ACTIVATIONKEY
+            value: {{ .Values.satellite.activationkey }}
         imagePullPolicy: Always
         volumeMounts:
           - name: runner
