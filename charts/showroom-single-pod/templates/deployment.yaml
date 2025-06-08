@@ -245,6 +245,18 @@ spec:
           value: {{ .Values.cloud.aws_access_key_id }}
         - name: AWS_SECRET_ACCESS_KEY
           value: {{ .Values.cloud.aws_secret_access_key }}
+        - name: AWS_WEB_CONSOLE_URL
+          value: {{ .Values.cloud.aws_web_console_url }}
+        - name: AWS_WEB_CONSOLE_USER_NAME
+          value: {{ .Values.cloud.aws_web_console_user_name }}
+        - name: AWS_WEB_CONSOLE_PASSWORD
+          value: {{ .Values.cloud.aws_web_console_password }}
+        - name: AWS_SANDBOX_ACCOUNT_ID
+          value: {{ .Values.cloud.aws_sandbox_account_id }}
+        - name: AWS_ROUTE53_DOMAIN
+          value: {{ .Values.cloud.aws_route53_domain }}
+        - name: AWS_DEFAULT_REGION
+          value: {{ .Values.cloud.aws_default_region }}
         - name: AZURE_SUBSCRIPTION
           value: {{ .Values.cloud.azure_suscription }}
         - name: AZURE_TENANT
