@@ -280,6 +280,8 @@ spec:
           protocol: TCP
         - containerPort: 7171
           protocol: TCP
+        - containerPort: {{ .Values.ironrdp.port }}
+          protocol: TCP
 {{- end }}
 
 
