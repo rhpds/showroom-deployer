@@ -272,7 +272,7 @@ spec:
         - name: RDPPASSWORD
           value: {{ .Values.ironrdp.password }}
         - name: JETSERVER
-          value: https://windows-jetrdp-{{ .Values.guid }}.{{ .Values.deployer.domain }}
+          value: https://windows-jetrdp-{{ .Values.guid }}.{{ .Values.deployer.domain }}/jet/rdp
         - name: TOKENGENSERVER
           value: https://windows-tokengen-{{ .Values.guid }}.{{ .Values.deployer.domain }}
         ports:
