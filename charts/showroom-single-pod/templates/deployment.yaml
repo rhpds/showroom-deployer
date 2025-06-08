@@ -252,7 +252,7 @@ spec:
         - name: AWS_WEB_CONSOLE_PASSWORD
           value: {{ .Values.cloud.aws_web_console_password }}
         - name: AWS_SANDBOX_ACCOUNT_ID
-          value: {{ .Values.cloud.aws_sandbox_account_id }}
+          value: "{{ .Values.cloud.aws_sandbox_account_id }}"
         - name: AWS_ROUTE53_DOMAIN
           value: {{ .Values.cloud.aws_route53_domain }}
         - name: AWS_DEFAULT_REGION
