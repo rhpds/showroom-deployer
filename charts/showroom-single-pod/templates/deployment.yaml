@@ -217,7 +217,7 @@ spec:
         resources:
           {{- toYaml .Values.wetty.resources | nindent 10 }}
 {{- range $i, $host := .Values.wetty.ssh.sshOtherHosts }}
-      - name: wetty_{{ $host }}
+      - name: wetty-{{ $host }}
         image: {{ $.Values.wetty.image }}
         imagePullPolicy: IfNotPresent
         args:
