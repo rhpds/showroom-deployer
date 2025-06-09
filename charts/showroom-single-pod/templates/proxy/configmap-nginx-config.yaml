@@ -93,10 +93,10 @@ data:
           proxy_set_header X-NginX-Proxy true;
         }
 {{- end }}
-
+{{- $wettyPort := .Values.wetty.port }}
 {{- range $i, $host := .Values.wetty.ssh.sshOtherHosts }}
         location ^~ /wetty_{{ $host }} {
-          proxy_pass http://localhost:{{ add .Values.wetty.port 1 $i }}/{{ .Values.wetty.base }};
+          proxy_pass http://localhost:{{ add $wettyPort (add 1 $i) }}/{{ .Values.wetty.base }};
           proxy_http_version 1.1;
           proxy_set_header Upgrade $http_upgrade;
           proxy_set_header Connection "upgrade";
