@@ -85,6 +85,7 @@ wetty:
     sshUser: ec2-user
     sshAuth: password
     sshPass: password
+    sshOtherHosts: []
 
 # To be fully implemented
 codeserver:
