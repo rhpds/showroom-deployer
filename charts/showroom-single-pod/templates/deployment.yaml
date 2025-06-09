@@ -222,7 +222,7 @@ spec:
         imagePullPolicy: IfNotPresent
         args:
         - --base="/{{ $.Values.wetty.base }}/"
-        - --port={{ add $.Values.wetty.port $i }}
+        - --port={{ add $.Values.wetty.port 1 $i }}
 {{-   if eq $.Values.wetty.ssh.autoSshToBastion "true" }}
         - --ssh-host={{ $host }}
         - --ssh-port={{ $.Values.wetty.ssh.sshPort }}
@@ -238,7 +238,7 @@ spec:
         - name: GUID
           value: "{{ $.Values.guid }}"
         ports:
-        - containerPort: {{ add $.Values.wetty.port $i }}
+        - containerPort: {{ add $.Values.wetty.port 1 $i }}
           protocol: TCP
         resources:
           {{- toYaml $.Values.wetty.resources | nindent 10 }}
