@@ -13,6 +13,11 @@ proxy:
   #  image: docker.io/library/nginx:1.25
   imagePullPolicy: IfNotPresent
 
+satellite:
+  url: ''
+  org: ''
+  activationkey: '' 
+
 content:
   # Only create a content pane, no other tabs will be available
   contentOnly: "false"

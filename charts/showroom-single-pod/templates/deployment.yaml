@@ -218,17 +218,17 @@ spec:
           {{- toYaml .Values.wetty.resources | nindent 10 }}
 {{- range $i, $host := .Values.wetty.ssh.sshOtherHosts }}
       - name: wetty_{{ $host }}
-        image: {{ .Values.wetty.image }}
+        image: {{ $.Values.wetty.image }}
         imagePullPolicy: IfNotPresent
         args:
-        - --base="/{{ .Values.wetty.base }}/"
-        - --port={{ .Values.wetty.port }}
-{{-   if eq .Values.wetty.ssh.autoSshToBastion "true" }}
+        - --base="/{{ $.Values.wetty.base }}/"
+        - --port={{ add $.Values.wetty.port $i }}
+{{-   if eq $.Values.wetty.ssh.autoSshToBastion "true" }}
         - --ssh-host={{ $host }}
-        - --ssh-port={{ .Values.wetty.ssh.sshPort }}
-        - --ssh-user={{ .Values.wetty.ssh.sshUser }}
-        - --ssh-auth={{ .Values.wetty.ssh.sshAuth }}
-        - --ssh-pass={{ .Values.wetty.ssh.sshPass }}
+        - --ssh-port={{ $.Values.wetty.ssh.sshPort }}
+        - --ssh-user={{ $.Values.wetty.ssh.sshUser }}
+        - --ssh-auth={{ $.Values.wetty.ssh.sshAuth }}
+        - --ssh-pass={{ $.Values.wetty.ssh.sshPass }}
 {{-   end }}
         env:
         - name: NAMESPACE
@@ -236,12 +236,12 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: GUID
-          value: "{{ .Values.guid }}"
+          value: "{{ $.Values.guid }}"
         ports:
-        - containerPort: {{ .Values.wetty.port }}
+        - containerPort: {{ add $.Values.wetty.port $i }}
           protocol: TCP
         resources:
-          {{- toYaml .Values.wetty.resources | nindent 10 }}
+          {{- toYaml $.Values.wetty.resources | nindent 10 }}
 {{- end }}
 {{- end }}
 
