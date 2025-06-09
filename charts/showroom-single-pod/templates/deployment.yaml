@@ -216,7 +216,7 @@ spec:
           protocol: TCP
         resources:
           {{- toYaml .Values.wetty.resources | nindent 10 }}
-{{- range $i, $host := .Values.wetty.sshOtherHosts }}
+{{- range $i, $host := .Values.wetty.ssh.sshOtherHosts }}
       - name: wetty_{{ $host }}
         image: {{ .Values.wetty.image }}
         imagePullPolicy: IfNotPresent
