@@ -217,14 +217,14 @@ spec:
         resources:
           {{- toYaml .Values.wetty.resources | nindent 10 }}
 {{- range $i, $host := .Values.wetty.sshOtherHosts }}
-      - name: wetty_{{ host }}
+      - name: wetty_{{ $host }}
         image: {{ .Values.wetty.image }}
         imagePullPolicy: IfNotPresent
         args:
         - --base="/{{ .Values.wetty.base }}/"
         - --port={{ .Values.wetty.port }}
 {{-   if eq .Values.wetty.ssh.autoSshToBastion "true" }}
-        - --ssh-host={{ host }}
+        - --ssh-host={{ $host }}
         - --ssh-port={{ .Values.wetty.ssh.sshPort }}
         - --ssh-user={{ .Values.wetty.ssh.sshUser }}
         - --ssh-auth={{ .Values.wetty.ssh.sshAuth }}
