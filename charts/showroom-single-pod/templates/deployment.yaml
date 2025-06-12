@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/name: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ .Release.Name }}
+{{- if eq .Values.automation.setup "true" }}
       initContainers:
       - resources: {}
         terminationMessagePath: /dev/termination-log
@@ -81,6 +82,7 @@ spec:
             mountPath: /runner/
         terminationMessagePolicy: File
         image: 'quay.io/agonzalezrh/showroom:setup-v0.1'
+{{- end }}
       containers:
       - resources: {}
         terminationMessagePath: /dev/termination-log

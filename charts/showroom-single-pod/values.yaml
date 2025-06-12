@@ -154,3 +154,6 @@ ironrdp:
   password: ""
   jetserver: "localhost:7171"
   tokengenserver: "localhost:8081"
+
+automation:
+  setup: "true"
