@@ -156,4 +156,4 @@ ironrdp:
   tokengenserver: "localhost:8081"
 
 automation:
-  setup: "true"
+  setup: "false"
