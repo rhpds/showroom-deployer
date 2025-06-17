@@ -355,7 +355,23 @@ spec:
         - containerPort: {{ .Values.ironrdp.port }}
           protocol: TCP
 {{- end }}
-
+      - name: monitoring
+        image: {{ .Values.monitoring.image }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: BASTION_HOST
+          value: {{ .Values.wetty.ssh.sshHost }}
+        - name: BASTION_PORT
+          value: "{{ .Values.wetty.ssh.sshPort }}"
+        - name: BASTION_USER
+          value: {{ .Values.wetty.ssh.sshUser }}
+        - name: BASTION_PASSWORD
+          value: {{ .Values.wetty.ssh.sshPass }}
+        - name: OTHER_HOSTS
+          value: {{ .Values.wetty.ssh.sshOtherHosts }}
+        ports:
+        - containerPort: {{ .Values.monitoring.port }}
+          protocol: TCP
 
       volumes:
       - name: runner

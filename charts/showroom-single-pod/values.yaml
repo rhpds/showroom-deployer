@@ -157,3 +157,7 @@ ironrdp:
 
 automation:
   setup: "false"
+
+monitoring:
+  image: quay.io/agonzalezrh/showroom-monitoring:v0.0.2
+  port: 9002
