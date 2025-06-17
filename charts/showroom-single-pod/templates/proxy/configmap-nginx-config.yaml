@@ -178,7 +178,7 @@ data:
         }
 {{- end }}
         location /monitoring/ {
-          proxy_pass http://localhost:9002;
+          proxy_pass http://localhost:{{ .Values.monitoring.port }};
           rewrite ^/monitoring/(.*)$ /$1 break;
 
           expires off;
