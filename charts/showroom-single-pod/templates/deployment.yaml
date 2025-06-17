@@ -368,7 +368,7 @@ spec:
         - name: BASTION_PASSWORD
           value: {{ .Values.wetty.ssh.sshPass }}
         - name: OTHER_HOSTS
-          value: {{ .Values.wetty.ssh.sshOtherHosts }}
+          value: {{ join " " .Values.wetty.ssh.sshOtherHosts }}
         ports:
         - containerPort: {{ .Values.monitoring.port }}
           protocol: TCP
