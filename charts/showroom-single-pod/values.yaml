@@ -156,7 +156,7 @@ ironrdp:
   tokengenserver: "localhost:8081"
 
 automation:
-  setup: "false"
+  setup: "true"
 
 monitoring:
   image: quay.io/agonzalezrh/showroom-monitoring:v0.0.2
