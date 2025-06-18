@@ -357,7 +357,7 @@ spec:
 {{- end }}
       - name: monitoring
         image: {{ .Values.monitoring.image }}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         env:
         - name: BASTION_HOST
           value: {{ .Values.wetty.ssh.sshHost }}
