@@ -277,24 +277,22 @@ spec:
           {{- toYaml $.Values.wetty.resources | nindent 10 }}
 {{- end }}
 
-{{- range $hostIndex, $host := fromYaml .Values.wetty.ssh.terminals | default (list) }}
+{{- range $hostIndex, $host := .Values.wetty.ssh.terminals | default (list) }}
 {{- range $i, $terminal := $host.terminals | default (list) }}
-      - name: wetty-{{ $host.name }}-{{ $terminal }}
+      - name: wetty-{{ $terminal.name }}
         image: {{ $.Values.wetty.image }}
         imagePullPolicy: IfNotPresent
         args:
         - --base="/{{ $.Values.wetty.base }}/"
-        - --port={{ add $.Values.wetty.port 10 $i }} #FIXME
+        - --port={{ add $.Values.wetty.port ($.Values.wetty.ssh.sshOtherHosts | len) 1 $i }}
 {{-   if eq $.Values.wetty.ssh.autoSshToBastion "true" }}
         - --ssh-host={{ $host.name }}
         - --ssh-port={{ $.Values.wetty.ssh.sshPort }}
         - --ssh-user={{ $.Values.wetty.ssh.sshUser }}
         - --ssh-auth={{ $.Values.wetty.ssh.sshAuth }}
         - --ssh-pass={{ $.Values.wetty.ssh.sshPass }}
-{{-   end }}
-    {{- if $terminal.command }}
         - --command="{{ $terminal.command }}"
-    {{- end }}
+{{-   end }}
         env:
         - name: NAMESPACE
           valueFrom:
@@ -303,14 +301,12 @@ spec:
         - name: GUID
           value: "{{ $.Values.guid }}"
         ports:
-        - containerPort: {{ add $.Values.wetty.port 10 $i }}
+        - containerPort: {{ add $.Values.wetty.port ($.Values.wetty.ssh.sshOtherHosts | len) 1 $i }}
           protocol: TCP
         resources:
           {{- toYaml $.Values.wetty.resources | nindent 10 }}
 {{- end }}
 {{- end }}
-
-
 {{- end }}
 
 {{- if eq .Values.novnc.setup "true" }}
