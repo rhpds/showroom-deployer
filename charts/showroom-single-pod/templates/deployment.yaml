@@ -277,7 +277,7 @@ spec:
           {{- toYaml $.Values.wetty.resources | nindent 10 }}
 {{- end }}
 
-{{- range $hostIndex, $host := .Values.wetty.ssh.terminals | default (list) }}
+{{- range $hostIndex, $host := fromYaml .Values.wetty.ssh.terminals | default (list) }}
 {{- range $i, $terminal := $host.terminals | default (list) }}
       - name: wetty-{{ $host.name }}-{{ $terminal }}
         image: {{ $.Values.wetty.image }}
