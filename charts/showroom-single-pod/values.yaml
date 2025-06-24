@@ -91,6 +91,7 @@ wetty:
     sshAuth: password
     sshPass: password
     sshOtherHosts: []
+    terminals: []
 
 # To be fully implemented
 codeserver:

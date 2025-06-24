@@ -276,6 +276,38 @@ spec:
         resources:
           {{- toYaml $.Values.wetty.resources | nindent 10 }}
 {{- end }}
+
+{{- range $i, $host := .Values.wetty.ssh.terminals }}
+{{- range $i, $terminal := .Values.wetty.ssh.terminals[$host] }}
+      - name: wetty-{{ $host }}-{{ $terminal }}
+        image: {{ $.Values.wetty.image }}
+        imagePullPolicy: IfNotPresent
+        args:
+        - --base="/{{ $.Values.wetty.base }}/"
+        - --port={{ add $.Values.wetty.port 10 $i }} #FIXME
+{{-   if eq $.Values.wetty.ssh.autoSshToBastion "true" }}
+        - --ssh-host={{ $host }}
+        - --ssh-port={{ $.Values.wetty.ssh.sshPort }}
+        - --ssh-user={{ $.Values.wetty.ssh.sshUser }}
+        - --ssh-auth={{ $.Values.wetty.ssh.sshAuth }}
+        - --ssh-pass={{ $.Values.wetty.ssh.sshPass }}
+{{-   end }}
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: GUID
+          value: "{{ $.Values.guid }}"
+        ports:
+        - containerPort: {{ add $.Values.wetty.port 10 $i }}
+          protocol: TCP
+        resources:
+          {{- toYaml $.Values.wetty.resources | nindent 10 }}
+{{- end }}
+{{- end }}
+
+
 {{- end }}
 
 {{- if eq .Values.novnc.setup "true" }}
