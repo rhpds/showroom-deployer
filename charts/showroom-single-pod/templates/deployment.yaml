@@ -278,7 +278,7 @@ spec:
 {{- end }}
 
 {{- range $hostIndex, $host := .Values.wetty.ssh.terminals }}
-{{- range $i, $terminal := $vm.terminals }}
+{{- range $i, $terminal := $host.terminals }}
       - name: wetty-{{ $host.name }}-{{ $terminal }}
         image: {{ $.Values.wetty.image }}
         imagePullPolicy: IfNotPresent
