@@ -279,7 +279,7 @@ spec:
 
 {{- range $hostIndex, $host := .Values.wetty.ssh.terminals | default (list) }}
 {{- range $i, $terminal := $host.terminals | default (list) }}
-      - name: wetty-{{ $terminal.name }}
+      - name: wetty-{{ $terminal.name replace "_" "-" }}
         image: {{ $.Values.wetty.image }}
         imagePullPolicy: IfNotPresent
         args:
