@@ -7,6 +7,7 @@ guid: nnnnn
 
 deployer:
   domain: cluster-GUID.GUID.sandboxNUMBERS.opentlc.com
+  registry_pull_token: ''
 
 proxy:
   image: quay.io/rhpds/nginx:1.25

@@ -45,6 +45,8 @@ spec:
             value: {{ .Values.satellite.org }}
           - name: SATELLITE_ACTIVATIONKEY
             value: {{ .Values.satellite.activationkey }}
+          - name: REGISTRY_PULL_TOKEN
+            values: {{ .Values.deployer.registry_pull_token }}
 {{- if eq .Values.cloud.setup "true" }}
           - name: CLOUD_PROVIDER
             value: {{ .Values.cloud.auth_cloud_provider }}
@@ -100,6 +102,12 @@ spec:
             value: {{ .Values.wetty.ssh.sshUser }}
           - name: BASTION_PASSWORD
             value: {{ .Values.wetty.ssh.sshPass }}
+          - name: GUID
+            value: {{ .Values.guid }}
+          - name: DOMAIN
+            value: {{ .Values.deployer.domain }}
+          - name: REGISTRY_PULL_TOKEN
+            values: {{ .Values.deployer.registry_pull_token }}
         ports:
           - name: runner
             containerPort: 8501
