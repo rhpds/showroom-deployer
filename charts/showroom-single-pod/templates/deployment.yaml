@@ -36,7 +36,7 @@ spec:
           - name: BASTION_PASSWORD
             value: {{ .Values.wetty.ssh.sshPass }}
           - name: GUID
-            value: {{ .Values.guid }}
+            value: "{{ .Values.guid }}"
           - name: DOMAIN
             value: {{ .Values.deployer.domain }}
           - name: SATELLITE_URL
@@ -103,7 +103,7 @@ spec:
           - name: BASTION_PASSWORD
             value: {{ .Values.wetty.ssh.sshPass }}
           - name: GUID
-            value: {{ .Values.guid }}
+            value: "{{ .Values.guid }}"
           - name: DOMAIN
             value: {{ .Values.deployer.domain }}
           - name: REGISTRY_PULL_TOKEN
@@ -137,7 +137,7 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: GUID
-          value: {{ .Values.guid }}
+          value: "{{ .Values.guid }}"
         - name: DOMAIN
           value: {{ .Values.deployer.domain }}
         ports:
