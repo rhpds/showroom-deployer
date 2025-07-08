@@ -1,0 +1,442 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Release.Name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ .Release.Name }}
+{{- if eq .Values.automation.setup "true" }}
+      initContainers:
+      - resources: {}
+        terminationMessagePath: /dev/termination-log
+        name: setup
+        env:
+          - name: GIT_REPO_URL
+            value: {{ .Values.content.repoUrl }}
+          - name: GIT_REPO_REF
+            value: {{ .Values.content.repoRef }}
+          - name: BASTION_HOST
+            value: {{ .Values.wetty.ssh.sshHost }}
+          - name: BASTION_PORT
+            value: "{{ .Values.wetty.ssh.sshPort }}"
+          - name: BASTION_USER
+            value: {{ .Values.wetty.ssh.sshUser }}
+          - name: BASTION_PASSWORD
+            value: {{ .Values.wetty.ssh.sshPass }}
+          - name: GUID
+            value: "{{ .Values.guid }}"
+          - name: DOMAIN
+            value: {{ .Values.deployer.domain }}
+          - name: SATELLITE_URL
+            value: {{ .Values.satellite.url }}
+          - name: SATELLITE_ORG
+            value: {{ .Values.satellite.org }}
+          - name: SATELLITE_ACTIVATIONKEY
+            value: {{ .Values.satellite.activationkey }}
+          - name: REGISTRY_PULL_TOKEN
+            value: {{ .Values.deployer.registry_pull_token }}
+{{- if eq .Values.cloud.setup "true" }}
+          - name: CLOUD_PROVIDER
+            value: {{ .Values.cloud.auth_cloud_provider }}
+          - name: AWS_ACCESS_KEY_ID
+            value: {{ .Values.cloud.aws_access_key_id }}
+          - name: AWS_SECRET_ACCESS_KEY
+            value: {{ .Values.cloud.aws_secret_access_key }}
+          - name: AWS_WEB_CONSOLE_URL
+            value: {{ .Values.cloud.aws_web_console_url }}
+          - name: AWS_WEB_CONSOLE_USER_NAME
+            value: {{ .Values.cloud.aws_web_console_user_name }}
+          - name: AWS_WEB_CONSOLE_PASSWORD
+            value: {{ .Values.cloud.aws_web_console_password }}
+          - name: AWS_SANDBOX_ACCOUNT_ID
+            value: "{{ .Values.cloud.aws_sandbox_account_id }}"
+          - name: AWS_ROUTE53_DOMAIN
+            value: {{ .Values.cloud.aws_route53_domain }}
+          - name: AWS_DEFAULT_REGION
+            value: {{ .Values.cloud.aws_default_region }}
+          - name: AZURE_SUBSCRIPTION
+            value: {{ .Values.cloud.azure_suscription }}
+          - name: AZURE_TENANT
+            value: {{ .Values.cloud.azure_tenant }}
+          - name: AZURE_CLIENT_ID
+            value: {{ .Values.cloud.azure_client_id }}
+          - name: AZURE_PASSWORD
+            value: {{ .Values.cloud.azure_password }}
+          - name: AZURE_RESOURCEGROUP
+            value: {{ .Values.cloud.azure_resourcegroup }}
+{{- end }}
+
+        imagePullPolicy: Always
+        volumeMounts:
+          - name: runner
+            mountPath: /runner/
+        terminationMessagePolicy: File
+        image: 'quay.io/agonzalezrh/showroom:setup-v0.1'
+{{- end }}
+      containers:
+      - resources: {}
+        terminationMessagePath: /dev/termination-log
+        name: runner
+        env:
+          - name: GIT_REPO_URL
+            value: {{ .Values.content.repoUrl }}
+          - name: GIT_REPO_REF
+            value: {{ .Values.content.repoRef }}
+          - name: BASTION_HOST
+            value: {{ .Values.wetty.ssh.sshHost }}
+          - name: BASTION_PORT
+            value: "{{ .Values.wetty.ssh.sshPort }}"
+          - name: BASTION_USER
+            value: {{ .Values.wetty.ssh.sshUser }}
+          - name: BASTION_PASSWORD
+            value: {{ .Values.wetty.ssh.sshPass }}
+          - name: GUID
+            value: "{{ .Values.guid }}"
+          - name: DOMAIN
+            value: {{ .Values.deployer.domain }}
+          - name: REGISTRY_PULL_TOKEN
+            value: {{ .Values.deployer.registry_pull_token }}
+        ports:
+          - name: runner
+            containerPort: 8501
+            protocol: TCP
+        imagePullPolicy: Always
+        volumeMounts:
+          - name: runner
+            mountPath: /runner/
+        terminationMessagePolicy: File
+        image: 'quay.io/agonzalezrh/showroom:runner-v1.13'
+      - name: nginx
+        image: {{ .Values.proxy.image }}
+        imagePullPolicy: {{ .Values.proxy.imagePullPolicy }}
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          name: nginx-config
+          subPath: nginx.conf
+        - mountPath: /data/www
+          name: content
+        - mountPath: /var/cache/nginx
+          name: nginx-cache
+        - mountPath: /var/run
+          name: nginx-pid
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: GUID
+          value: "{{ .Values.guid }}"
+        - name: DOMAIN
+          value: {{ .Values.deployer.domain }}
+        ports:
+        - name: web
+          containerPort: 8080
+
+      - name: content
+        image: {{ .Values.content.image }}
+        imagePullPolicy: {{ .Values.content.imagePullPolicy }}
+        env:
+        - name: GIT_REPO_URL
+          value: {{ .Values.content.repoUrl }}
+        - name: GIT_REPO_REF
+          value: {{ .Values.content.repoRef }}
+        - name: ANTORA_PLAYBOOK
+          value: {{ .Values.content.antoraPlaybook }}
+        - name: ZT_BUNDLE
+          value: {{ .Values.content.zero_touch_bundle }}
+        - name: ZT_UI_ENABLED
+          value: "{{ .Values.content.zero_touch_ui_enabled }}"
+        volumeMounts:
+        - name: user-data
+          mountPath: /user_data/
+        - name: showroom
+          mountPath: /showroom/
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+
+{{- if eq .Values.terminal.setup "true" }}
+      - name: terminal
+        image: {{ .Values.terminal.image }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: GUID
+          value: "{{ .Values.guid }}"
+        volumeMounts:
+        - name: terminal-lab-user-home
+          mountPath: /home/lab-user
+        ports:
+        - containerPort: {{ .Values.terminal.port }}
+          protocol: TCP
+        resources:
+          {{- toYaml .Values.terminal.resources | nindent 10 }}
+{{- end }}
+{{- if eq .Values.ocpconsole.setup "true" }}
+      - name: console-app
+        image: "quay.io/openshift/origin-console:4.14"
+        env:
+          - name: BRIDGE_BRANDING
+            value: openshift
+          - name: BRIDGE_USER_AUTH
+            value: disabled
+          - name: BRIDGE_K8S_MODE
+            value: off-cluster
+          - name: BRIDGE_K8S_MODE_OFF_CLUSTER_ENDPOINT
+            value: https://kubernetes.default
+          - name: BRIDGE_K8S_MODE_OFF_CLUSTER_SKIP_VERIFY_TLS
+            value: "true"
+          - name: BRIDGE_K8S_AUTH
+            value: bearer-token
+          - name: BRIDGE_BASE_PATH
+            value: "/console/"
+          - name: BRIDGE_K8S_AUTH_BEARER_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: console-secret
+                key: token
+        ports:
+        - containerPort: 9000
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /console/
+            port: 9000
+        readinessProbe:
+          httpGet:
+            path: /console/
+            port: 9000
+{{- end }}
+
+{{- if eq .Values.wetty.setup "true" }}
+      - name: wetty
+        image: {{ .Values.wetty.image }}
+        imagePullPolicy: IfNotPresent
+        args:
+        - --base="/{{ .Values.wetty.base }}/"
+        - --port={{ .Values.wetty.port }}
+{{-   if eq .Values.wetty.ssh.autoSshToBastion "true" }}
+        - --ssh-host={{ .Values.wetty.ssh.sshHost }}
+        - --ssh-port={{ .Values.wetty.ssh.sshPort }}
+        - --ssh-user={{ .Values.wetty.ssh.sshUser }}
+        - --ssh-auth={{ .Values.wetty.ssh.sshAuth }}
+        - --ssh-pass={{ .Values.wetty.ssh.sshPass }}
+{{-   end }}
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: GUID
+          value: "{{ .Values.guid }}"
+        ports:
+        - containerPort: {{ .Values.wetty.port }}
+          protocol: TCP
+        resources:
+          {{- toYaml .Values.wetty.resources | nindent 10 }}
+{{- range $i, $host := .Values.wetty.ssh.sshOtherHosts }}
+      - name: wetty-{{ $host }}
+        image: {{ $.Values.wetty.image }}
+        imagePullPolicy: IfNotPresent
+        args:
+        - --base="/{{ $.Values.wetty.base }}/"
+        - --port={{ add $.Values.wetty.port 1 $i }}
+{{-   if eq $.Values.wetty.ssh.autoSshToBastion "true" }}
+        - --ssh-host={{ $host }}
+        - --ssh-port={{ $.Values.wetty.ssh.sshPort }}
+        - --ssh-user={{ $.Values.wetty.ssh.sshUser }}
+        - --ssh-auth={{ $.Values.wetty.ssh.sshAuth }}
+        - --ssh-pass={{ $.Values.wetty.ssh.sshPass }}
+{{-   end }}
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: GUID
+          value: "{{ $.Values.guid }}"
+        ports:
+        - containerPort: {{ add $.Values.wetty.port 1 $i }}
+          protocol: TCP
+        resources:
+          {{- toYaml $.Values.wetty.resources | nindent 10 }}
+{{- end }}
+
+{{- range $hostIndex, $host := .Values.wetty.ssh.terminals | default (list) }}
+{{- range $i, $terminal := $host.terminals | default (list) }}
+      - name: wetty-{{ $terminal.name | replace "_" "-" }}
+        image: {{ $.Values.wetty.image }}
+        imagePullPolicy: IfNotPresent
+        args:
+        - --base="/{{ $.Values.wetty.base }}/"
+        - --port={{ add $.Values.wetty.port ($.Values.wetty.ssh.sshOtherHosts | len) 1 $i }}
+{{-   if eq $.Values.wetty.ssh.autoSshToBastion "true" }}
+        - --ssh-host={{ $host.name }}
+        - --ssh-port={{ $.Values.wetty.ssh.sshPort }}
+        - --ssh-user={{ $.Values.wetty.ssh.sshUser }}
+        - --ssh-auth={{ $.Values.wetty.ssh.sshAuth }}
+        - --ssh-pass={{ $.Values.wetty.ssh.sshPass }}
+        - --command="{{ $terminal.command }}"
+{{-   end }}
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: GUID
+          value: "{{ $.Values.guid }}"
+        ports:
+        - containerPort: {{ add $.Values.wetty.port ($.Values.wetty.ssh.sshOtherHosts | len) 1 $i }}
+          protocol: TCP
+        resources:
+          {{- toYaml $.Values.wetty.resources | nindent 10 }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if eq .Values.novnc.setup "true" }}
+      - name: novnc
+        image: {{ .Values.novnc.image }}
+        imagePullPolicy: IfNotPresent
+        args:
+        - websockify
+        - --web=/www
+        - 127.0.0.1:{{ .Values.novnc.port }}
+        - "{{ .Values.novnc.vncServer }}"
+        ports:
+        - containerPort: {{ .Values.novnc.port }}
+          protocol: TCP
+        resources:
+          {{- toYaml .Values.novnc.resources | nindent 10 }}
+{{- end }}
+
+{{- if eq .Values.cloud.setup "true" }}
+      - name: cloud 
+        image: {{ .Values.cloud.image }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: CLOUD_PROVIDER
+          value: {{ .Values.cloud.auth_cloud_provider }}
+        - name: AWS_ACCESS_KEY_ID
+          value: {{ .Values.cloud.aws_access_key_id }}
+        - name: AWS_SECRET_ACCESS_KEY
+          value: {{ .Values.cloud.aws_secret_access_key }}
+        - name: AWS_WEB_CONSOLE_URL
+          value: {{ .Values.cloud.aws_web_console_url }}
+        - name: AWS_WEB_CONSOLE_USER_NAME
+          value: {{ .Values.cloud.aws_web_console_user_name }}
+        - name: AWS_WEB_CONSOLE_PASSWORD
+          value: {{ .Values.cloud.aws_web_console_password }}
+        - name: AWS_SANDBOX_ACCOUNT_ID
+          value: "{{ .Values.cloud.aws_sandbox_account_id }}"
+        - name: AWS_ROUTE53_DOMAIN
+          value: {{ .Values.cloud.aws_route53_domain }}
+        - name: AWS_DEFAULT_REGION
+          value: {{ .Values.cloud.aws_default_region }}
+        - name: AZURE_SUBSCRIPTION
+          value: {{ .Values.cloud.azure_suscription }}
+        - name: AZURE_TENANT
+          value: {{ .Values.cloud.azure_tenant }}
+        - name: AZURE_CLIENT_ID
+          value: {{ .Values.cloud.azure_client_id }}
+        - name: AZURE_PASSWORD
+          value: {{ .Values.cloud.azure_password }}
+        - name: AZURE_RESOURCEGROUP
+          value: {{ .Values.cloud.azure_resourcegroup }}
+        ports:
+        - containerPort: {{ .Values.cloud.port }}
+          protocol: TCP
+{{- end }}
+
+{{- if eq .Values.ironrdp.setup "true" }}
+      - name: ironrdp
+        image: {{ .Values.ironrdp.image }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: RDPSERVER
+          value: {{ .Values.ironrdp.server }}
+        - name: RDPUSER
+          value: {{ .Values.ironrdp.user }}
+        - name: RDPPASSWORD
+          value: {{ .Values.ironrdp.password }}
+        - name: JETSERVER
+          value: https://windows-jetrdp-{{ .Values.guid }}.{{ .Values.deployer.domain }}/jet/rdp
+        - name: TOKENGENSERVER
+          value: https://windows-tokengen-{{ .Values.guid }}.{{ .Values.deployer.domain }}
+        ports:
+        - containerPort: 8081
+          protocol: TCP
+        - containerPort: 7171
+          protocol: TCP
+        - containerPort: {{ .Values.ironrdp.port }}
+          protocol: TCP
+{{- end }}
+      - name: monitoring
+        image: {{ .Values.monitoring.image }}
+        imagePullPolicy: Always
+        env:
+        - name: BASTION_HOST
+          value: {{ .Values.wetty.ssh.sshHost }}
+        - name: BASTION_PORT
+          value: "{{ .Values.wetty.ssh.sshPort }}"
+        - name: BASTION_USER
+          value: {{ .Values.wetty.ssh.sshUser }}
+        - name: BASTION_PASSWORD
+          value: {{ .Values.wetty.ssh.sshPass }}
+        - name: OTHER_HOSTS
+          value: {{ join " " .Values.wetty.ssh.sshOtherHosts }}
+        ports:
+        - containerPort: {{ .Values.monitoring.port }}
+          protocol: TCP
+
+      volumes:
+      - name: runner
+        emptyDir: {}
+      - name: showroom
+        emptyDir: {}
+      - name: user-data
+        configMap:
+          name: {{ .Release.Name }}-userdata
+      - name: content
+        configMap:
+          name: {{ .Release.Name }}-index
+      - name: nginx-config
+        configMap:
+          defaultMode: 420
+          name: {{ .Release.Name }}-proxy-config
+      - name: nginx-pid
+        emptyDir: {}
+      - name: nginx-cache
+        emptyDir: {}
+{{- if eq .Values.terminal.setup "true" }}
+      - name: terminal-lab-user-home
+{{-   if eq .Values.terminal.storage.setup "true" }}
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-terminal-lab-user-home
+{{-   else }}
+        emptyDir: {}
+{{-   end }}
+{{- end }}
