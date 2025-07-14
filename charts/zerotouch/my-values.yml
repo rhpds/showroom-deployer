@@ -1,0 +1,14 @@
+content:
+  repoUrl: https://github.com/agonzalezrh/rhel_zero_networking_basics.git
+  repoRef: main
+  antoraPlaybook: site.yml
+  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.0.4/nookbag-v0.0.4.zip"
+
+wetty:
+  ssh:
+    autoSshToBastion: "true"
+    sshHost: bastion.krkvq.sandbox114.opentlc.com
+    sshPort: 22
+    sshUser: lab-user
+    sshAuth: password
+    sshPass: sVy12ATIDIk9

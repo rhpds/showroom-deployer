@@ -1,0 +1,17 @@
+{{- if eq .Values.terminal.storage.setup "true" }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-terminal-lab-user-home
+  namespace: {{ .Release.Namespace}}
+spec:
+  accessModes:
+  - ReadWriteOnce
+{{- if .Values.terminal.storage.storageClass }}
+  storageClassName: {{ .Values.terminal.storage.storageClass }}
+{{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.terminal.storage.pvcSize }}
+{{- end }}
