@@ -11,13 +11,12 @@ deployer:
 
 proxy:
   image: quay.io/rhpds/nginx:1.25
-  #  image: docker.io/library/nginx:1.25
   imagePullPolicy: IfNotPresent
 
 satellite:
   url: ''
   org: ''
-  activationkey: '' 
+  activationkey: ''
 
 content:
   # Only create a content pane, no other tabs will be available
@@ -73,7 +72,7 @@ terminal:
 
 wetty:
   setup: "true"
-  image: quay.io/rhpds/wetty:latest
+  image: quay.io/rhpds/wetty:v2
   name: wetty
   display_name: "Login Terminal 1"
   port: 8001
@@ -124,7 +123,7 @@ novnc:
 
 cloud:
   setup: "false"
-  image: quay.io/agonzalezrh/showroom-cloud:v0.0.1
+  image: quay.io/rhpds/showroom-cloud:v1
   port: 9001
   auth_cloud_provider: ""
   aws_access_key_id: ""
@@ -156,6 +155,12 @@ ironrdp:
   password: ""
   jetserver: "localhost:7171"
   tokengenserver: "localhost:8081"
+
+setup_automation:
+  image: quay.io/rhpds/setup-automation:v1
+
+runtime_automation:
+  image: quay.io/agonzalezrh/showroom:runner-v1.13
 
 automation:
   setup: "true"

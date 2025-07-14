@@ -83,7 +83,7 @@ spec:
           - name: runner
             mountPath: /runner/
         terminationMessagePolicy: File
-        image: 'quay.io/agonzalezrh/showroom:setup-v0.1'
+        image: {{ .Values.setup_automation.image }}
 {{- end }}
       containers:
       - resources: {}
@@ -117,7 +117,7 @@ spec:
           - name: runner
             mountPath: /runner/
         terminationMessagePolicy: File
-        image: 'quay.io/agonzalezrh/showroom:runner-v1.13'
+        image: {{ .Values.runtime_automation.image }}
       - name: nginx
         image: {{ .Values.proxy.image }}
         imagePullPolicy: {{ .Values.proxy.imagePullPolicy }}
@@ -334,7 +334,7 @@ spec:
 {{- end }}
 
 {{- if eq .Values.cloud.setup "true" }}
-      - name: cloud 
+      - name: cloud
         image: {{ .Values.cloud.image }}
         imagePullPolicy: IfNotPresent
         env:
