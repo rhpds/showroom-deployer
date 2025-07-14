@@ -124,7 +124,7 @@ novnc:
 
 cloud:
   setup: "false"
-  image: quay.io/agonzalezrh/showroom-cloud:v0.0.1
+  image: quay.io/rhpds/showroom-cloud:v1
   port: 9001
   auth_cloud_provider: ""
   aws_access_key_id: ""
