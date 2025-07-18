@@ -21,7 +21,7 @@ satellite:
 content:
   # Only create a content pane, no other tabs will be available
   contentOnly: "false"
-  image: ghcr.io/rhpds/showroom-content:prod
+  image: quay.io/rhpds/showroom-content:v1
   imagePullPolicy: IfNotPresent
   repoUrl: https://github.com/rhpds/showroom_template_default.git
   repoRef: main
