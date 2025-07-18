@@ -21,7 +21,7 @@ satellite:
 content:
   # Only create a content pane, no other tabs will be available
   contentOnly: "false"
-  image: ghcr.io/rhpds/showroom-content:prod
+  image: quay.io/rhpds/showroom-content:v1
   imagePullPolicy: IfNotPresent
   repoUrl: https://github.com/rhpds/showroom_template_default.git
   repoRef: main
@@ -157,14 +157,13 @@ ironrdp:
   tokengenserver: "localhost:8081"
 
 setup_automation:
+  setup: "true"
   image: quay.io/rhpds/setup-automation:v1
 
 runtime_automation:
-  image: quay.io/agonzalezrh/showroom:runner-v1.13
-
-automation:
   setup: "true"
+  image: quay.io/rhpds/zerotouch-automation:v1
 
 monitoring:
-  image: quay.io/agonzalezrh/showroom-monitoring:v0.0.2
+  image: quay.io/rhpds/zt-monitoring:v1
   port: 9999
