@@ -47,6 +47,8 @@ spec:
             value: {{ .Values.satellite.activationkey }}
           - name: REGISTRY_PULL_TOKEN
             value: {{ .Values.deployer.registry_pull_token }}
+          - name: VAULT_PASSWORD
+            value: {{ .Values.automation.vault_password }}
 {{- if eq .Values.cloud.setup "true" }}
           - name: CLOUD_PROVIDER
             value: {{ .Values.cloud.auth_cloud_provider }}

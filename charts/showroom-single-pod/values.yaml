@@ -159,6 +159,7 @@ ironrdp:
 
 automation:
   setup: "true"
+  vault_password: ""
 
 monitoring:
   image: quay.io/agonzalezrh/showroom-monitoring:v0.0.2
