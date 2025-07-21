@@ -109,6 +109,8 @@ spec:
         env:
           - name: DEBUG
             value: "true"
+          - name: PORT
+            value: "8501"
           - name: ANSIBLE_USER
             value: {{ .Values.wetty.ssh.sshUser }}
           - name: ANSIBLE_PASSWORD
@@ -123,8 +125,7 @@ spec:
             value: {{ .Values.deployer.registry_pull_token }}
         ports:
           - name: runner
-            #TODO: Change with zt-automation supports changing port via env var
-            containerPort: 80
+            containerPort: 8501
             protocol: TCP
         imagePullPolicy: IfNotPresent
         volumeMounts:
