@@ -132,6 +132,12 @@ spec:
           - mountPath: /app/runtime-automation
             name: {{ .Release.Name }}-files
             subPath: runtime-automation
+          - mountPath: /app/artifacts
+            name: {{ .Release.Name }}-files
+            subPath: artifacts
+          - mountPath: /app/logs
+            name: {{ .Release.Name }}-files
+            subPath: logs
         terminationMessagePolicy: File
         image: {{ .Values.runtime_automation.image }}
 {{- end }}
