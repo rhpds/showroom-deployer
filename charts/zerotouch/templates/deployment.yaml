@@ -17,8 +17,24 @@ spec:
         app.kubernetes.io/name: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ .Release.Name }}
-{{- if eq .Values.setup_automation.setup "true" }}
       initContainers:
+      - name: git-cloner
+        image: quay.io/rhpds/git-cloner:v1.0.0
+        env:
+        - name: GIT_REPO_URL
+          value: {{.Values.content.repoUrl}}
+        - name: GIT_REPO_REF
+          value: {{.Values.content.repoRef}}
+        volumeMounts:
+        - mountPath: /files
+          name: {{ .Release.Name }}-files
+      - name: antora-builder
+        image: docker.io/antora/antora:3.1.10
+        command: ['sh', '-c', "until [ -f .git-cloner ]; do echo waiting for files; sleep 1; done; echo Generating Antora content...; antora --stacktrace site.yml; echo done; tree;"]
+        volumeMounts:
+        - mountPath: /antora
+          name: {{ .Release.Name }}-files
+{{- if eq .Values.setup_automation.setup "true" }}
       - resources: {}
         terminationMessagePath: /dev/termination-log
         name: setup
@@ -78,7 +94,7 @@ spec:
             value: {{ .Values.cloud.azure_resourcegroup }}
 {{- end }}
 
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         volumeMounts:
           - name: runner
             mountPath: /runner/
@@ -91,18 +107,14 @@ spec:
         terminationMessagePath: /dev/termination-log
         name: runner
         env:
-          - name: GIT_REPO_URL
-            value: {{ .Values.content.repoUrl }}
-          - name: GIT_REPO_REF
-            value: {{ .Values.content.repoRef }}
-          - name: BASTION_HOST
-            value: {{ .Values.wetty.ssh.sshHost }}
+          - name: DEBUG
+            value: "true"
+          - name: ANSIBLE_USER
+            value: {{ .Values.wetty.ssh.sshUser }}
+          - name: ANSIBLE_PASSWORD
+            value: {{ .Values.wetty.ssh.sshPass }}
           - name: BASTION_PORT
             value: "{{ .Values.wetty.ssh.sshPort }}"
-          - name: BASTION_USER
-            value: {{ .Values.wetty.ssh.sshUser }}
-          - name: BASTION_PASSWORD
-            value: {{ .Values.wetty.ssh.sshPass }}
           - name: GUID
             value: "{{ .Values.guid }}"
           - name: DOMAIN
@@ -111,18 +123,20 @@ spec:
             value: {{ .Values.deployer.registry_pull_token }}
         ports:
           - name: runner
-            containerPort: 8501
+            #TODO: Change with zt-automation supports changing port via env var
+            containerPort: 80
             protocol: TCP
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         volumeMounts:
-          - name: runner
-            mountPath: /runner/
+          - mountPath: /app/runtime-automation
+            name: {{ .Release.Name }}-files
+            subPath: runtime-automation
         terminationMessagePolicy: File
         image: {{ .Values.runtime_automation.image }}
 {{- end }}
       - name: nginx
         image: {{ .Values.proxy.image }}
-        imagePullPolicy: {{ .Values.proxy.imagePullPolicy }}
+        imagePullPolicy: IfNotPresent
         volumeMounts:
         - mountPath: /etc/nginx/nginx.conf
           name: nginx-config
@@ -148,7 +162,7 @@ spec:
 
       - name: content
         image: {{ .Values.content.image }}
-        imagePullPolicy: {{ .Values.content.imagePullPolicy }}
+        imagePullPolicy: IfNotPresent
         env:
         - name: GIT_REPO_URL
           value: {{ .Values.content.repoUrl }}
@@ -398,7 +412,7 @@ spec:
 {{- end }}
       - name: monitoring
         image: {{ .Values.monitoring.image }}
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
         - name: BASTION_HOST
           value: {{ .Values.wetty.ssh.sshHost }}
@@ -415,6 +429,8 @@ spec:
           protocol: TCP
 
       volumes:
+      - name: {{ .Release.Name }}-files
+        emptyDir: {}
       - name: runner
         emptyDir: {}
       - name: showroom

@@ -11,7 +11,6 @@ deployer:
 
 proxy:
   image: quay.io/rhpds/nginx:1.25
-  imagePullPolicy: IfNotPresent
 
 satellite:
   url: ''
@@ -21,8 +20,7 @@ satellite:
 content:
   # Only create a content pane, no other tabs will be available
   contentOnly: "false"
-  image: quay.io/rhpds/showroom-content:v1
-  imagePullPolicy: IfNotPresent
+  image: quay.io/rhpds/showroom-content:v1.1
   repoUrl: https://github.com/rhpds/showroom_template_default.git
   repoRef: main
   antoraPlaybook: default-site.yml
@@ -72,7 +70,7 @@ terminal:
 
 wetty:
   setup: "true"
-  image: quay.io/rhpds/wetty:v2
+  image: quay.io/rhpds/wetty:v2.5
   name: wetty
   display_name: "Login Terminal 1"
   port: 8001
