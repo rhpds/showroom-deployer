@@ -110,6 +110,45 @@ spec:
             value: {{ .Values.deployer.domain }}
           - name: REGISTRY_PULL_TOKEN
             value: {{ .Values.deployer.registry_pull_token }}
+          - name: SATELLITE_URL
+            value: {{ .Values.satellite.url }}
+          - name: SATELLITE_ORG
+            value: {{ .Values.satellite.org }}
+          - name: SATELLITE_ACTIVATIONKEY
+            value: {{ .Values.satellite.activationkey }}
+          - name: VAULT_PASSWORD
+            value: {{ .Values.automation.vault_password }}
+{{- if eq .Values.cloud.setup "true" }}
+          - name: CLOUD_PROVIDER
+            value: {{ .Values.cloud.auth_cloud_provider }}
+          - name: AWS_ACCESS_KEY_ID
+            value: {{ .Values.cloud.aws_access_key_id }}
+          - name: AWS_SECRET_ACCESS_KEY
+            value: {{ .Values.cloud.aws_secret_access_key }}
+          - name: AWS_WEB_CONSOLE_URL
+            value: {{ .Values.cloud.aws_web_console_url }}
+          - name: AWS_WEB_CONSOLE_USER_NAME
+            value: {{ .Values.cloud.aws_web_console_user_name }}
+          - name: AWS_WEB_CONSOLE_PASSWORD
+            value: {{ .Values.cloud.aws_web_console_password }}
+          - name: AWS_SANDBOX_ACCOUNT_ID
+            value: "{{ .Values.cloud.aws_sandbox_account_id }}"
+          - name: AWS_ROUTE53_DOMAIN
+            value: {{ .Values.cloud.aws_route53_domain }}
+          - name: AWS_DEFAULT_REGION
+            value: {{ .Values.cloud.aws_default_region }}
+          - name: AZURE_SUBSCRIPTION
+            value: {{ .Values.cloud.azure_suscription }}
+          - name: AZURE_TENANT
+            value: {{ .Values.cloud.azure_tenant }}
+          - name: AZURE_CLIENT_ID
+            value: {{ .Values.cloud.azure_client_id }}
+          - name: AZURE_PASSWORD
+            value: {{ .Values.cloud.azure_password }}
+          - name: AZURE_RESOURCEGROUP
+            value: {{ .Values.cloud.azure_resourcegroup }}
+{{- end }}
+
         ports:
           - name: runner
             containerPort: 8501
@@ -119,7 +158,7 @@ spec:
           - name: runner
             mountPath: /runner/
         terminationMessagePolicy: File
-        image: 'quay.io/agonzalezrh/showroom:runner-v1.13'
+        image: 'quay.io/agonzalezrh/showroom:runner-v1.14'
       - name: nginx
         image: {{ .Values.proxy.image }}
         imagePullPolicy: {{ .Values.proxy.imagePullPolicy }}
