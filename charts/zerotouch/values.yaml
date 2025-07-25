@@ -20,7 +20,7 @@ satellite:
 content:
   # Only create a content pane, no other tabs will be available
   contentOnly: "false"
-  image: quay.io/rhpds/showroom-content:v1.1
+  image: quay.io/rhpds/showroom-content:v1.2.0
   repoUrl: https://github.com/rhpds/showroom_template_default.git
   repoRef: main
   antoraPlaybook: default-site.yml
@@ -165,3 +165,9 @@ runtime_automation:
 monitoring:
   image: quay.io/rhpds/zt-monitoring:v1
   port: 9999
+
+git_cloner:
+  image: quay.io/rhpds/git-cloner:v1.1.1
+
+antora:
+  image: quay.io/rhpds/antora:v1.0.0

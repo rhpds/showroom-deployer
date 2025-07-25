@@ -19,21 +19,32 @@ spec:
       serviceAccountName: {{ .Release.Name }}
       initContainers:
       - name: git-cloner
-        image: quay.io/rhpds/git-cloner:v1.0.0
+        image: {{ .Values.git_cloner.image }}
         env:
         - name: GIT_REPO_URL
           value: {{.Values.content.repoUrl}}
         - name: GIT_REPO_REF
           value: {{.Values.content.repoRef}}
+        - name: CLONE_DIR
+          value: "/showroom/repo"
         volumeMounts:
-        - mountPath: /files
+        - mountPath: /showroom/repo
           name: {{ .Release.Name }}-files
+          subPath: repo
       - name: antora-builder
-        image: docker.io/antora/antora:3.1.10
-        command: ['sh', '-c', "until [ -f .git-cloner ]; do echo waiting for files; sleep 1; done; echo Generating Antora content...; antora --stacktrace site.yml; echo done; tree;"]
+        image: {{ .Values.antora.image }}
+        env:
+        - name: FILES_DIR
+          value: "/showroom/repo"
+        - name: OUTPUT_DIR
+          value: "/showroom/www"
         volumeMounts:
-        - mountPath: /antora
+        - mountPath: /showroom/repo
           name: {{ .Release.Name }}-files
+          subPath: repo
+        - mountPath: /showroom/www
+          name: {{ .Release.Name }}-files
+          subPath: www
 {{- if eq .Values.setup_automation.setup "true" }}
       - resources: {}
         terminationMessagePath: /dev/termination-log
@@ -171,10 +182,6 @@ spec:
         image: {{ .Values.content.image }}
         imagePullPolicy: IfNotPresent
         env:
-        - name: GIT_REPO_URL
-          value: {{ .Values.content.repoUrl }}
-        - name: GIT_REPO_REF
-          value: {{ .Values.content.repoRef }}
         - name: ANTORA_PLAYBOOK
           value: {{ .Values.content.antoraPlaybook }}
         - name: ZT_BUNDLE
@@ -184,8 +191,12 @@ spec:
         volumeMounts:
         - name: user-data
           mountPath: /user_data/
-        - name: showroom
-          mountPath: /showroom/
+        - mountPath: /showroom/repo
+          name: {{ .Release.Name }}-files
+          subPath: repo
+        - mountPath: /showroom/www
+          name: {{ .Release.Name }}-files
+          subPath: www
         ports:
         - containerPort: 8000
           protocol: TCP
