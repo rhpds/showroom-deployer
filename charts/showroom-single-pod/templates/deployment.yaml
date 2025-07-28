@@ -236,6 +236,31 @@ spec:
         resources:
           {{- toYaml .Values.terminal.resources | nindent 10 }}
 {{- end }}
+{{- range $hostIndex, $host := .Values.terminal.terminals | default (list) }}
+{{- range $i, $terminal := $host.terminals | default (list) }}
+      - name: terminal-{{ $terminal.name }}
+        image: {{ $.Values.terminal.image }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: GUID
+          value: "{{ $.Values.guid }}"
+        - name: RUNCOMMAND 
+          value: "{{ $terminal.command }}"
+        volumeMounts:
+        - name: terminal-lab-user-home
+          mountPath: /home/lab-user
+        ports:
+        - containerPort: {{ add $.Values.terminal.port 1 $i }}
+          protocol: TCP
+        resources:
+          {{- toYaml $.Values.terminal.resources | nindent 10 }}
+{{- end }}
+{{- end }}
+
 {{- if eq .Values.ocpconsole.setup "true" }}
       - name: console-app
         image: "quay.io/openshift/origin-console:4.14"
