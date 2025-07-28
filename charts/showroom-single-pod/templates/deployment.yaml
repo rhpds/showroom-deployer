@@ -250,6 +250,8 @@ spec:
           value: "{{ $.Values.guid }}"
         - name: RUNCOMMAND 
           value: "{{ $terminal.command }}"
+        - name: PORT
+          value: "{{ add $.Values.terminal.port 1 $i }}"
         volumeMounts:
         - name: terminal-lab-user-home
           mountPath: /home/lab-user
