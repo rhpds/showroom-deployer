@@ -53,7 +53,7 @@ second_terminal_tab:
 
 terminal:
   setup: "true"
-  image: quay.io/rhpds/openshift-showroom-terminal-ocp:latest
+  image: quay.io/rhpds/openshift-showroom-terminal-ocp:2025-07-29
   name: terminal
   display_name: "Terminal 1"
   port: 7681
