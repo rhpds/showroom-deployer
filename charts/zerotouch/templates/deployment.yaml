@@ -74,6 +74,8 @@ spec:
             value: {{ .Values.satellite.activationkey }}
           - name: REGISTRY_PULL_TOKEN
             value: {{ .Values.deployer.registry_pull_token }}
+          - name: VAULT_PASSWORD
+            value: {{ .Values.automation.vault_password }}
 {{- if eq .Values.cloud.setup "true" }}
           - name: CLOUD_PROVIDER
             value: {{ .Values.cloud.auth_cloud_provider }}
@@ -94,7 +96,7 @@ spec:
           - name: AWS_DEFAULT_REGION
             value: {{ .Values.cloud.aws_default_region }}
           - name: AZURE_SUBSCRIPTION
-            value: {{ .Values.cloud.azure_suscription }}
+            value: {{ .Values.cloud.azure_subscription }}
           - name: AZURE_TENANT
             value: {{ .Values.cloud.azure_tenant }}
           - name: AZURE_CLIENT_ID
@@ -134,6 +136,45 @@ spec:
             value: {{ .Values.deployer.domain }}
           - name: REGISTRY_PULL_TOKEN
             value: {{ .Values.deployer.registry_pull_token }}
+          - name: SATELLITE_URL
+            value: {{ .Values.satellite.url }}
+          - name: SATELLITE_ORG
+            value: {{ .Values.satellite.org }}
+          - name: SATELLITE_ACTIVATIONKEY
+            value: {{ .Values.satellite.activationkey }}
+          - name: VAULT_PASSWORD
+            value: {{ .Values.automation.vault_password }}
+{{- if eq .Values.cloud.setup "true" }}
+          - name: CLOUD_PROVIDER
+            value: {{ .Values.cloud.auth_cloud_provider }}
+          - name: AWS_ACCESS_KEY_ID
+            value: {{ .Values.cloud.aws_access_key_id }}
+          - name: AWS_SECRET_ACCESS_KEY
+            value: {{ .Values.cloud.aws_secret_access_key }}
+          - name: AWS_WEB_CONSOLE_URL
+            value: {{ .Values.cloud.aws_web_console_url }}
+          - name: AWS_WEB_CONSOLE_USER_NAME
+            value: {{ .Values.cloud.aws_web_console_user_name }}
+          - name: AWS_WEB_CONSOLE_PASSWORD
+            value: {{ .Values.cloud.aws_web_console_password }}
+          - name: AWS_SANDBOX_ACCOUNT_ID
+            value: "{{ .Values.cloud.aws_sandbox_account_id }}"
+          - name: AWS_ROUTE53_DOMAIN
+            value: {{ .Values.cloud.aws_route53_domain }}
+          - name: AWS_DEFAULT_REGION
+            value: {{ .Values.cloud.aws_default_region }}
+          - name: AZURE_SUBSCRIPTION
+            value: {{ .Values.cloud.azure_subscription }}
+          - name: AZURE_TENANT
+            value: {{ .Values.cloud.azure_tenant }}
+          - name: AZURE_CLIENT_ID
+            value: {{ .Values.cloud.azure_client_id }}
+          - name: AZURE_PASSWORD
+            value: {{ .Values.cloud.azure_password }}
+          - name: AZURE_RESOURCEGROUP
+            value: {{ .Values.cloud.azure_resourcegroup }}
+{{- end }}
+
         ports:
           - name: runner
             containerPort: 8501
@@ -229,6 +270,33 @@ spec:
         resources:
           {{- toYaml .Values.terminal.resources | nindent 10 }}
 {{- end }}
+{{- range $hostIndex, $host := .Values.terminal.terminals | default (list) }}
+{{- range $i, $terminal := $host.terminals | default (list) }}
+      - name: terminal-{{ $terminal.name }}
+        image: {{ $.Values.terminal.image }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: GUID
+          value: "{{ $.Values.guid }}"
+        - name: RUNCOMMAND
+          value: "{{ $terminal.command }}"
+        - name: PORT
+          value: "{{ add $.Values.terminal.port 1 $i }}"
+        volumeMounts:
+        - name: terminal-lab-user-home
+          mountPath: /home/lab-user
+        ports:
+        - containerPort: {{ add $.Values.terminal.port 1 $i }}
+          protocol: TCP
+        resources:
+          {{- toYaml $.Values.terminal.resources | nindent 10 }}
+{{- end }}
+{{- end }}
+
 {{- if eq .Values.ocpconsole.setup "true" }}
       - name: console-app
         image: "quay.io/openshift/origin-console:4.14"
@@ -391,7 +459,7 @@ spec:
         - name: AWS_DEFAULT_REGION
           value: {{ .Values.cloud.aws_default_region }}
         - name: AZURE_SUBSCRIPTION
-          value: {{ .Values.cloud.azure_suscription }}
+          value: {{ .Values.cloud.azure_subscription }}
         - name: AZURE_TENANT
           value: {{ .Values.cloud.azure_tenant }}
         - name: AZURE_CLIENT_ID
