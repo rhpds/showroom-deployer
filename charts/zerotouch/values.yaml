@@ -162,6 +162,9 @@ runtime_automation:
   setup: "true"
   image: quay.io/rhpds/zerotouch-automation:v1.1.0
 
+automation:
+  vault_password: ""
+
 monitoring:
   image: quay.io/rhpds/zt-monitoring:v1
   port: 9999
