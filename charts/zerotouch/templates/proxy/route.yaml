@@ -12,6 +12,13 @@ spec:
   to:
     kind: Service
     name: {{ .Release.Name }}
+  httpHeaders:
+    actions:
+      response:
+        - name: X-Frame-Options
+          action:
+            type: Delete
+      request: null
   port:
     targetPort: 8080
   tls:
