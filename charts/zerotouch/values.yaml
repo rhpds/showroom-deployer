@@ -160,7 +160,7 @@ setup_automation:
 
 runtime_automation:
   setup: "true"
-  image: quay.io/rhpds/zerotouch-automation:v1.1.1
+  image: quay.io/rhpds/zerotouch-automation:v1.1.2
 
 automation:
   vault_password: ""
