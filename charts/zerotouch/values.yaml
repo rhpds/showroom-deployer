@@ -156,11 +156,11 @@ ironrdp:
 
 setup_automation:
   setup: "true"
-  image: quay.io/rhpds/setup-automation:v1
+  image: quay.io/rhpds/setup-automation:v1.0.2
 
 runtime_automation:
   setup: "true"
-  image: quay.io/rhpds/zerotouch-automation:v1.1.0
+  image: quay.io/rhpds/zerotouch-automation:v1.1.1
 
 automation:
   vault_password: ""
@@ -173,4 +173,4 @@ git_cloner:
   image: quay.io/rhpds/git-cloner:v1.1.1
 
 antora:
-  image: quay.io/rhpds/antora:v1.0.0
+  image: quay.io/rhpds/antora:v1.0.1
