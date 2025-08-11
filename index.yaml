@@ -705,6 +705,16 @@ entries:
   zerotouch:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-08-11T05:12:03.302469597Z"
+    description: Deploys the ZT showroom front-end in a single pod
+    digest: 35a0f582dc2e1ac9c8f3162777701e502fd507668e1ab0b0ef2d9f2c9b71cfa0
+    name: zerotouch
+    type: application
+    urls:
+    - https://github.com/rhpds/showroom-deployer/releases/download/zerotouch-1.9.10/zerotouch-1.9.10.tgz
+    version: 1.9.10
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-08-05T05:47:23.495460949Z"
     description: Deploys the ZT showroom front-end in a single pod
     digest: 979366e10f1d28361c9fb9276e3fc3ef964ac660038cd27ae020e4d308b4dc45
@@ -843,4 +853,4 @@ entries:
     urls:
     - https://github.com/rhpds/showroom-deployer/releases/download/zerotouch-1.8.8/zerotouch-1.8.8.tgz
     version: 1.8.8
-generated: "2025-08-05T05:47:23.495718395Z"
+generated: "2025-08-11T05:12:03.302729545Z"
