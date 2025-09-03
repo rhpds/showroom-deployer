@@ -156,7 +156,7 @@ ironrdp:
 
 setup_automation:
   setup: "true"
-  image: quay.io/rhpds/setup-automation:v1.0.2
+  image: quay.io/rhpds/setup-automation:v1.0.3
 
 runtime_automation:
   setup: "true"
