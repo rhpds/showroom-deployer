@@ -8,7 +8,21 @@ metadata:
     haproxy.router.openshift.io/timeout: 1h
     haproxy.router.openshift.io/timeout-tunnel: 1h
 spec:
-  host: showroom-{{ .Values.guid }}.{{ .Values.deployer.domain }}
+  {{- $host := "" -}}
+  {{- if and (hasKey .Values "route") (eq .Values.route.omitHost "true") -}}
+  {{- /* omit host entirely */ -}}
+  {{- else if and (hasKey .Values "route") (ne .Values.route.hostOverride "") -}}
+  {{- $host = .Values.route.hostOverride -}}
+  {{- else -}}
+  {{- $suffix := "" -}}
+  {{- if and (hasKey .Values "route") (ne .Values.route.hostSuffix "") -}}
+  {{- $suffix = printf "-%s" .Values.route.hostSuffix -}}
+  {{- end -}}
+  {{- $host = printf "showroom-%s%s.%s" .Values.guid $suffix .Values.deployer.domain -}}
+  {{- end -}}
+  {{- if ne $host "" }}
+  host: {{ $host | quote }}
+  {{- end }}
   to:
     kind: Service
     name: {{ .Release.Name }}
