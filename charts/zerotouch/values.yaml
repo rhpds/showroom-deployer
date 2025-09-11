@@ -9,6 +9,14 @@ deployer:
   domain: cluster-GUID.GUID.sandboxNUMBERS.opentlc.com
   registry_pull_token: ''
 
+route:
+  # If non-empty, use this host verbatim for the main proxy Route
+  hostOverride: ""
+  # If non-empty, appended as -<hostSuffix> to the default host
+  hostSuffix: ""
+  # If "true", omit spec.host to let OpenShift auto-generate
+  omitHost: "false"
+
 proxy:
   image: quay.io/rhpds/nginx:1.25
 
