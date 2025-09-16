@@ -85,7 +85,7 @@ spec:
           - name: runner
             mountPath: /runner/
         terminationMessagePolicy: File
-        image: 'quay.io/mitsharm/ansible-runner-api:latest'
+        image: 'quay.io/agonzalezrh/showroom:setup-v0.2'
 {{- end }}
       containers:
       - resources: {}
