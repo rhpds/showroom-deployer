@@ -85,7 +85,7 @@ spec:
           - name: runner
             mountPath: /runner/
         terminationMessagePolicy: File
-        image: 'quay.io/mitsharm/zerotouch-setup-automation:latest'
+        image: 'quay.io/agonzalezrh/showroom:setup-v0.2'
 {{- end }}
       containers:
       - resources: {}
@@ -158,7 +158,7 @@ spec:
           - name: runner
             mountPath: /runner/
         terminationMessagePolicy: File
-        image: 'quay.io/mitsharm/zerotouch-runtime-automation:latest'
+        image: 'quay.io/agonzalezrh/showroom:runner-v1.14'
       - name: nginx
         image: {{ .Values.proxy.image }}
         imagePullPolicy: {{ .Values.proxy.imagePullPolicy }}
