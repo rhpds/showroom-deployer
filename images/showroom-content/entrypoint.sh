@@ -25,9 +25,17 @@ else
   git checkout ${GIT_REPO_REF}
 fi
 
+CONTENT_START_PATH=$(yq e '.content.sources[0].start_path // "content"' ${ANTORA_PLAYBOOK})
+
+CONTENT_DIR=${WORKDIR}/${CONTENT_START_PATH}
+if [ ! -d "${CONTENT_DIR}" ]; then
+  echo "Content directory ${CONTENT_DIR} does not exist. Exiting."
+  exit 1
+fi
+
 echo
-echo "Original user_data in content/antora.yml"
-cat ${WORKDIR}/content/antora.yml
+echo "Original user_data in ${CONTENT_START_PATH}/antora.yml"
+cat ${CONTENT_DIR}/antora.yml
 
 if [ -z "${USER_DATA_FILE}" ]; then
   echo
@@ -39,14 +47,14 @@ if test -r ${USER_DATA_FILE}
 then
   echo
   echo "Merging ${USER_DATA_FILE} and antora.yml"}
-  yq -i ".asciidoc.attributes *= load(\"${USER_DATA_FILE}\")" ${WORKDIR}/content/antora.yml
-  echo "new user_data in content/antora.yml"
+  yq -i ".asciidoc.attributes *= load(\"${USER_DATA_FILE}\")" ${CONTENT_DIR}/antora.yml
+  echo "new user_data in ${CONTENT_START_PATH}/antora.yml"
 else
   echo
   echo "USER_DATA_FILE: ${USER_DATA_FILE} not found."
   exit 1
 fi
-cat ${WORKDIR}/content/antora.yml
+cat ${CONTENT_DIR}/antora.yml
 echo
 
 WWW_ROOT=/showroom/www/
