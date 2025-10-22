@@ -28,7 +28,7 @@ satellite:
 content:
   # Only create a content pane, no other tabs will be available
   contentOnly: "false"
-  image: quay.io/rhpds/showroom-content:v1.2.0
+  image: quay.io/rhpds/showroom-content:v1.3.0
   repoUrl: https://github.com/rhpds/showroom_template_default.git
   repoRef: main
   antoraPlaybook: default-site.yml
@@ -168,7 +168,7 @@ setup_automation:
 
 runtime_automation:
   setup: "true"
-  image: quay.io/rhpds/zerotouch-automation:v1.1.2
+  image: quay.io/rhpds/zerotouch-automation:v1.2.0
 
 automation:
   vault_password: ""
