@@ -33,26 +33,9 @@ content:
   user_data: |
     bastion_password: from_helm
 
-# to have two terminals in one tab
-# set stacked_terminals to "true"
-# and indicate which two terminals you want
-stacked_terminals:
-  setup: "false"
-  name: stacked-terminal
-  display_name: "Stacked Terminal"
-  top: "terminal"
-  bottom: "wetty"
-
-second_terminal_tab:
-  setup: "true"
-  name: second-terminal-tab
-  display_name: "Terminal 2"
-
 terminal:
   setup: "true"
   image: quay.io/rhpds/openshift-showroom-terminal-ocp:latest
-  name: terminal
-  display_name: "Terminal 1"
   port: 7681
   resources:
     limits:
@@ -70,9 +53,7 @@ terminal:
 
 wetty:
   setup: "true"
-  image: quay.io/rhpds/wetty:latest
-  name: wetty
-  display_name: "Login Terminal 1"
+  image: quay.io/rhpds/wetty:v2.5
   port: 8001
   base: "wetty"
   resources:
@@ -99,10 +80,6 @@ codeserver:
     requests:
       cpu: 500m
       memory: 512Mi
-
-# To be fully implemented
-ocpconsole:
-  setup: "false"
 
 novnc:
   setup: "false"

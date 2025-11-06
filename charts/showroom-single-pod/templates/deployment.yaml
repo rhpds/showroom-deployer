@@ -91,41 +91,6 @@ spec:
         resources:
           {{- toYaml .Values.terminal.resources | nindent 10 }}
 {{- end }}
-{{- if eq .Values.ocpconsole.setup "true" }}
-      - name: console-app
-        image: "quay.io/openshift/origin-console:4.14"
-        env:
-          - name: BRIDGE_BRANDING
-            value: openshift
-          - name: BRIDGE_USER_AUTH
-            value: disabled
-          - name: BRIDGE_K8S_MODE
-            value: off-cluster
-          - name: BRIDGE_K8S_MODE_OFF_CLUSTER_ENDPOINT
-            value: https://kubernetes.default
-          - name: BRIDGE_K8S_MODE_OFF_CLUSTER_SKIP_VERIFY_TLS
-            value: "true"
-          - name: BRIDGE_K8S_AUTH
-            value: bearer-token
-          - name: BRIDGE_BASE_PATH
-            value: "/console/"
-          - name: BRIDGE_K8S_AUTH_BEARER_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: console-secret
-                key: token
-        ports:
-        - containerPort: 9000
-          protocol: TCP
-        livenessProbe:
-          httpGet:
-            path: /console/
-            port: 9000
-        readinessProbe:
-          httpGet:
-            path: /console/
-            port: 9000
-{{- end }}
 
 {{- if eq .Values.wetty.setup "true" }}
       - name: wetty

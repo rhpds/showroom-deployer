@@ -27,13 +27,7 @@ data:
         absolute_redirect off;
 
         location / {
-          index index.html;
-          root /data/www;
-        }
-
-        location /content/ {
           proxy_pass http://localhost:8000;
-          rewrite ^/content/(.*)$ /$1 break;
 
           expires off;
           proxy_cache off;
@@ -72,23 +66,6 @@ data:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header Host $http_host;
           proxy_set_header X-NginX-Proxy true;
-        }
-{{- end }}
-
-{{-   if eq .Values.ocpconsole.setup "true" }}
-        location /ocp/ {
-          # JM: not working, don't know why
-          # keeps looking for assets on / of the nginx
-
-          proxy_pass https://console.openshift-console:443;
-          rewrite ^/ocp/(.*)$ /$1 break;
-
-          expires off;
-          proxy_cache off;
-          proxy_pass_request_headers on;
-          proxy_set_header Accept-Encoding "gzip";
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          proxy_set_header X-Forwarded-Proto $scheme;
         }
 {{- end }}
 
