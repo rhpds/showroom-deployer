@@ -17,6 +17,42 @@ spec:
         app.kubernetes.io/name: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ .Release.Name }}
+      initContainers:
+      - name: git-cloner
+        image: {{ .Values.git_cloner.image }}
+        env:
+        - name: GIT_REPO_URL
+          value: {{ .Values.content.repoUrl }}
+        - name: GIT_REPO_REF
+          value: {{ .Values.content.repoRef }}
+        - name: CLONE_DIR
+          value: "/showroom/repo"
+        volumeMounts:
+        - mountPath: /showroom/repo
+          name: {{ .Release.Name }}-files
+          subPath: repo
+      - name: antora-builder
+        image: {{ .Values.antora.image }}
+        env:
+        - name: FILES_DIR
+          value: "/showroom/repo"
+        - name: OUTPUT_DIR
+          value: "/showroom/www"
+        - name: ANTORA_PLAYBOOK
+          value: {{ .Values.content.antoraPlaybook }}
+        - name: ZT_BUNDLE
+          value: {{ .Values.content.zero_touch_bundle }}
+        - name: ZT_UI_ENABLED
+          value: "{{ .Values.content.zero_touch_ui_enabled }}"
+        volumeMounts:
+        - mountPath: /showroom/repo
+          name: {{ .Release.Name }}-files
+          subPath: repo
+        - name: user-data
+          mountPath: /user_data/
+        - mountPath: /showroom/www
+          name: {{ .Release.Name }}-files
+          subPath: www
       containers:
       - name: nginx
         image: {{ .Values.proxy.image }}
@@ -25,8 +61,6 @@ spec:
         - mountPath: /etc/nginx/nginx.conf
           name: nginx-config
           subPath: nginx.conf
-        - mountPath: /data/www
-          name: content
         - mountPath: /var/cache/nginx
           name: nginx-cache
         - mountPath: /var/run
@@ -50,11 +84,19 @@ spec:
           value: {{ .Values.content.repoRef }}
         - name: ANTORA_PLAYBOOK
           value: {{ .Values.content.antoraPlaybook }}
+        - name: ZT_BUNDLE
+          value: {{ .Values.content.zero_touch_bundle }}
+        - name: ZT_UI_ENABLED
+          value: "{{ .Values.content.zero_touch_ui_enabled }}"
         volumeMounts:
         - name: user-data
           mountPath: /user_data/
-        - name: showroom
-          mountPath: /showroom/
+        - mountPath: /showroom/repo
+          name: {{ .Release.Name }}-files
+          subPath: repo
+        - mountPath: /showroom/www
+          name: {{ .Release.Name }}-files
+          subPath: www
         ports:
         - containerPort: 8000
           protocol: TCP
@@ -86,41 +128,6 @@ spec:
           protocol: TCP
         resources:
           {{- toYaml .Values.terminal.resources | nindent 10 }}
-{{- end }}
-{{- if eq .Values.ocpconsole.setup "true" }}
-      - name: console-app
-        image: "quay.io/openshift/origin-console:4.14"
-        env:
-          - name: BRIDGE_BRANDING
-            value: openshift
-          - name: BRIDGE_USER_AUTH
-            value: disabled
-          - name: BRIDGE_K8S_MODE
-            value: off-cluster
-          - name: BRIDGE_K8S_MODE_OFF_CLUSTER_ENDPOINT
-            value: https://kubernetes.default
-          - name: BRIDGE_K8S_MODE_OFF_CLUSTER_SKIP_VERIFY_TLS
-            value: "true"
-          - name: BRIDGE_K8S_AUTH
-            value: bearer-token
-          - name: BRIDGE_BASE_PATH
-            value: "/console/"
-          - name: BRIDGE_K8S_AUTH_BEARER_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: console-secret
-                key: token
-        ports:
-        - containerPort: 9000
-          protocol: TCP
-        livenessProbe:
-          httpGet:
-            path: /console/
-            port: 9000
-        readinessProbe:
-          httpGet:
-            path: /console/
-            port: 9000
 {{- end }}
 
 {{- if eq .Values.wetty.setup "true" }}
@@ -168,14 +175,13 @@ spec:
 {{- end }}
 
       volumes:
+      - name: {{ .Release.Name }}-files
+        emptyDir: {}
       - name: showroom
         emptyDir: {}
       - name: user-data
         configMap:
           name: {{ .Release.Name }}-userdata
-      - name: content
-        configMap:
-          name: {{ .Release.Name }}-index
       - name: nginx-config
         configMap:
           defaultMode: 420
