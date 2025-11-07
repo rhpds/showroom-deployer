@@ -62,6 +62,12 @@ wetty:
     requests:
       cpu: 500m
       memory: 256Mi
+
+git_cloner:
+  image: quay.io/rhpds/git-cloner:v1.1.2
+
+antora:
+  image: quay.io/rhpds/antora:v1.0.1
   ssh:
     autoSshToBastion: "false"
     sshHost: shared-410-bastion.openshift.redhatworkshops.io

@@ -17,6 +17,42 @@ spec:
         app.kubernetes.io/name: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ .Release.Name }}
+      initContainers:
+      - name: git-cloner
+        image: {{ .Values.git_cloner.image }}
+        env:
+        - name: GIT_REPO_URL
+          value: {{ .Values.content.repoUrl }}
+        - name: GIT_REPO_REF
+          value: {{ .Values.content.repoRef }}
+        - name: CLONE_DIR
+          value: "/showroom/repo"
+        volumeMounts:
+        - mountPath: /showroom/repo
+          name: {{ .Release.Name }}-files
+          subPath: repo
+      - name: antora-builder
+        image: {{ .Values.antora.image }}
+        env:
+        - name: FILES_DIR
+          value: "/showroom/repo"
+        - name: OUTPUT_DIR
+          value: "/showroom/www"
+        - name: ANTORA_PLAYBOOK
+          value: {{ .Values.content.antoraPlaybook }}
+        - name: ZT_BUNDLE
+          value: {{ .Values.content.zero_touch_bundle }}
+        - name: ZT_UI_ENABLED
+          value: "{{ .Values.content.zero_touch_ui_enabled }}"
+        volumeMounts:
+        - mountPath: /showroom/repo
+          name: {{ .Release.Name }}-files
+          subPath: repo
+        - name: user-data
+          mountPath: /user_data/
+        - mountPath: /showroom/www
+          name: {{ .Release.Name }}-files
+          subPath: www
       containers:
       - name: nginx
         image: {{ .Values.proxy.image }}
@@ -57,8 +93,12 @@ spec:
         volumeMounts:
         - name: user-data
           mountPath: /user_data/
-        - name: showroom
-          mountPath: /showroom/
+        - mountPath: /showroom/repo
+          name: {{ .Release.Name }}-files
+          subPath: repo
+        - mountPath: /showroom/www
+          name: {{ .Release.Name }}-files
+          subPath: www
         ports:
         - containerPort: 8000
           protocol: TCP
@@ -137,6 +177,8 @@ spec:
 {{- end }}
 
       volumes:
+      - name: {{ .Release.Name }}-files
+        emptyDir: {}
       - name: showroom
         emptyDir: {}
       - name: user-data
