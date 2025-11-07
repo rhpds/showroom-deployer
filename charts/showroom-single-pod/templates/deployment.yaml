@@ -61,8 +61,6 @@ spec:
         - mountPath: /etc/nginx/nginx.conf
           name: nginx-config
           subPath: nginx.conf
-        - mountPath: /data/www
-          name: content
         - mountPath: /var/cache/nginx
           name: nginx-cache
         - mountPath: /var/run
@@ -184,9 +182,6 @@ spec:
       - name: user-data
         configMap:
           name: {{ .Release.Name }}-userdata
-      - name: content
-        configMap:
-          name: {{ .Release.Name }}-index
       - name: nginx-config
         configMap:
           defaultMode: 420
