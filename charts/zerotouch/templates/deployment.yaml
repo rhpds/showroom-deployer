@@ -31,6 +31,8 @@ spec:
         - mountPath: /showroom/repo
           name: {{ .Release.Name }}-files
           subPath: repo
+        resources:
+          {{- toYaml .Values.git_cloner.resources | nindent 10 }}
       - name: antora-builder
         image: {{ .Values.antora.image }}
         env:
@@ -54,8 +56,11 @@ spec:
         - mountPath: /showroom/www
           name: {{ .Release.Name }}-files
           subPath: www
+        resources:
+          {{- toYaml .Values.antora.resources | nindent 10 }}
 {{- if eq .Values.setup_automation.setup "true" }}
-      - resources: {}
+      - resources:
+          {{- toYaml .Values.setup_automation.resources | nindent 10 }}
         terminationMessagePath: /dev/termination-log
         name: setup
         env:
@@ -125,7 +130,8 @@ spec:
 {{- end }}
       containers:
 {{- if eq .Values.runtime_automation.setup "true" }}
-      - resources: {}
+      - resources:
+          {{- toYaml .Values.runtime_automation.resources | nindent 10 }}
         terminationMessagePath: /dev/termination-log
         name: runner
         env:
@@ -227,6 +233,8 @@ spec:
         ports:
         - name: web
           containerPort: 8080
+        resources:
+          {{- toYaml .Values.proxy.resources | nindent 10 }}
 
       - name: content
         image: {{ .Values.content.image }}
@@ -262,6 +270,8 @@ spec:
           httpGet:
             path: /
             port: 8000
+        resources:
+          {{- toYaml .Values.content.resources | nindent 10 }}
 
 {{- if eq .Values.terminal.setup "true" }}
       - name: terminal
@@ -484,6 +494,8 @@ spec:
         ports:
         - containerPort: {{ .Values.cloud.port }}
           protocol: TCP
+        resources:
+          {{- toYaml .Values.cloud.resources | nindent 10 }}
 {{- end }}
 
 {{- if eq .Values.ironrdp.setup "true" }}
@@ -508,6 +520,8 @@ spec:
           protocol: TCP
         - containerPort: {{ .Values.ironrdp.port }}
           protocol: TCP
+        resources:
+          {{- toYaml .Values.ironrdp.resources | nindent 10 }}
 {{- end }}
       - name: monitoring
         image: {{ .Values.monitoring.image }}
@@ -526,6 +540,8 @@ spec:
         ports:
         - containerPort: {{ .Values.monitoring.port }}
           protocol: TCP
+        resources:
+          {{- toYaml .Values.monitoring.resources | nindent 10 }}
 
       volumes:
       - name: {{ .Release.Name }}-files
