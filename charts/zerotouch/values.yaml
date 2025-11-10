@@ -19,6 +19,12 @@ route:
 
 proxy:
   image: quay.io/rhpds/nginx:1.25
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
 satellite:
   url: ''
@@ -36,7 +42,7 @@ content:
   zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.1.0/nookbag-v0.1.0.zip"
   resources:
     limits:
-      memory: 64Mi
+      memory: 128Mi
     requests:
       cpu: 100m
       memory: 64Mi
@@ -87,7 +93,7 @@ wetty:
   base: "wetty"
   resources:
     limits:
-      memory: 256Mi
+      memory: 512Mi
     requests:
       cpu: 500m
       memory: 256Mi
@@ -151,7 +157,7 @@ cloud:
     limits:
       memory: 256Mi
     requests:
-      cpu: 500m
+      cpu: 250m
       memory: 256Mi
 
 ironrdp:
@@ -163,14 +169,32 @@ ironrdp:
   password: ""
   jetserver: "localhost:7171"
   tokengenserver: "localhost:8081"
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
 setup_automation:
   setup: "true"
   image: quay.io/rhpds/setup-automation:v1.0.3
+  resources:
+    limits:
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
 
 runtime_automation:
   setup: "true"
   image: quay.io/rhpds/zerotouch-automation:v1.2.0
+  resources:
+    limits:
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
 
 automation:
   vault_password: ""
@@ -178,9 +202,27 @@ automation:
 monitoring:
   image: quay.io/rhpds/zt-monitoring:v1
   port: 9999
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
 git_cloner:
   image: quay.io/rhpds/git-cloner:v1.1.2
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
 
 antora:
   image: quay.io/rhpds/antora:v1.0.1
+  resources:
+    limits:
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
