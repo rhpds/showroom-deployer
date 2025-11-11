@@ -21,7 +21,7 @@ proxy:
   image: quay.io/rhpds/nginx:1.25
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
       memory: 256Mi
     requests:
       cpu: 100m
@@ -43,7 +43,7 @@ content:
   zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.1.0/nookbag-v0.1.0.zip"
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
       memory: 128Mi
     requests:
       cpu: 100m
@@ -74,7 +74,7 @@ terminal:
   port: 7681
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
       memory: 1Gi
     requests:
       cpu: 500m
@@ -95,7 +95,7 @@ wetty:
   base: "wetty"
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
       memory: 512Mi
     requests:
       cpu: 500m
@@ -116,7 +116,7 @@ codeserver:
   image: quay.io/rhpds/code-server:latest
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
       memory: 512Mi
     requests:
       cpu: 500m
@@ -134,7 +134,7 @@ novnc:
   password: password
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
       memory: 256Mi
     requests:
       cpu: 500m
@@ -160,7 +160,7 @@ cloud:
   azure_resourcegroup: ""
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
       memory: 256Mi
     requests:
       cpu: 250m
@@ -177,7 +177,7 @@ ironrdp:
   tokengenserver: "localhost:8081"
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
       memory: 256Mi
     requests:
       cpu: 100m
@@ -188,7 +188,7 @@ setup_automation:
   image: quay.io/rhpds/setup-automation:v1.0.3
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
       memory: 512Mi
     requests:
       cpu: 250m
@@ -199,7 +199,7 @@ runtime_automation:
   image: quay.io/rhpds/zerotouch-automation:v1.2.0
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
       memory: 512Mi
     requests:
       cpu: 250m
@@ -213,7 +213,7 @@ monitoring:
   port: 9999
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
       memory: 256Mi
     requests:
       cpu: 100m
@@ -223,7 +223,7 @@ git_cloner:
   image: quay.io/rhpds/git-cloner:v1.1.2
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
       memory: 256Mi
     requests:
       cpu: 50m
@@ -233,7 +233,7 @@ antora:
   image: quay.io/rhpds/antora:v1.0.1
   resources:
     limits:
-      cpu: 1000m
+      cpu: 500m
       memory: 512Mi
     requests:
       cpu: 250m
