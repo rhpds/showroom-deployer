@@ -38,7 +38,7 @@ spec:
           value: "/showroom/repo"
         - name: OUTPUT_DIR
           value: "/showroom/www"
-        - name: ANTORA_PLAYBOOK
+        - name: ANTORA_SITE_FILE
           value: {{ .Values.content.antoraPlaybook }}
         - name: ZT_BUNDLE
           value: {{ .Values.content.zero_touch_bundle }}
