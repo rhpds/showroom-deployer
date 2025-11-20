@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}
-  namespace: {{ .Release.Namespace}}
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:
@@ -22,9 +22,9 @@ spec:
         image: {{ .Values.git_cloner.image }}
         env:
         - name: GIT_REPO_URL
-          value: {{.Values.content.repoUrl}}
+          value: {{ .Values.content.repoUrl | quote }}
         - name: GIT_REPO_REF
-          value: {{.Values.content.repoRef}}
+          value: {{ .Values.content.repoRef | quote }}
         - name: CLONE_DIR
           value: "/showroom/repo"
         volumeMounts:
@@ -41,9 +41,9 @@ spec:
         - name: OUTPUT_DIR
           value: "/showroom/www"
         - name: ANTORA_PLAYBOOK
-          value: {{ .Values.content.antoraPlaybook }}
+          value: {{ .Values.content.antoraPlaybook | quote }}
         - name: ZT_BUNDLE
-          value: {{ .Values.content.zero_touch_bundle }}
+          value: {{ .Values.content.zero_touch_bundle | quote }}
         - name: ZT_UI_ENABLED
           value: "{{ .Values.content.zero_touch_ui_enabled }}"
 
@@ -65,60 +65,60 @@ spec:
         name: setup
         env:
           - name: GIT_REPO_URL
-            value: {{ .Values.content.repoUrl }}
+            value: {{ .Values.content.repoUrl | quote }}
           - name: GIT_REPO_REF
-            value: {{ .Values.content.repoRef }}
+            value: {{ .Values.content.repoRef | quote }}
           - name: BASTION_HOST
-            value: {{ .Values.wetty.ssh.sshHost }}
+            value: {{ .Values.wetty.ssh.sshHost | quote }}
           - name: BASTION_PORT
             value: "{{ .Values.wetty.ssh.sshPort }}"
           - name: BASTION_USER
-            value: {{ .Values.wetty.ssh.sshUser }}
+            value: {{ .Values.wetty.ssh.sshUser | quote }}
           - name: BASTION_PASSWORD
-            value: {{ .Values.wetty.ssh.sshPass }}
+            value: {{ .Values.wetty.ssh.sshPass | quote }}
           - name: GUID
             value: "{{ .Values.guid }}"
           - name: DOMAIN
-            value: {{ .Values.deployer.domain }}
+            value: {{ .Values.deployer.domain | quote }}
           - name: SATELLITE_URL
-            value: {{ .Values.satellite.url }}
+            value: {{ .Values.satellite.url | quote }}
           - name: SATELLITE_ORG
-            value: {{ .Values.satellite.org }}
+            value: {{ .Values.satellite.org | quote }}
           - name: SATELLITE_ACTIVATIONKEY
-            value: {{ .Values.satellite.activationkey }}
+            value: {{ .Values.satellite.activationkey | quote }}
           - name: REGISTRY_PULL_TOKEN
-            value: {{ .Values.deployer.registry_pull_token }}
+            value: {{ .Values.deployer.registry_pull_token | quote }}
           - name: VAULT_PASSWORD
-            value: {{ .Values.setup_automation.vault_password }}
+            value: {{ .Values.setup_automation.vault_password | quote }}
 {{- if eq .Values.cloud.setup "true" }}
           - name: CLOUD_PROVIDER
-            value: {{ .Values.cloud.auth_cloud_provider }}
+            value: {{ .Values.cloud.auth_cloud_provider | quote }}
           - name: AWS_ACCESS_KEY_ID
-            value: {{ .Values.cloud.aws_access_key_id }}
+            value: {{ .Values.cloud.aws_access_key_id | quote }}
           - name: AWS_SECRET_ACCESS_KEY
-            value: {{ .Values.cloud.aws_secret_access_key }}
+            value: {{ .Values.cloud.aws_secret_access_key | quote }}
           - name: AWS_WEB_CONSOLE_URL
-            value: {{ .Values.cloud.aws_web_console_url }}
+            value: {{ .Values.cloud.aws_web_console_url | quote }}
           - name: AWS_WEB_CONSOLE_USER_NAME
-            value: {{ .Values.cloud.aws_web_console_user_name }}
+            value: {{ .Values.cloud.aws_web_console_user_name | quote }}
           - name: AWS_WEB_CONSOLE_PASSWORD
-            value: {{ .Values.cloud.aws_web_console_password }}
+            value: {{ .Values.cloud.aws_web_console_password | quote }}
           - name: AWS_SANDBOX_ACCOUNT_ID
             value: "{{ .Values.cloud.aws_sandbox_account_id }}"
           - name: AWS_ROUTE53_DOMAIN
-            value: {{ .Values.cloud.aws_route53_domain }}
+            value: {{ .Values.cloud.aws_route53_domain | quote }}
           - name: AWS_DEFAULT_REGION
-            value: {{ .Values.cloud.aws_default_region }}
+            value: {{ .Values.cloud.aws_default_region | quote }}
           - name: AZURE_SUBSCRIPTION
-            value: {{ .Values.cloud.azure_subscription }}
+            value: {{ .Values.cloud.azure_subscription | quote }}
           - name: AZURE_TENANT
-            value: {{ .Values.cloud.azure_tenant }}
+            value: {{ .Values.cloud.azure_tenant | quote }}
           - name: AZURE_CLIENT_ID
-            value: {{ .Values.cloud.azure_client_id }}
+            value: {{ .Values.cloud.azure_client_id | quote }}
           - name: AZURE_PASSWORD
-            value: {{ .Values.cloud.azure_password }}
+            value: {{ .Values.cloud.azure_password | quote }}
           - name: AZURE_RESOURCEGROUP
-            value: {{ .Values.cloud.azure_resourcegroup }}
+            value: {{ .Values.cloud.azure_resourcegroup | quote }}
 {{- end }}
 
         imagePullPolicy: IfNotPresent
@@ -140,54 +140,54 @@ spec:
           - name: PORT
             value: "8501"
           - name: ANSIBLE_USER
-            value: {{ .Values.wetty.ssh.sshUser }}
+            value: {{ .Values.wetty.ssh.sshUser | quote }}
           - name: ANSIBLE_PASSWORD
-            value: {{ .Values.wetty.ssh.sshPass }}
+            value: {{ .Values.wetty.ssh.sshPass | quote }}
           - name: BASTION_PORT
             value: "{{ .Values.wetty.ssh.sshPort }}"
           - name: GUID
             value: "{{ .Values.guid }}"
           - name: DOMAIN
-            value: {{ .Values.deployer.domain }}
+            value: {{ .Values.deployer.domain | quote }}
           - name: REGISTRY_PULL_TOKEN
-            value: {{ .Values.deployer.registry_pull_token }}
+            value: {{ .Values.deployer.registry_pull_token | quote }}
           - name: SATELLITE_URL
-            value: {{ .Values.satellite.url }}
+            value: {{ .Values.satellite.url | quote }}
           - name: SATELLITE_ORG
-            value: {{ .Values.satellite.org }}
+            value: {{ .Values.satellite.org | quote }}
           - name: SATELLITE_ACTIVATIONKEY
-            value: {{ .Values.satellite.activationkey }}
+            value: {{ .Values.satellite.activationkey | quote }}
           - name: VAULT_PASSWORD
-            value: {{ .Values.setup_automation.vault_password }}
+            value: {{ .Values.setup_automation.vault_password | quote }}
 {{- if eq .Values.cloud.setup "true" }}
           - name: CLOUD_PROVIDER
-            value: {{ .Values.cloud.auth_cloud_provider }}
+            value: {{ .Values.cloud.auth_cloud_provider | quote }}
           - name: AWS_ACCESS_KEY_ID
-            value: {{ .Values.cloud.aws_access_key_id }}
+            value: {{ .Values.cloud.aws_access_key_id | quote }}
           - name: AWS_SECRET_ACCESS_KEY
-            value: {{ .Values.cloud.aws_secret_access_key }}
+            value: {{ .Values.cloud.aws_secret_access_key | quote }}
           - name: AWS_WEB_CONSOLE_URL
-            value: {{ .Values.cloud.aws_web_console_url }}
+            value: {{ .Values.cloud.aws_web_console_url | quote }}
           - name: AWS_WEB_CONSOLE_USER_NAME
-            value: {{ .Values.cloud.aws_web_console_user_name }}
+            value: {{ .Values.cloud.aws_web_console_user_name | quote }}
           - name: AWS_WEB_CONSOLE_PASSWORD
-            value: {{ .Values.cloud.aws_web_console_password }}
+            value: {{ .Values.cloud.aws_web_console_password | quote }}
           - name: AWS_SANDBOX_ACCOUNT_ID
             value: "{{ .Values.cloud.aws_sandbox_account_id }}"
           - name: AWS_ROUTE53_DOMAIN
-            value: {{ .Values.cloud.aws_route53_domain }}
+            value: {{ .Values.cloud.aws_route53_domain | quote }}
           - name: AWS_DEFAULT_REGION
-            value: {{ .Values.cloud.aws_default_region }}
+            value: {{ .Values.cloud.aws_default_region | quote }}
           - name: AZURE_SUBSCRIPTION
-            value: {{ .Values.cloud.azure_subscription }}
+            value: {{ .Values.cloud.azure_subscription | quote }}
           - name: AZURE_TENANT
-            value: {{ .Values.cloud.azure_tenant }}
+            value: {{ .Values.cloud.azure_tenant | quote }}
           - name: AZURE_CLIENT_ID
-            value: {{ .Values.cloud.azure_client_id }}
+            value: {{ .Values.cloud.azure_client_id | quote }}
           - name: AZURE_PASSWORD
-            value: {{ .Values.cloud.azure_password }}
+            value: {{ .Values.cloud.azure_password | quote }}
           - name: AZURE_RESOURCEGROUP
-            value: {{ .Values.cloud.azure_resourcegroup }}
+            value: {{ .Values.cloud.azure_resourcegroup | quote }}
 {{- end }}
 
         ports:
@@ -229,7 +229,7 @@ spec:
         - name: GUID
           value: "{{ .Values.guid }}"
         - name: DOMAIN
-          value: {{ .Values.deployer.domain }}
+          value: {{ .Values.deployer.domain | quote }}
         ports:
         - name: web
           containerPort: 8080
@@ -241,15 +241,15 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: ANTORA_PLAYBOOK
-          value: {{ .Values.content.antoraPlaybook }}
+          value: {{ .Values.content.antoraPlaybook | quote }}
         - name: ZT_BUNDLE
-          value: {{ .Values.content.zero_touch_bundle }}
+          value: {{ .Values.content.zero_touch_bundle | quote }}
         - name: ZT_UI_ENABLED
           value: "{{ .Values.content.zero_touch_ui_enabled }}"
         - name: GUID
           value: "{{ .Values.guid }}"
         - name: DOMAIN
-          value: {{ .Values.deployer.domain }}
+          value: {{ .Values.deployer.domain | quote }}
         volumeMounts:
         - name: user-data
           mountPath: /user_data/
@@ -464,33 +464,33 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: CLOUD_PROVIDER
-          value: {{ .Values.cloud.auth_cloud_provider }}
+          value: {{ .Values.cloud.auth_cloud_provider | quote }}
         - name: AWS_ACCESS_KEY_ID
-          value: {{ .Values.cloud.aws_access_key_id }}
+          value: {{ .Values.cloud.aws_access_key_id | quote }}
         - name: AWS_SECRET_ACCESS_KEY
-          value: {{ .Values.cloud.aws_secret_access_key }}
+          value: {{ .Values.cloud.aws_secret_access_key | quote }}
         - name: AWS_WEB_CONSOLE_URL
-          value: {{ .Values.cloud.aws_web_console_url }}
+          value: {{ .Values.cloud.aws_web_console_url | quote }}
         - name: AWS_WEB_CONSOLE_USER_NAME
-          value: {{ .Values.cloud.aws_web_console_user_name }}
+          value: {{ .Values.cloud.aws_web_console_user_name | quote }}
         - name: AWS_WEB_CONSOLE_PASSWORD
-          value: {{ .Values.cloud.aws_web_console_password }}
+          value: {{ .Values.cloud.aws_web_console_password | quote }}
         - name: AWS_SANDBOX_ACCOUNT_ID
           value: "{{ .Values.cloud.aws_sandbox_account_id }}"
         - name: AWS_ROUTE53_DOMAIN
-          value: {{ .Values.cloud.aws_route53_domain }}
+          value: {{ .Values.cloud.aws_route53_domain | quote }}
         - name: AWS_DEFAULT_REGION
-          value: {{ .Values.cloud.aws_default_region }}
+          value: {{ .Values.cloud.aws_default_region | quote }}
         - name: AZURE_SUBSCRIPTION
-          value: {{ .Values.cloud.azure_subscription }}
+          value: {{ .Values.cloud.azure_subscription | quote }}
         - name: AZURE_TENANT
-          value: {{ .Values.cloud.azure_tenant }}
+          value: {{ .Values.cloud.azure_tenant | quote }}
         - name: AZURE_CLIENT_ID
-          value: {{ .Values.cloud.azure_client_id }}
+          value: {{ .Values.cloud.azure_client_id | quote }}
         - name: AZURE_PASSWORD
-          value: {{ .Values.cloud.azure_password }}
+          value: {{ .Values.cloud.azure_password | quote }}
         - name: AZURE_RESOURCEGROUP
-          value: {{ .Values.cloud.azure_resourcegroup }}
+          value: {{ .Values.cloud.azure_resourcegroup | quote }}
         ports:
         - containerPort: {{ .Values.cloud.port }}
           protocol: TCP
@@ -504,15 +504,15 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: RDPSERVER
-          value: {{ .Values.ironrdp.server }}
+          value: {{ .Values.ironrdp.server | quote }}
         - name: RDPUSER
-          value: {{ .Values.ironrdp.user }}
+          value: {{ .Values.ironrdp.user | quote }}
         - name: RDPPASSWORD
-          value: {{ .Values.ironrdp.password }}
+          value: {{ .Values.ironrdp.password | quote }}
         - name: JETSERVER
-          value: https://windows-jetrdp-{{ .Values.guid }}.{{ .Values.deployer.domain }}/jet/rdp
+          value: {{ printf "https://windows-jetrdp-%s.%s/jet/rdp" .Values.guid .Values.deployer.domain | quote }}
         - name: TOKENGENSERVER
-          value: https://windows-tokengen-{{ .Values.guid }}.{{ .Values.deployer.domain }}
+          value: {{ printf "https://windows-tokengen-%s.%s" .Values.guid .Values.deployer.domain | quote }}
         ports:
         - containerPort: 8081
           protocol: TCP
@@ -528,15 +528,15 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: BASTION_HOST
-          value: {{ .Values.wetty.ssh.sshHost }}
+          value: {{ .Values.wetty.ssh.sshHost | quote }}
         - name: BASTION_PORT
           value: "{{ .Values.wetty.ssh.sshPort }}"
         - name: BASTION_USER
-          value: {{ .Values.wetty.ssh.sshUser }}
+          value: {{ .Values.wetty.ssh.sshUser | quote }}
         - name: BASTION_PASSWORD
-          value: {{ .Values.wetty.ssh.sshPass }}
+          value: {{ .Values.wetty.ssh.sshPass | quote }}
         - name: OTHER_HOSTS
-          value: {{ join " " .Values.wetty.ssh.sshOtherHosts }}
+          value: {{ join " " .Values.wetty.ssh.sshOtherHosts | quote }}
         ports:
         - containerPort: {{ .Values.monitoring.port }}
           protocol: TCP
