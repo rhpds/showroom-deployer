@@ -19,12 +19,12 @@ spec:
       serviceAccountName: {{ .Release.Name }}
       initContainers:
       - name: git-cloner
-        image: {{ .Values.git_cloner.image }}
+        image: {{ .Values.git_cloner.image | quote }}
         env:
         - name: GIT_REPO_URL
-          value: {{ .Values.content.repoUrl }}
+          value: {{ .Values.content.repoUrl | quote }}
         - name: GIT_REPO_REF
-          value: {{ .Values.content.repoRef }}
+          value: {{ .Values.content.repoRef | quote }}
         - name: CLONE_DIR
           value: "/showroom/repo"
         volumeMounts:
@@ -32,18 +32,18 @@ spec:
           name: {{ .Release.Name }}-files
           subPath: repo
       - name: antora-builder
-        image: {{ .Values.antora.image }}
+        image: {{ .Values.antora.image | quote }}
         env:
         - name: FILES_DIR
           value: "/showroom/repo"
         - name: OUTPUT_DIR
           value: "/showroom/www"
         - name: ANTORA_SITE_FILE
-          value: {{ .Values.content.antoraPlaybook }}
+          value: {{ .Values.content.antoraPlaybook | quote }}
         - name: ZT_BUNDLE
-          value: {{ .Values.content.zero_touch_bundle }}
+          value: {{ .Values.content.zero_touch_bundle | quote }}
         - name: ZT_UI_ENABLED
-          value: "{{ .Values.content.zero_touch_ui_enabled }}"
+          value: {{ .Values.content.zero_touch_ui_enabled | quote }}
         volumeMounts:
         - mountPath: /showroom/repo
           name: {{ .Release.Name }}-files
@@ -55,8 +55,8 @@ spec:
           subPath: www
       containers:
       - name: nginx
-        image: {{ .Values.proxy.image }}
-        imagePullPolicy: {{ .Values.proxy.imagePullPolicy }}
+        image: {{ .Values.proxy.image | quote }}
+        imagePullPolicy: {{ .Values.proxy.imagePullPolicy | quote }}
         volumeMounts:
         - mountPath: /etc/nginx/nginx.conf
           name: nginx-config
@@ -75,19 +75,19 @@ spec:
           containerPort: 8080
 
       - name: content
-        image: {{ .Values.content.image }}
-        imagePullPolicy: {{ .Values.content.imagePullPolicy }}
+        image: {{ .Values.content.image | quote }}
+        imagePullPolicy: {{ .Values.content.imagePullPolicy | quote }}
         env:
         - name: GIT_REPO_URL
-          value: {{ .Values.content.repoUrl }}
+          value: {{ .Values.content.repoUrl | quote  }}
         - name: GIT_REPO_REF
-          value: {{ .Values.content.repoRef }}
+          value: {{ .Values.content.repoRef | quote  }}
         - name: ANTORA_PLAYBOOK
-          value: {{ .Values.content.antoraPlaybook }}
+          value: {{ .Values.content.antoraPlaybook | quote  }}
         - name: ZT_BUNDLE
-          value: {{ .Values.content.zero_touch_bundle }}
+          value: {{ .Values.content.zero_touch_bundle | quote  }}
         - name: ZT_UI_ENABLED
-          value: "{{ .Values.content.zero_touch_ui_enabled }}"
+          value: {{ .Values.content.zero_touch_ui_enabled | quote }}
         - name: DOMAIN
           value: {{ .Values.deployer.domain | quote }}
         - name: GUID
@@ -115,7 +115,7 @@ spec:
 
 {{- if eq .Values.terminal.setup "true" }}
       - name: terminal
-        image: {{ .Values.terminal.image }}
+        image: {{ .Values.terminal.image | quote }}
         imagePullPolicy: IfNotPresent
         env:
         - name: NAMESPACE
@@ -123,7 +123,7 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: GUID
-          value: "{{ .Values.guid }}"
+          value: {{ .Values.guid | quote }}
         volumeMounts:
         - name: terminal-lab-user-home
           mountPath: /home/lab-user
@@ -136,7 +136,7 @@ spec:
 
 {{- if eq .Values.wetty.setup "true" }}
       - name: wetty
-        image: {{ .Values.wetty.image }}
+        image: {{ .Values.wetty.image | quote }}
         imagePullPolicy: IfNotPresent
         args:
         - --base="/{{ .Values.wetty.base }}/"
@@ -154,7 +154,7 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: GUID
-          value: "{{ .Values.guid }}"
+          value: {{ .Values.guid | quote }}
         ports:
         - containerPort: {{ .Values.wetty.port }}
           protocol: TCP
@@ -164,7 +164,7 @@ spec:
 
 {{- if eq .Values.novnc.setup "true" }}
       - name: novnc
-        image: {{ .Values.novnc.image }}
+        image: {{ .Values.novnc.image | quote }}
         imagePullPolicy: IfNotPresent
         args:
         - websockify
