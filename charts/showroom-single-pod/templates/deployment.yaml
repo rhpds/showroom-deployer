@@ -88,6 +88,10 @@ spec:
           value: {{ .Values.content.zero_touch_bundle }}
         - name: ZT_UI_ENABLED
           value: "{{ .Values.content.zero_touch_ui_enabled }}"
+        - name: DOMAIN
+          value: {{ .Values.deployer.domain | quote }}
+        - name: GUID
+          value: {{ .Values.guid | quote }}
         volumeMounts:
         - name: user-data
           mountPath: /user_data/
