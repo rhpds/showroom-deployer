@@ -9,7 +9,7 @@ metadata:
     haproxy.router.openshift.io/timeout: 1h
     haproxy.router.openshift.io/timeout-tunnel: 1h
 spec:
-  host: windows-ironrdp-{{ .Values.guid }}.{{ .Values.deployer.domain }}
+  host: {{ printf "windows-ironrdp-%s.%s" .Values.guid .Values.deployer.domain | quote }}
   to:
     kind: Service
     name: windows-ironrdp
