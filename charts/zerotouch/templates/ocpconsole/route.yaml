@@ -4,9 +4,9 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: {{ .Release.Name }}-ocpconsole
-  namespace: {{ .Release.Namespace}}
+  namespace: {{ .Release.Namespace }}
 spec:
-  host: "{{ .Release.Name }}-{{ .Release.Namespace}}.{{ .Values.deployer.domain }}"
+  host: "{{ .Release.Name }}-{{ .Release.Namespace }}.{{ .Values.deployer.domain }}"
   path: /console/
   httpHeaders:
     actions:
