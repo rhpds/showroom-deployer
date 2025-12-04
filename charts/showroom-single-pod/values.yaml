@@ -10,26 +10,16 @@ deployer:
 
 proxy:
   image: quay.io/rhpds/nginx:1.25
-  #  image: docker.io/library/nginx:1.25
   imagePullPolicy: IfNotPresent
 
 content:
-  title: Showroom
-  # Only create a content pane, no other tabs will be available
-  contentOnly: "false"
   image: quay.io/rhpds/showroom-content:v1.3.0
   imagePullPolicy: IfNotPresent
   repoUrl: https://github.com/rhpds/showroom_template_default.git
   repoRef: main
   antoraPlaybook: default-site.yml
   zero_touch_ui_enabled: "true"
-  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.1.0/nookbag-v0.1.0.zip"
-  resources:
-    limits:
-      memory: 64Mi
-    requests:
-      cpu: 100m
-      memory: 64Mi
+  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.2.1/nookbag-v0.2.1.zip"
   user_data: |
     bastion_password: from_helm
 
@@ -68,24 +58,17 @@ git_cloner:
 
 antora:
   image: quay.io/rhpds/antora:v1.0.1
-  ssh:
-    autoSshToBastion: "false"
-    sshHost: shared-410-bastion.openshift.redhatworkshops.io
-    sshPort: 22
-    sshUser: ec2-user
-    sshAuth: password
-    sshPass: password
 
 # To be fully implemented
-codeserver:
-  setup: "false"
-  image: quay.io/rhpds/code-server:latest
-  resources:
-    limits:
-      memory: 512Mi
-    requests:
-      cpu: 500m
-      memory: 512Mi
+# codeserver:
+#   setup: "false"
+#   image: quay.io/rhpds/code-server:latest
+#   resources:
+#     limits:
+#       memory: 512Mi
+#     requests:
+#       cpu: 500m
+#       memory: 512Mi
 
 novnc:
   setup: "false"
