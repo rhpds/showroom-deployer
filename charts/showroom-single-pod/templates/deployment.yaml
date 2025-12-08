@@ -40,10 +40,6 @@ spec:
           value: "/showroom/www"
         - name: ANTORA_SITE_FILE
           value: {{ .Values.content.antoraPlaybook | quote }}
-        - name: ZT_BUNDLE
-          value: {{ .Values.content.zero_touch_bundle | quote }}
-        - name: ZT_UI_ENABLED
-          value: {{ .Values.content.zero_touch_ui_enabled | quote }}
         volumeMounts:
         - mountPath: /showroom/repo
           name: {{ .Release.Name }}-files
@@ -92,6 +88,8 @@ spec:
           value: {{ .Values.deployer.domain | quote }}
         - name: GUID
           value: {{ .Values.guid | quote }}
+        - name: USER
+          value: {{ .Values.user | quote }}
         volumeMounts:
         - name: user-data
           mountPath: /user_data/

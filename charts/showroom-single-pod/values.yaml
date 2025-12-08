@@ -4,6 +4,7 @@
 # Declare variables to be passed into your templates.
 
 guid: nnnnn
+user: ""
 
 deployer:
   domain: cluster-GUID.GUID.sandboxNUMBERS.opentlc.com
