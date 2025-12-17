@@ -125,6 +125,8 @@ spec:
         volumeMounts:
         - name: terminal-lab-user-home
           mountPath: /home/lab-user
+        - name: terminal-data-ssh # to enable ssh out of the container
+          mountPath: /data/.ssh
         ports:
         - containerPort: {{ .Values.terminal.port }}
           protocol: TCP
@@ -193,6 +195,8 @@ spec:
       - name: nginx-cache
         emptyDir: {}
 {{- if eq .Values.terminal.setup "true" }}
+      - name: terminal-data-ssh # to enable ssh out of the container
+        emptyDir: {}
       - name: terminal-lab-user-home
 {{-   if eq .Values.terminal.storage.setup "true" }}
         persistentVolumeClaim:
