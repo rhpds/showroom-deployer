@@ -58,7 +58,7 @@ git_cloner:
   image: quay.io/rhpds/git-cloner:v1.1.2
 
 antora:
-  image: quay.io/rhpds/antora:v1.0.1
+  image: quay.io/rhpds/antora:v1.1.0
 
 # To be fully implemented
 # codeserver:
