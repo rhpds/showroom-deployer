@@ -14,7 +14,7 @@ proxy:
   imagePullPolicy: IfNotPresent
 
 content:
-  image: quay.io/rhpds/showroom-content:v1.3.0
+  image: quay.io/rhpds/showroom-content:v1.3.1
   imagePullPolicy: IfNotPresent
   repoUrl: https://github.com/rhpds/showroom_template_default.git
   repoRef: main
