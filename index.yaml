@@ -214,6 +214,16 @@ entries:
   showroom-single-pod:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2026-01-21T05:22:25.638462102Z"
+    description: Deploys the Showroom front-end in a single pod
+    digest: c813fd0b8deb2537a61ab378a1d51cd6eeaf67ebcf2fc8589efa128d3b6110f4
+    name: showroom-single-pod
+    type: application
+    urls:
+    - https://github.com/rhpds/showroom-deployer/releases/download/showroom-single-pod-2.0.9/showroom-single-pod-2.0.9.tgz
+    version: 2.0.9
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2026-01-21T02:41:46.056501743Z"
     description: Deploys the Showroom front-end in a single pod
     digest: 48f9acad77d5d4a1495c9ec911cf08c6f24df1d46cc87f10ee584d7557cd7ec6
@@ -1023,4 +1033,4 @@ entries:
     urls:
     - https://github.com/rhpds/showroom-deployer/releases/download/zerotouch-1.8.8/zerotouch-1.8.8.tgz
     version: 1.8.8
-generated: "2026-01-21T02:41:46.05743902Z"
+generated: "2026-01-21T05:22:25.638795502Z"
