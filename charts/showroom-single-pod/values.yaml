@@ -3,6 +3,10 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Limit pods to OCP compute (worker) nodes only. Override to {} to allow any node.
+nodeSelector:
+  node-role.kubernetes.io/worker: ""
+
 guid: nnnnn
 user: ""
 
