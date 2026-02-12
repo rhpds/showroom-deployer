@@ -40,6 +40,8 @@ spec:
           value: "/showroom/www"
         - name: ANTORA_SITE_FILE
           value: {{ .Values.content.antoraPlaybook | quote }}
+        - name: ANTORA_ENABLE_DEV_MODE
+          value: {{ .Values.content.enableDevMode | quote }}
         volumeMounts:
         - mountPath: /showroom/repo
           name: {{ .Release.Name }}-files
