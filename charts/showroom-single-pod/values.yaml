@@ -20,6 +20,7 @@ content:
   repoRef: main
   antoraPlaybook: default-site.yml
   enableDevMode: "false"
+  uiConfig: ""
   zero_touch_ui_enabled: "true"
   zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.2.1/nookbag-v0.2.1.zip"
   user_data: |

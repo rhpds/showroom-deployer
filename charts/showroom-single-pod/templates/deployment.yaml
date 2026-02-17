@@ -86,6 +86,8 @@ spec:
           value: {{ .Values.content.zero_touch_bundle | quote  }}
         - name: ZT_UI_ENABLED
           value: {{ .Values.content.zero_touch_ui_enabled | quote }}
+        - name: SHOWROOM_UI_CONFIG
+          value: {{ .Values.content.uiConfig | quote }}
         - name: DOMAIN
           value: {{ .Values.deployer.domain | quote }}
         - name: GUID
