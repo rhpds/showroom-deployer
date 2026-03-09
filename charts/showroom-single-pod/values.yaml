@@ -26,6 +26,20 @@ content:
   user_data: |
     bastion_password: from_helm
 
+nookbag_sidecar:
+  setup: "true"
+  image: quay.io/rhpds/nookbag-sidecar:v1.0.0
+  imagePullPolicy: IfNotPresent
+  baseUrl: "http://localhost:8080"
+  nookbagBase: "/"
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 10m
+      memory: 16Mi
+
 terminal:
   setup: "true"
   image: quay.io/rhpds/openshift-showroom-terminal-ocp:latest

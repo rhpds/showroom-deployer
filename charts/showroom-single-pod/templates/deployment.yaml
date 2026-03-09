@@ -110,10 +110,42 @@ spec:
           httpGet:
             path: /
             port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
         readinessProbe:
           httpGet:
             path: /
             port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 3
+
+{{- if eq .Values.nookbag_sidecar.setup "true" }}
+      - name: nookbag-sidecar
+        image: {{ .Values.nookbag_sidecar.image | quote }}
+        imagePullPolicy: {{ .Values.nookbag_sidecar.imagePullPolicy | quote }}
+        env:
+        - name: HEALTHZ_PORT
+          value: "8090"
+        - name: HEALTHZ_BASE_URL
+          value: {{ .Values.nookbag_sidecar.baseUrl | quote }}
+        - name: NOOKBAG_BASE
+          value: {{ .Values.nookbag_sidecar.nookbagBase | quote }}
+        ports:
+        - name: healthz
+          containerPort: 8090
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8090
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 3
+        resources:
+          {{- toYaml .Values.nookbag_sidecar.resources | nindent 10 }}
+{{- end }}
 
 {{- if eq .Values.terminal.setup "true" }}
       - name: terminal
