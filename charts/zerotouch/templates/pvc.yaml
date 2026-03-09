@@ -15,3 +15,20 @@ spec:
     requests:
       storage: {{ .Values.terminal.storage.pvcSize | quote }}
 {{- end }}
+{{- if eq .Values.setup_automation.setup "true" }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-setup-state
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+{{- if .Values.setup_automation.storage.storageClass }}
+  storageClassName: {{ .Values.setup_automation.storage.storageClass | quote }}
+{{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.setup_automation.storage.pvcSize | quote }}
+{{- end }}

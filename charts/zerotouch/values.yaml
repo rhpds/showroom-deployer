@@ -186,6 +186,10 @@ ironrdp:
 setup_automation:
   setup: "true"
   image: quay.io/rhpds/setup-automation:v1.0.3
+  force: "false"
+  storage:
+    pvcSize: 1Mi
+    storageClass: ""
   resources:
     limits:
       cpu: 500m
