@@ -42,6 +42,10 @@ spec:
           value: {{ .Values.content.antoraPlaybook | quote }}
         - name: ANTORA_ENABLE_DEV_MODE
           value: {{ .Values.content.enableDevMode | quote }}
+{{- if .Values.content.antoraUiBundleUrl }}
+        - name: ANTORA_UI_BUNDLE_URL
+          value: {{ .Values.content.antoraUiBundleUrl | quote }}
+{{- end }}
         volumeMounts:
         - mountPath: /showroom/repo
           name: {{ .Release.Name }}-files
@@ -71,6 +75,8 @@ spec:
         ports:
         - name: web
           containerPort: 8080
+        resources:
+          {{- toYaml .Values.proxy.resources | nindent 10 }}
 
       - name: content
         image: {{ .Values.content.image | quote }}
@@ -120,6 +126,8 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 10
           timeoutSeconds: 3
+        resources:
+          {{- toYaml .Values.content.resources | nindent 10 }}
 
 {{- if eq .Values.nookbag_sidecar.setup "true" }}
       - name: nookbag-sidecar
