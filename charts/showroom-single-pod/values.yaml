@@ -18,11 +18,11 @@ content:
   imagePullPolicy: IfNotPresent
   repoUrl: https://github.com/rhpds/showroom_template_default.git
   repoRef: main
-  antoraPlaybook: default-site.yml
+  antoraPlaybook: site.yml
   enableDevMode: "false"
   uiConfig: ""
   zero_touch_ui_enabled: "true"
-  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.2.1/nookbag-v0.2.1.zip"
+  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.3.2/nookbag-v0.3.2.zip"
   user_data: |
     bastion_password: from_helm
 
