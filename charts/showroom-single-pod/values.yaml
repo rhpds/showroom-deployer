@@ -36,7 +36,7 @@ content:
 
 nookbag_sidecar:
   setup: "true"
-  image: quay.io/rhpds/nookbag-sidecar:v1.0.1
+  image: quay.io/rhpds/nookbag-sidecar:v1.0.2
   imagePullPolicy: IfNotPresent
   baseUrl: "http://localhost:8080"
   nookbagBase: ""
