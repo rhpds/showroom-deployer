@@ -90,6 +90,10 @@ spec:
             value: {{ .Values.deployer.registry_pull_token | quote }}
           - name: VAULT_PASSWORD
             value: {{ .Values.setup_automation.vault_password | quote }}
+          - name: FORCE_SETUP
+            value: {{ .Values.setup_automation.force | quote }}
+          - name: SETUP_STATE_DIR
+            value: "/setup-state"
 {{- if eq .Values.cloud.setup "true" }}
           - name: CLOUD_PROVIDER
             value: {{ .Values.cloud.auth_cloud_provider | quote }}
@@ -125,6 +129,8 @@ spec:
         volumeMounts:
           - name: runner
             mountPath: /runner/
+          - name: setup-state
+            mountPath: /setup-state
         terminationMessagePolicy: File
         image: {{ .Values.setup_automation.image }}
 {{- end }}
@@ -550,6 +556,11 @@ spec:
         emptyDir: {}
       - name: showroom
         emptyDir: {}
+{{- if eq .Values.setup_automation.setup "true" }}
+      - name: setup-state
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-setup-state
+{{- end }}
       - name: user-data
         configMap:
           name: {{ .Release.Name }}-userdata
