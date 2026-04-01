@@ -185,7 +185,7 @@ ironrdp:
 
 setup_automation:
   setup: "true"
-  image: quay.io/rhpds/setup-automation:v1.0.5
+  image: quay.io/rhpds/setup-automation:v1.0.8
   resources:
     limits:
       cpu: 500m
