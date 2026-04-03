@@ -186,6 +186,8 @@ ironrdp:
 setup_automation:
   setup: "true"
   image: quay.io/rhpds/setup-automation:v1.0.8
+  vault_password: ""
+  environment_variables: {}
   resources:
     limits:
       cpu: 500m
@@ -197,6 +199,7 @@ setup_automation:
 runtime_automation:
   setup: "true"
   image: quay.io/rhpds/zerotouch-automation:v1.2.0
+  environment_variables: {}
   resources:
     limits:
       cpu: 500m

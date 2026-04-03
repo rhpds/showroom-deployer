@@ -120,6 +120,10 @@ spec:
           - name: AZURE_RESOURCEGROUP
             value: {{ .Values.cloud.azure_resourcegroup | quote }}
 {{- end }}
+{{- range $key, $value := .Values.setup_automation.environment_variables }}
+          - name: {{ $key | upper }}
+            value: {{ $value | quote }}
+{{- end }}
 
         imagePullPolicy: IfNotPresent
         volumeMounts:
@@ -188,6 +192,10 @@ spec:
             value: {{ .Values.cloud.azure_password | quote }}
           - name: AZURE_RESOURCEGROUP
             value: {{ .Values.cloud.azure_resourcegroup | quote }}
+{{- end }}
+{{- range $key, $value := .Values.runtime_automation.environment_variables }}
+          - name: {{ $key | upper }}
+            value: {{ $value | quote }}
 {{- end }}
 
         ports:
