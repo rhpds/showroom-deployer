@@ -55,22 +55,6 @@ spec:
         - mountPath: /showroom/www
           name: {{ .Release.Name }}-files
           subPath: www
-      - name: copy-ui-config
-        image: {{ .Values.git_cloner.image | quote }}
-        command:
-        - sh
-        - -c
-        - |
-          for f in ui-config.yml zero-touch-config.yml; do
-            [ -f /showroom/repo/$f ] && cp /showroom/repo/$f /showroom/www/$f && echo "Copied $f" || true
-          done
-        volumeMounts:
-        - mountPath: /showroom/repo
-          name: {{ .Release.Name }}-files
-          subPath: repo
-        - mountPath: /showroom/www
-          name: {{ .Release.Name }}-files
-          subPath: www
       containers:
       - name: nginx
         image: {{ .Values.proxy.image | quote }}
