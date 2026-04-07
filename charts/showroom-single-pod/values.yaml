@@ -48,6 +48,20 @@ nookbag_sidecar:
       cpu: 10m
       memory: 16Mi
 
+runtime_automation:
+  setup: "false"
+  image: quay.io/rhpds/zt-runner:v2.4.2
+  imagePullPolicy: Always
+  port: 8501
+  environment_variables: {}
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
 terminal:
   setup: "true"
   image: quay.io/rhpds/openshift-showroom-terminal-ocp:latest

@@ -55,6 +55,22 @@ spec:
         - mountPath: /showroom/www
           name: {{ .Release.Name }}-files
           subPath: www
+      - name: copy-ui-config
+        image: {{ .Values.git_cloner.image | quote }}
+        command:
+        - sh
+        - -c
+        - |
+          for f in ui-config.yml zero-touch-config.yml; do
+            [ -f /showroom/repo/$f ] && cp /showroom/repo/$f /showroom/www/$f && echo "Copied $f" || true
+          done
+        volumeMounts:
+        - mountPath: /showroom/repo
+          name: {{ .Release.Name }}-files
+          subPath: repo
+        - mountPath: /showroom/www
+          name: {{ .Release.Name }}-files
+          subPath: www
       containers:
       - name: nginx
         image: {{ .Values.proxy.image | quote }}
@@ -128,6 +144,35 @@ spec:
           timeoutSeconds: 3
         resources:
           {{- toYaml .Values.content.resources | nindent 10 }}
+
+{{- if eq .Values.runtime_automation.setup "true" }}
+      - name: runner
+        image: {{ .Values.runtime_automation.image | quote }}
+        imagePullPolicy: {{ .Values.runtime_automation.imagePullPolicy | quote }}
+        env:
+        - name: PORT
+          value: {{ .Values.runtime_automation.port | quote }}
+        - name: GUID
+          value: {{ .Values.guid | quote }}
+        - name: DOMAIN
+          value: {{ .Values.deployer.domain | quote }}
+{{- range $key, $value := .Values.runtime_automation.environment_variables }}
+        - name: {{ $key | upper }}
+          value: {{ $value | quote }}
+{{- end }}
+        ports:
+        - name: runner
+          containerPort: {{ .Values.runtime_automation.port }}
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /showroom/repo
+          name: {{ .Release.Name }}-files
+          subPath: repo
+        - name: user-data
+          mountPath: /user_data/
+        resources:
+          {{- toYaml .Values.runtime_automation.resources | nindent 10 }}
+{{- end }}
 
 {{- if eq .Values.nookbag_sidecar.setup "true" }}
       - name: nookbag-sidecar
