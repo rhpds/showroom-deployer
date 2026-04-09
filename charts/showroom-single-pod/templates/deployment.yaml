@@ -129,6 +129,51 @@ spec:
         resources:
           {{- toYaml .Values.content.resources | nindent 10 }}
 
+{{- if eq .Values.runtime_automation.setup "true" }}
+      - name: runner
+        image: {{ .Values.runtime_automation.image | quote }}
+        imagePullPolicy: {{ .Values.runtime_automation.imagePullPolicy | quote }}
+        env:
+        - name: PORT
+          value: {{ .Values.runtime_automation.port | quote }}
+        - name: GUID
+          value: {{ .Values.guid | quote }}
+        - name: DOMAIN
+          value: {{ .Values.deployer.domain | quote }}
+{{- range $key, $value := .Values.runtime_automation.environment_variables }}
+        - name: {{ $key | upper }}
+          value: {{ $value | quote }}
+{{- end }}
+        ports:
+        - name: runner
+          containerPort: {{ .Values.runtime_automation.port }}
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: runner
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: runner
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        volumeMounts:
+        - mountPath: /showroom/repo
+          name: {{ .Release.Name }}-files
+          subPath: repo
+        - name: user-data
+          mountPath: /user_data/
+        resources:
+          {{- toYaml .Values.runtime_automation.resources | nindent 10 }}
+{{- end }}
+
 {{- if eq .Values.nookbag_sidecar.setup "true" }}
       - name: nookbag-sidecar
         image: {{ .Values.nookbag_sidecar.image | quote }}
