@@ -50,7 +50,7 @@ nookbag_sidecar:
 
 runtime_automation:
   setup: "false"
-  image: quay.io/rhpds/zt-runner:v2.4.2
+  image: quay.io/rhpds/showroom-automation:v1.0.0
   imagePullPolicy: Always
   port: 8501
   environment_variables: {}
