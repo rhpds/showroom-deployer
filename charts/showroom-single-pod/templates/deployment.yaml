@@ -91,7 +91,7 @@ spec:
         - name: ZT_BUNDLE
           value: {{ .Values.content.zero_touch_bundle | quote  }}
         - name: ZT_UI_ENABLED
-          value: {{ .Values.content.zero_touch_ui_enabled | quote }}
+          value: "true"
         - name: SHOWROOM_UI_CONFIG
           value: {{ .Values.content.uiConfig | quote }}
         - name: DOMAIN
