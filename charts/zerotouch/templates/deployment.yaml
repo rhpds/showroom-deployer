@@ -45,7 +45,7 @@ spec:
         - name: ZT_BUNDLE
           value: {{ .Values.content.zero_touch_bundle | quote }}
         - name: ZT_UI_ENABLED
-          value: "{{ .Values.content.zero_touch_ui_enabled }}"
+          value: {{ .Values.content.zero_touch_ui_enabled | quote }}
 
         volumeMounts:
         - mountPath: /showroom/repo
@@ -71,13 +71,13 @@ spec:
           - name: BASTION_HOST
             value: {{ .Values.wetty.ssh.sshHost | quote }}
           - name: BASTION_PORT
-            value: "{{ .Values.wetty.ssh.sshPort }}"
+            value: {{ .Values.wetty.ssh.sshPort | quote }}
           - name: BASTION_USER
             value: {{ .Values.wetty.ssh.sshUser | quote }}
           - name: BASTION_PASSWORD
             value: {{ .Values.wetty.ssh.sshPass | quote }}
           - name: GUID
-            value: "{{ .Values.guid }}"
+            value: {{ .Values.guid | quote }}
           - name: DOMAIN
             value: {{ .Values.deployer.domain | quote }}
           - name: SATELLITE_URL
@@ -108,7 +108,7 @@ spec:
           - name: AWS_WEB_CONSOLE_PASSWORD
             value: {{ .Values.cloud.aws_web_console_password | quote }}
           - name: AWS_SANDBOX_ACCOUNT_ID
-            value: "{{ .Values.cloud.aws_sandbox_account_id }}"
+            value: {{ .Values.cloud.aws_sandbox_account_id | quote }}
           - name: AWS_ROUTE53_DOMAIN
             value: {{ .Values.cloud.aws_route53_domain | quote }}
           - name: AWS_DEFAULT_REGION
@@ -154,9 +154,9 @@ spec:
           - name: ANSIBLE_PASSWORD
             value: {{ .Values.wetty.ssh.sshPass | quote }}
           - name: BASTION_PORT
-            value: "{{ .Values.wetty.ssh.sshPort }}"
+            value: {{ .Values.wetty.ssh.sshPort | quote }}
           - name: GUID
-            value: "{{ .Values.guid }}"
+            value: {{ .Values.guid | quote }}
           - name: DOMAIN
             value: {{ .Values.deployer.domain | quote }}
           - name: REGISTRY_PULL_TOKEN
@@ -183,7 +183,7 @@ spec:
           - name: AWS_WEB_CONSOLE_PASSWORD
             value: {{ .Values.cloud.aws_web_console_password | quote }}
           - name: AWS_SANDBOX_ACCOUNT_ID
-            value: "{{ .Values.cloud.aws_sandbox_account_id }}"
+            value: {{ .Values.cloud.aws_sandbox_account_id | quote }}
           - name: AWS_ROUTE53_DOMAIN
             value: {{ .Values.cloud.aws_route53_domain | quote }}
           - name: AWS_DEFAULT_REGION
@@ -239,7 +239,7 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: GUID
-          value: "{{ .Values.guid }}"
+          value: {{ .Values.guid | quote }}
         - name: DOMAIN
           value: {{ .Values.deployer.domain | quote }}
         ports:
@@ -257,9 +257,9 @@ spec:
         - name: ZT_BUNDLE
           value: {{ .Values.content.zero_touch_bundle | quote }}
         - name: ZT_UI_ENABLED
-          value: "{{ .Values.content.zero_touch_ui_enabled }}"
+          value: {{ .Values.content.zero_touch_ui_enabled | quote }}
         - name: GUID
-          value: "{{ .Values.guid }}"
+          value: {{ .Values.guid | quote }}
         - name: DOMAIN
           value: {{ .Values.deployer.domain | quote }}
         volumeMounts:
@@ -295,7 +295,7 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: GUID
-          value: "{{ .Values.guid }}"
+          value: {{ .Values.guid | quote }}
         volumeMounts:
         - name: terminal-lab-user-home
           mountPath: /home/lab-user
@@ -316,11 +316,11 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: GUID
-          value: "{{ $.Values.guid }}"
+          value: {{ $.Values.guid | quote }}
         - name: RUNCOMMAND
-          value: "{{ $terminal.command }}"
+          value: {{ $terminal.command | quote }}
         - name: PORT
-          value: "{{ add $.Values.terminal.port 1 $i }}"
+          value: {{ add $.Values.terminal.port 1 $i | quote }}
         volumeMounts:
         - name: terminal-lab-user-home
           mountPath: /home/lab-user
@@ -352,7 +352,7 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: GUID
-          value: "{{ .Values.guid }}"
+          value: {{ .Values.guid | quote }}
         ports:
         - containerPort: {{ .Values.wetty.port }}
           protocol: TCP
@@ -378,7 +378,7 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: GUID
-          value: "{{ $.Values.guid }}"
+          value: {{ $.Values.guid | quote }}
         ports:
         - containerPort: {{ add $.Values.wetty.port 1 $i }}
           protocol: TCP
@@ -408,7 +408,7 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: GUID
-          value: "{{ $.Values.guid }}"
+          value: {{ $.Values.guid | quote }}
         ports:
         - containerPort: {{ add $.Values.wetty.port ($.Values.wetty.ssh.sshOtherHosts | len) 1 $i }}
           protocol: TCP
@@ -452,7 +452,7 @@ spec:
         - name: AWS_WEB_CONSOLE_PASSWORD
           value: {{ .Values.cloud.aws_web_console_password | quote }}
         - name: AWS_SANDBOX_ACCOUNT_ID
-          value: "{{ .Values.cloud.aws_sandbox_account_id }}"
+          value: {{ .Values.cloud.aws_sandbox_account_id | quote }}
         - name: AWS_ROUTE53_DOMAIN
           value: {{ .Values.cloud.aws_route53_domain | quote }}
         - name: AWS_DEFAULT_REGION
@@ -506,7 +506,7 @@ spec:
         - name: BASTION_HOST
           value: {{ .Values.wetty.ssh.sshHost | quote }}
         - name: BASTION_PORT
-          value: "{{ .Values.wetty.ssh.sshPort }}"
+          value: {{ .Values.wetty.ssh.sshPort | quote }}
         - name: BASTION_USER
           value: {{ .Values.wetty.ssh.sshUser | quote }}
         - name: BASTION_PASSWORD
