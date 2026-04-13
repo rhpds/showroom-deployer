@@ -52,8 +52,6 @@ content:
 terminal:
   setup: "false"
   image: quay.io/rhpds/openshift-showroom-terminal-ocp:latest
-  name: terminal
-  display_name: "Terminal 1"
   port: 7681
   resources:
     limits:
@@ -105,10 +103,6 @@ codeserver:
       cpu: 500m
       memory: 512Mi
 
-# To be fully implemented
-ocpconsole:
-  setup: "false"
-
 novnc:
   setup: "false"
   image: ghcr.io/rhpds/showroom-novnc:latest
@@ -156,8 +150,6 @@ ironrdp:
   server: "windows-rdp"
   user: "Administrator"
   password: ""
-  jetserver: "localhost:7171"
-  tokengenserver: "localhost:8081"
   resources:
     limits:
       cpu: 500m
@@ -194,9 +186,6 @@ runtime_automation:
     requests:
       cpu: 250m
       memory: 256Mi
-
-automation:
-  vault_password: ""
 
 monitoring:
   image: quay.io/rhpds/zt-monitoring:v1
