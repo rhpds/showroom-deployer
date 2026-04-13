@@ -33,8 +33,6 @@ satellite:
   activationkey: ''
 
 content:
-  # Only create a content pane, no other tabs will be available
-  contentOnly: "false"
   image: quay.io/rhpds/showroom-content:v1.3.0
   repoUrl: https://github.com/rhpds/showroom_template_default.git
   repoRef: main
@@ -50,21 +48,6 @@ content:
       memory: 64Mi
   user_data: |
     bastion_password: from_helm
-
-# to have two terminals in one tab
-# set stacked_terminals to "true"
-# and indicate which two terminals you want
-stacked_terminals:
-  setup: "false"
-  name: stacked-terminal
-  display_name: "Stacked Terminal"
-  top: "terminal"
-  bottom: "wetty"
-
-second_terminal_tab:
-  setup: "true"
-  name: second-terminal-tab
-  display_name: "Terminal 2"
 
 terminal:
   setup: "false"

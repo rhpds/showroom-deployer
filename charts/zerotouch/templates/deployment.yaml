@@ -229,8 +229,6 @@ spec:
         - mountPath: /etc/nginx/nginx.conf
           name: nginx-config
           subPath: nginx.conf
-        - mountPath: /data/www
-          name: content
         - mountPath: /var/cache/nginx
           name: nginx-cache
         - mountPath: /var/run
@@ -562,8 +560,6 @@ spec:
         emptyDir: {}
       - name: runner
         emptyDir: {}
-      - name: showroom
-        emptyDir: {}
 {{- if eq .Values.setup_automation.setup "true" }}
       - name: setup-state
         persistentVolumeClaim:
@@ -572,9 +568,6 @@ spec:
       - name: user-data
         configMap:
           name: {{ .Release.Name }}-userdata
-      - name: content
-        configMap:
-          name: {{ .Release.Name }}-index
       - name: nginx-config
         configMap:
           defaultMode: 420
