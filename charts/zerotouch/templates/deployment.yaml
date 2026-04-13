@@ -48,7 +48,10 @@ spec:
           value: {{ .Values.content.zero_touch_bundle | quote }}
         - name: ZT_UI_ENABLED
           value: {{ .Values.content.zero_touch_ui_enabled | quote }}
-
+{{- if .Values.antora.uiBundleUrl }}
+        - name: ANTORA_UI_BUNDLE_URL
+          value: {{ .Values.antora.uiBundleUrl | quote }}
+{{- end }}
         volumeMounts:
         - mountPath: /showroom/repo
           name: {{ include "zerotouch.fullname" . }}-files
