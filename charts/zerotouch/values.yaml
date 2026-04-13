@@ -33,7 +33,7 @@ satellite:
   activationkey: ''
 
 content:
-  image: quay.io/rhpds/showroom-content:v1.3.0
+  image: quay.io/rhpds/showroom-content:v1.4.1
   repoUrl: https://github.com/rhpds/showroom_template_default.git
   repoRef: main
   antoraPlaybook: site.yml
@@ -199,7 +199,7 @@ monitoring:
       memory: 128Mi
 
 git_cloner:
-  image: quay.io/rhpds/git-cloner:v1.1.2
+  image: quay.io/rhpds/git-cloner:v1.1.4
   resources:
     limits:
       cpu: 500m
@@ -209,7 +209,7 @@ git_cloner:
       memory: 64Mi
 
 antora:
-  image: quay.io/rhpds/antora:v1.0.1
+  image: quay.io/rhpds/antora:v1.2.2
   # Override the Antora UI bundle URL to use a custom theme.
   # When empty, the default theme from the site.yml playbook is used.
   uiBundleUrl: ""
