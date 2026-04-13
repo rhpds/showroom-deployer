@@ -2,21 +2,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "zerotouch.fullname" . }}
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "zerotouch.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ .Release.Name }}
+      {{- include "zerotouch.selectorLabels" . | nindent 6 }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ .Release.Name }}
+        {{- include "zerotouch.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ .Release.Name }}
+      serviceAccountName: {{ include "zerotouch.fullname" . }}
       initContainers:
       - name: git-cloner
         image: {{ .Values.git_cloner.image }}
@@ -29,7 +31,7 @@ spec:
           value: "/showroom/repo"
         volumeMounts:
         - mountPath: /showroom/repo
-          name: {{ .Release.Name }}-files
+          name: {{ include "zerotouch.fullname" . }}-files
           subPath: repo
         resources:
           {{- toYaml .Values.git_cloner.resources | nindent 10 }}
@@ -49,12 +51,12 @@ spec:
 
         volumeMounts:
         - mountPath: /showroom/repo
-          name: {{ .Release.Name }}-files
+          name: {{ include "zerotouch.fullname" . }}-files
           subPath: repo
         - name: user-data
           mountPath: /user_data/
         - mountPath: /showroom/www
-          name: {{ .Release.Name }}-files
+          name: {{ include "zerotouch.fullname" . }}-files
           subPath: www
         resources:
           {{- toYaml .Values.antora.resources | nindent 10 }}
@@ -211,13 +213,13 @@ spec:
         imagePullPolicy: IfNotPresent
         volumeMounts:
           - mountPath: /app/runtime-automation
-            name: {{ .Release.Name }}-files
+            name: {{ include "zerotouch.fullname" . }}-files
             subPath: repo/runtime-automation
           - mountPath: /app/artifacts
-            name: {{ .Release.Name }}-files
+            name: {{ include "zerotouch.fullname" . }}-files
             subPath: artifacts
           - mountPath: /app/logs
-            name: {{ .Release.Name }}-files
+            name: {{ include "zerotouch.fullname" . }}-files
             subPath: logs
         terminationMessagePolicy: File
         image: {{ .Values.runtime_automation.image }}
@@ -266,10 +268,10 @@ spec:
         - name: user-data
           mountPath: /user_data/
         - mountPath: /showroom/repo
-          name: {{ .Release.Name }}-files
+          name: {{ include "zerotouch.fullname" . }}-files
           subPath: repo
         - mountPath: /showroom/www
-          name: {{ .Release.Name }}-files
+          name: {{ include "zerotouch.fullname" . }}-files
           subPath: www
         ports:
         - containerPort: 8000
@@ -520,22 +522,22 @@ spec:
           {{- toYaml .Values.monitoring.resources | nindent 10 }}
 
       volumes:
-      - name: {{ .Release.Name }}-files
+      - name: {{ include "zerotouch.fullname" . }}-files
         emptyDir: {}
 {{- if eq .Values.setup_automation.setup "true" }}
       - name: runner
         emptyDir: {}
       - name: setup-state
         persistentVolumeClaim:
-          claimName: {{ .Release.Name }}-setup-state
+          claimName: {{ include "zerotouch.fullname" . }}-setup-state
 {{- end }}
       - name: user-data
         configMap:
-          name: {{ .Release.Name }}-userdata
+          name: {{ include "zerotouch.fullname" . }}-userdata
       - name: nginx-config
         configMap:
           defaultMode: 420
-          name: {{ .Release.Name }}-proxy-config
+          name: {{ include "zerotouch.fullname" . }}-proxy-config
       - name: nginx-pid
         emptyDir: {}
       - name: nginx-cache
@@ -544,7 +546,7 @@ spec:
       - name: terminal-lab-user-home
 {{-   if eq .Values.terminal.storage.setup "true" }}
         persistentVolumeClaim:
-          claimName: {{ .Release.Name }}-terminal-lab-user-home
+          claimName: {{ include "zerotouch.fullname" . }}-terminal-lab-user-home
 {{-   else }}
         emptyDir: {}
 {{-   end }}

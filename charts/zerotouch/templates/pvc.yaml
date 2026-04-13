@@ -3,8 +3,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Release.Name }}-terminal-lab-user-home
+  name: {{ include "zerotouch.fullname" . }}-terminal-lab-user-home
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "zerotouch.labels" . | nindent 4 }}
 spec:
   accessModes:
   - ReadWriteOnce
@@ -20,8 +22,10 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Release.Name }}-setup-state
+  name: {{ include "zerotouch.fullname" . }}-setup-state
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "zerotouch.labels" . | nindent 4 }}
 spec:
   accessModes:
   - ReadWriteOnce

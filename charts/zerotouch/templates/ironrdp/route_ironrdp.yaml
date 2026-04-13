@@ -5,6 +5,8 @@ kind: Route
 metadata:
   name: windows-ironrdp
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "zerotouch.labels" . | nindent 4 }}
   annotations:
     haproxy.router.openshift.io/timeout: 1h
     haproxy.router.openshift.io/timeout-tunnel: 1h

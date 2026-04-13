@@ -2,8 +2,10 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "zerotouch.fullname" . }}
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "zerotouch.labels" . | nindent 4 }}
   annotations:
     haproxy.router.openshift.io/timeout: 1h
     haproxy.router.openshift.io/timeout-tunnel: 1h
@@ -25,7 +27,7 @@ spec:
   {{- end }}
   to:
     kind: Service
-    name: {{ .Release.Name }}
+    name: {{ include "zerotouch.fullname" . }}
   httpHeaders:
     actions:
       response:
