@@ -1,4 +1,4 @@
-{{- if eq .Values.terminal.storage.setup "true" }}
+{{- if and (eq .Values.terminal.setup "true") (eq .Values.terminal.storage.setup "true") }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
