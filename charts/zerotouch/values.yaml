@@ -210,6 +210,9 @@ git_cloner:
 
 antora:
   image: quay.io/rhpds/antora:v1.0.1
+  # Override the Antora UI bundle URL to use a custom theme.
+  # When empty, the default theme from the site.yml playbook is used.
+  uiBundleUrl: ""
   resources:
     limits:
       cpu: 500m
