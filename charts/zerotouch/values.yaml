@@ -33,14 +33,12 @@ satellite:
   activationkey: ''
 
 content:
-  # Only create a content pane, no other tabs will be available
-  contentOnly: "false"
   image: quay.io/rhpds/showroom-content:v1.3.0
   repoUrl: https://github.com/rhpds/showroom_template_default.git
   repoRef: main
-  antoraPlaybook: default-site.yml
-  zero_touch_ui_enabled: "false"
-  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.1.0/nookbag-v0.1.0.zip"
+  antoraPlaybook: site.yml
+  zero_touch_ui_enabled: "true"
+  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.3.2/nookbag-v0.3.2.zip"
   resources:
     limits:
       cpu: 500m
@@ -51,26 +49,9 @@ content:
   user_data: |
     bastion_password: from_helm
 
-# to have two terminals in one tab
-# set stacked_terminals to "true"
-# and indicate which two terminals you want
-stacked_terminals:
-  setup: "false"
-  name: stacked-terminal
-  display_name: "Stacked Terminal"
-  top: "terminal"
-  bottom: "wetty"
-
-second_terminal_tab:
-  setup: "true"
-  name: second-terminal-tab
-  display_name: "Terminal 2"
-
 terminal:
   setup: "false"
   image: quay.io/rhpds/openshift-showroom-terminal-ocp:latest
-  name: terminal
-  display_name: "Terminal 1"
   port: 7681
   resources:
     limits:
@@ -122,10 +103,6 @@ codeserver:
       cpu: 500m
       memory: 512Mi
 
-# To be fully implemented
-ocpconsole:
-  setup: "false"
-
 novnc:
   setup: "false"
   image: ghcr.io/rhpds/showroom-novnc:latest
@@ -173,8 +150,6 @@ ironrdp:
   server: "windows-rdp"
   user: "Administrator"
   password: ""
-  jetserver: "localhost:7171"
-  tokengenserver: "localhost:8081"
   resources:
     limits:
       cpu: 500m
@@ -186,8 +161,12 @@ ironrdp:
 setup_automation:
   setup: "true"
   image: quay.io/rhpds/setup-automation:v1.0.8
+  force: "false"
   vault_password: ""
   environment_variables: {}
+  storage:
+    pvcSize: 1Mi
+    storageClass: ""
   resources:
     limits:
       cpu: 500m
@@ -207,9 +186,6 @@ runtime_automation:
     requests:
       cpu: 250m
       memory: 256Mi
-
-automation:
-  vault_password: ""
 
 monitoring:
   image: quay.io/rhpds/zt-monitoring:v1

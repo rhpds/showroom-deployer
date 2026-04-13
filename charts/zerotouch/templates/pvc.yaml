@@ -1,10 +1,12 @@
-{{- if eq .Values.terminal.storage.setup "true" }}
+{{- if and (eq .Values.terminal.setup "true") (eq .Values.terminal.storage.setup "true") }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Release.Name }}-terminal-lab-user-home
+  name: {{ include "zerotouch.fullname" . }}-terminal-lab-user-home
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "zerotouch.labels" . | nindent 4 }}
 spec:
   accessModes:
   - ReadWriteOnce
@@ -14,4 +16,23 @@ spec:
   resources:
     requests:
       storage: {{ .Values.terminal.storage.pvcSize | quote }}
+{{- end }}
+{{- if eq .Values.setup_automation.setup "true" }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "zerotouch.fullname" . }}-setup-state
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "zerotouch.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+{{- if .Values.setup_automation.storage.storageClass }}
+  storageClassName: {{ .Values.setup_automation.storage.storageClass | quote }}
+{{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.setup_automation.storage.pvcSize | quote }}
 {{- end }}
