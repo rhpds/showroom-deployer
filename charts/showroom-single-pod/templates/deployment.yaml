@@ -46,6 +46,10 @@ spec:
         - name: ANTORA_UI_BUNDLE_URL
           value: {{ .Values.content.antoraUiBundleUrl | quote }}
 {{- end }}
+{{- if .Values.content.antoraNavbarLogo }}
+        - name: ANTORA_KEY_NAVBAR_LOGO
+          value: {{ .Values.content.antoraNavbarLogo | quote }}
+{{- end }}
         volumeMounts:
         - mountPath: /showroom/repo
           name: {{ .Release.Name }}-files
