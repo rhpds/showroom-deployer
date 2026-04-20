@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}
-  namespace: {{ .Release.Namespace}}
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:
@@ -45,6 +45,10 @@ spec:
 {{- if .Values.content.antoraUiBundleUrl }}
         - name: ANTORA_UI_BUNDLE_URL
           value: {{ .Values.content.antoraUiBundleUrl | quote }}
+{{- end }}
+{{- if .Values.content.antoraNavbarLogo }}
+        - name: ANTORA_KEY_NAVBAR_LOGO
+          value: {{ .Values.content.antoraNavbarLogo | quote }}
 {{- end }}
         volumeMounts:
         - mountPath: /showroom/repo
@@ -203,7 +207,7 @@ spec:
 {{- if eq .Values.terminal.setup "true" }}
       - name: terminal
         image: {{ .Values.terminal.image | quote }}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: {{ .Values.terminal.imagePullPolicy | quote }}
         env:
         - name: NAMESPACE
           valueFrom:
@@ -226,7 +230,7 @@ spec:
 {{- if eq .Values.wetty.setup "true" }}
       - name: wetty
         image: {{ .Values.wetty.image | quote }}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: {{ .Values.wetty.imagePullPolicy | quote }}
         args:
         - --base="/{{ .Values.wetty.base }}/"
         - --port={{ .Values.wetty.port }}
@@ -255,7 +259,7 @@ spec:
 {{- if eq .Values.novnc.setup "true" }}
       - name: novnc
         image: {{ .Values.novnc.image | quote }}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: {{ .Values.novnc.imagePullPolicy | quote }}
         args:
         - websockify
         - --web=/www
@@ -270,8 +274,6 @@ spec:
 
       volumes:
       - name: {{ .Release.Name }}-files
-        emptyDir: {}
-      - name: showroom
         emptyDir: {}
       - name: user-data
         configMap:
