@@ -30,7 +30,7 @@ content:
   antoraNavbarLogo: ""
   enableDevMode: "false"
   uiConfig: ""
-  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.3.4/nookbag-v0.3.4.zip"
+  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.3.6/nookbag-v0.3.6.zip"
   resources:
     limits:
       cpu: 100m
@@ -90,7 +90,7 @@ terminal:
 
 wetty:
   setup: "true"
-  image: quay.io/rhpds/wetty:v2.5
+  image: quay.io/rhpds/wetty:v2.7.6
   imagePullPolicy: IfNotPresent
   port: 8001
   base: "wetty"
