@@ -21,7 +21,7 @@ proxy:
       memory: 16Mi
 
 content:
-  image: quay.io/rhpds/showroom-content:v1.4.1
+  image: quay.io/rhpds/showroom-content:v1.4.2
   imagePullPolicy: IfNotPresent
   repoUrl: https://github.com/rhpds/showroom_template_nookbag.git
   repoRef: main
@@ -103,7 +103,7 @@ wetty:
       memory: 256Mi
 
 git_cloner:
-  image: quay.io/rhpds/git-cloner:v1.1.4
+  image: quay.io/rhpds/git-cloner:v1.1.5
 
 antora:
   image: quay.io/rhpds/antora:v1.2.4
