@@ -23,14 +23,14 @@ proxy:
 content:
   image: quay.io/rhpds/showroom-content:v1.4.2
   imagePullPolicy: IfNotPresent
-  repoUrl: https://github.com/rhpds/showroom_template_nookbag.git
+  repoUrl: https://github.com/rhpds/showroom-template.git
   repoRef: main
   antoraPlaybook: site.yml
   antoraUiBundleUrl: ""
   antoraNavbarLogo: ""
   enableDevMode: "false"
   uiConfig: ""
-  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.3.6/nookbag-v0.3.6.zip"
+  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.3.7/nookbag-v0.3.7.zip"
   resources:
     limits:
       cpu: 100m
@@ -106,7 +106,7 @@ git_cloner:
   image: quay.io/rhpds/git-cloner:v1.1.5
 
 antora:
-  image: quay.io/rhpds/antora:v1.2.4
+  image: quay.io/rhpds/antora:v1.3.0
 
 novnc:
   setup: "false"
