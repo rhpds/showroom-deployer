@@ -30,7 +30,7 @@ content:
   antoraNavbarLogo: ""
   enableDevMode: "false"
   uiConfig: ""
-  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.3.7/nookbag-v0.3.7.zip"
+  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.4.0/nookbag-v0.4.0.zip"
   resources:
     limits:
       cpu: 100m
@@ -43,7 +43,7 @@ content:
 
 runtime_automation:
   setup: "false"
-  image: quay.io/rhpds/zt-runner:v2.5.0
+  image: quay.io/rhpds/zerotouch-automation:v1.3.0
   imagePullPolicy: Always
   port: 8501
   environment_variables: {}
