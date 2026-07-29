@@ -12,7 +12,8 @@ data:
     entryPoints:
       web:
         address: ":8080"
-    ping: {}
+    ping:
+      entryPoint: web
     providers:
       file:
         filename: /etc/traefik/dynamic.yml
