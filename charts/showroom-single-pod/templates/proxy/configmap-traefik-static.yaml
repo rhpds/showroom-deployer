@@ -6,6 +6,9 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   traefik.yml: |
+    api:
+      dashboard: false
+      insecure: false
     entryPoints:
       web:
         address: ":8080"
