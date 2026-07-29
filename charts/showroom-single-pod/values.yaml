@@ -10,7 +10,7 @@ deployer:
   domain: cluster-GUID.GUID.sandboxNUMBERS.opentlc.com
 
 proxy:
-  image: quay.io/rhpds/nginx:1.25
+  image: quay.io/rhpds/traefik:v3.7.9
   imagePullPolicy: IfNotPresent
   resources:
     limits:

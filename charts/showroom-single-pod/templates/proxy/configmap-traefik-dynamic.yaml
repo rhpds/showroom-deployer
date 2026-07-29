@@ -1,0 +1,118 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-traefik-dynamic
+  namespace: {{ .Release.Namespace }}
+data:
+  dynamic.yml: |
+    http:
+      routers:
+        showroom:
+          rule: "PathPrefix(`/`)"
+          entryPoints:
+            - web
+          service: showroom
+          priority: 1
+{{- if eq .Values.terminal.setup "true" }}
+        terminal:
+          rule: "PathPrefix(`/terminal`)"
+          entryPoints:
+            - web
+          service: terminal
+          middlewares:
+            - terminal-stripprefix
+          priority: 10
+{{- end }}
+{{- if eq .Values.wetty.setup "true" }}
+        wetty:
+          rule: "PathPrefix(`/wetty`)"
+          entryPoints:
+            - web
+          service: wetty
+          priority: 10
+{{- end }}
+{{- if eq .Values.runtime_automation.setup "true" }}
+        runner-stream:
+          rule: "PathPrefix(`/stream`)"
+          entryPoints:
+            - web
+          service: runner
+          priority: 50
+        runner-api:
+          rule: "PathPrefix(`/runner`)"
+          entryPoints:
+            - web
+          service: runner
+          middlewares:
+            - runner-api-stripprefix
+          priority: 50
+{{- end }}
+{{- if eq .Values.novnc.setup "true" }}
+        novnc:
+          rule: "PathPrefix(`/novnc`)"
+          entryPoints:
+            - web
+          service: novnc
+          middlewares:
+            - novnc-stripprefix
+          priority: 10
+        websockify:
+          rule: "PathPrefix(`/websockify`)"
+          entryPoints:
+            - web
+          service: novnc
+          priority: 10
+{{- end }}
+
+      services:
+        showroom:
+          loadBalancer:
+            servers:
+              - url: "http://127.0.0.1:8000"
+{{- if eq .Values.terminal.setup "true" }}
+        terminal:
+          loadBalancer:
+            servers:
+              - url: "http://127.0.0.1:{{ .Values.terminal.port }}"
+{{- end }}
+{{- if eq .Values.wetty.setup "true" }}
+        wetty:
+          loadBalancer:
+            servers:
+              - url: "http://127.0.0.1:{{ .Values.wetty.port }}"
+{{- end }}
+{{- if eq .Values.runtime_automation.setup "true" }}
+        runner:
+          loadBalancer:
+            responseForwarding:
+              flushInterval: "-1s"
+            servers:
+              - url: "http://127.0.0.1:{{ .Values.runtime_automation.port }}"
+{{- end }}
+{{- if eq .Values.novnc.setup "true" }}
+        novnc:
+          loadBalancer:
+            servers:
+              - url: "http://127.0.0.1:{{ .Values.novnc.port }}"
+{{- end }}
+
+      middlewares:
+{{- if eq .Values.terminal.setup "true" }}
+        terminal-stripprefix:
+          stripPrefix:
+            prefixes:
+              - "/terminal"
+{{- end }}
+{{- if eq .Values.runtime_automation.setup "true" }}
+        runner-api-stripprefix:
+          stripPrefix:
+            prefixes:
+              - "/runner"
+{{- end }}
+{{- if eq .Values.novnc.setup "true" }}
+        novnc-stripprefix:
+          stripPrefix:
+            prefixes:
+              - "/novnc"
+{{- end }}

@@ -15,6 +15,10 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: {{ .Release.Name }}
+      annotations:
+        checksum/traefik-static: {{ include (print $.Template.BasePath "/proxy/configmap-traefik-static.yaml") . | sha256sum }}
+        checksum/traefik-dynamic: {{ include (print $.Template.BasePath "/proxy/configmap-traefik-dynamic.yaml") . | sha256sum }}
+        checksum/userdata: {{ include (print $.Template.BasePath "/proxy/configmap-user-data.yaml") . | sha256sum }}
     spec:
       serviceAccountName: {{ .Release.Name }}
       initContainers:
@@ -60,22 +64,18 @@ spec:
           name: {{ .Release.Name }}-files
           subPath: www
       containers:
-      - name: nginx
+      - name: traefik
         image: {{ .Values.proxy.image | quote }}
         imagePullPolicy: {{ .Values.proxy.imagePullPolicy | quote }}
+        args:
+        - "--configfile=/etc/traefik/traefik.yml"
         volumeMounts:
-        - mountPath: /etc/nginx/nginx.conf
-          name: nginx-config
-          subPath: nginx.conf
-        - mountPath: /var/cache/nginx
-          name: nginx-cache
-        - mountPath: /var/run
-          name: nginx-pid
-        env:
-        - name: NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
+        - mountPath: /etc/traefik/traefik.yml
+          name: traefik-static
+          subPath: traefik.yml
+        - mountPath: /etc/traefik/dynamic.yml
+          name: traefik-dynamic
+          subPath: dynamic.yml
         ports:
         - name: web
           containerPort: 8080
@@ -259,14 +259,12 @@ spec:
       - name: user-data
         configMap:
           name: {{ .Release.Name }}-userdata
-      - name: nginx-config
+      - name: traefik-static
         configMap:
-          defaultMode: 420
-          name: {{ .Release.Name }}-proxy-config
-      - name: nginx-pid
-        emptyDir: {}
-      - name: nginx-cache
-        emptyDir: {}
+          name: {{ .Release.Name }}-traefik-static
+      - name: traefik-dynamic
+        configMap:
+          name: {{ .Release.Name }}-traefik-dynamic
 {{- if eq .Values.terminal.setup "true" }}
       - name: terminal-data-ssh # to enable ssh out of the container
         emptyDir: {}

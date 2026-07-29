@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-traefik-static
+  namespace: {{ .Release.Namespace }}
+data:
+  traefik.yml: |
+    entryPoints:
+      web:
+        address: ":8080"
+    providers:
+      file:
+        filename: /etc/traefik/dynamic.yml
+    log:
+      level: INFO
+    accessLog: {}
+    global:
+      checkNewVersion: false
+      sendAnonymousUsage: false
