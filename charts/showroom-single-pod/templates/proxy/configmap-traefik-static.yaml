@@ -13,6 +13,7 @@ data:
     providers:
       file:
         filename: /etc/traefik/dynamic.yml
+        watch: false
     log:
       level: INFO
     accessLog: {}
