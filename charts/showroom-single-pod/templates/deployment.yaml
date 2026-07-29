@@ -144,6 +144,10 @@ spec:
           value: {{ .Values.guid | quote }}
         - name: DOMAIN
           value: {{ .Values.deployer.domain | quote }}
+        - name: ANSIBLE_USER
+          value: {{ .Values.runtime_automation.ansible_user | quote }}
+        - name: ANSIBLE_PASSWORD
+          value: {{ .Values.runtime_automation.ansible_password | quote }}
 {{- range $key, $value := .Values.runtime_automation.environment_variables }}
         - name: {{ $key | upper }}
           value: {{ $value | quote }}
@@ -169,6 +173,9 @@ spec:
           timeoutSeconds: 5
           failureThreshold: 3
         volumeMounts:
+        - mountPath: /app/runtime-automation
+          name: {{ .Release.Name }}-files
+          subPath: repo/runtime-automation
         - mountPath: /showroom/repo
           name: {{ .Release.Name }}-files
           subPath: repo

@@ -46,6 +46,10 @@ runtime_automation:
   image: quay.io/rhpds/zerotouch-automation:v1.3.0
   imagePullPolicy: Always
   port: 8501
+  # Ansible credentials for playbooks that target remote hosts.
+  # Required by zerotouch-automation startup; set to any value for localhost-only playbooks.
+  ansible_user: ""
+  ansible_password: ""
   environment_variables: {}
   resources:
     limits:
