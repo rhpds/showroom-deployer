@@ -73,9 +73,11 @@ spec:
         - mountPath: /etc/traefik/traefik.yml
           name: traefik-static
           subPath: traefik.yml
+          readOnly: true
         - mountPath: /etc/traefik/dynamic.yml
           name: traefik-dynamic
           subPath: dynamic.yml
+          readOnly: true
         ports:
         - name: web
           containerPort: 8080
