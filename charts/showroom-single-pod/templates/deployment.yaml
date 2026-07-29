@@ -79,6 +79,20 @@ spec:
         ports:
         - name: web
           containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          timeoutSeconds: 2
         resources:
           {{- toYaml .Values.proxy.resources | nindent 10 }}
 
