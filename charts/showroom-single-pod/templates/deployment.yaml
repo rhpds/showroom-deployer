@@ -68,7 +68,7 @@ spec:
         image: {{ .Values.proxy.image | quote }}
         imagePullPolicy: {{ .Values.proxy.imagePullPolicy | quote }}
         args:
-        - "--configfile=/etc/traefik/traefik.yml"
+        - "--configFile=/etc/traefik/traefik.yml"
         volumeMounts:
         - mountPath: /etc/traefik/traefik.yml
           name: traefik-static
