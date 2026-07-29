@@ -97,6 +97,7 @@ data:
               - url: "http://127.0.0.1:{{ .Values.novnc.port }}"
 {{- end }}
 
+{{- if or (eq .Values.terminal.setup "true") (eq .Values.runtime_automation.setup "true") (eq .Values.novnc.setup "true") }}
       middlewares:
 {{- if eq .Values.terminal.setup "true" }}
         terminal-stripprefix:
@@ -115,4 +116,5 @@ data:
           stripPrefix:
             prefixes:
               - "/novnc"
+{{- end }}
 {{- end }}
