@@ -232,7 +232,7 @@ spec:
         - --base="/{{ .Values.wetty.base }}/"
         - --port={{ .Values.wetty.port }}
         - --allow-iframe=true
-{{-   if eq .Values.wetty.ssh.autoSshToBastion "true" }}
+{{-   if and .Values.wetty.ssh (eq .Values.wetty.ssh.autoSshToBastion "true") }}
         - --ssh-host={{ .Values.wetty.ssh.sshHost }}
         - --ssh-port={{ .Values.wetty.ssh.sshPort }}
         - --ssh-user={{ .Values.wetty.ssh.sshUser }}
