@@ -15,6 +15,10 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: {{ .Release.Name }}
+      annotations:
+        checksum/traefik-static: {{ include (print $.Template.BasePath "/proxy/configmap-traefik-static.yaml") . | sha256sum }}
+        checksum/traefik-dynamic: {{ include (print $.Template.BasePath "/proxy/configmap-traefik-dynamic.yaml") . | sha256sum }}
+        checksum/userdata: {{ include (print $.Template.BasePath "/proxy/configmap-user-data.yaml") . | sha256sum }}
     spec:
       serviceAccountName: {{ .Release.Name }}
       initContainers:
@@ -60,25 +64,37 @@ spec:
           name: {{ .Release.Name }}-files
           subPath: www
       containers:
-      - name: nginx
+      - name: traefik
         image: {{ .Values.proxy.image | quote }}
         imagePullPolicy: {{ .Values.proxy.imagePullPolicy | quote }}
+        args:
+        - "--configFile=/etc/traefik/traefik.yml"
         volumeMounts:
-        - mountPath: /etc/nginx/nginx.conf
-          name: nginx-config
-          subPath: nginx.conf
-        - mountPath: /var/cache/nginx
-          name: nginx-cache
-        - mountPath: /var/run
-          name: nginx-pid
-        env:
-        - name: NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
+        - mountPath: /etc/traefik/traefik.yml
+          name: traefik-static
+          subPath: traefik.yml
+          readOnly: true
+        - mountPath: /etc/traefik/dynamic.yml
+          name: traefik-dynamic
+          subPath: dynamic.yml
+          readOnly: true
         ports:
         - name: web
           containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          timeoutSeconds: 2
         resources:
           {{- toYaml .Values.proxy.resources | nindent 10 }}
 
@@ -144,6 +160,10 @@ spec:
           value: {{ .Values.guid | quote }}
         - name: DOMAIN
           value: {{ .Values.deployer.domain | quote }}
+        - name: ANSIBLE_USER
+          value: {{ .Values.runtime_automation.ansible_user | quote }}
+        - name: ANSIBLE_PASSWORD
+          value: {{ .Values.runtime_automation.ansible_password | quote }}
 {{- range $key, $value := .Values.runtime_automation.environment_variables }}
         - name: {{ $key | upper }}
           value: {{ $value | quote }}
@@ -169,6 +189,9 @@ spec:
           timeoutSeconds: 5
           failureThreshold: 3
         volumeMounts:
+        - mountPath: /app/runtime-automation
+          name: {{ .Release.Name }}-files
+          subPath: repo/runtime-automation
         - mountPath: /showroom/repo
           name: {{ .Release.Name }}-files
           subPath: repo
@@ -209,7 +232,7 @@ spec:
         - --base="/{{ .Values.wetty.base }}/"
         - --port={{ .Values.wetty.port }}
         - --allow-iframe=true
-{{-   if eq .Values.wetty.ssh.autoSshToBastion "true" }}
+{{-   if and .Values.wetty.ssh (eq .Values.wetty.ssh.autoSshToBastion "true") }}
         - --ssh-host={{ .Values.wetty.ssh.sshHost }}
         - --ssh-port={{ .Values.wetty.ssh.sshPort }}
         - --ssh-user={{ .Values.wetty.ssh.sshUser }}
@@ -252,14 +275,12 @@ spec:
       - name: user-data
         configMap:
           name: {{ .Release.Name }}-userdata
-      - name: nginx-config
+      - name: traefik-static
         configMap:
-          defaultMode: 420
-          name: {{ .Release.Name }}-proxy-config
-      - name: nginx-pid
-        emptyDir: {}
-      - name: nginx-cache
-        emptyDir: {}
+          name: {{ .Release.Name }}-traefik-static
+      - name: traefik-dynamic
+        configMap:
+          name: {{ .Release.Name }}-traefik-dynamic
 {{- if eq .Values.terminal.setup "true" }}
       - name: terminal-data-ssh # to enable ssh out of the container
         emptyDir: {}
