@@ -80,7 +80,7 @@ terminal:
 
 wetty:
   setup: "true"
-  image: quay.io/rhpds/wetty:v2.7.6
+  image: quay.io/rhpds/wetty:v3.2.1
   imagePullPolicy: IfNotPresent
   port: 8001
   base: "wetty"
