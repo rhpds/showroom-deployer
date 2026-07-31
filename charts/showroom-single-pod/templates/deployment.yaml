@@ -192,6 +192,9 @@ spec:
         - mountPath: /app/runtime-automation
           name: {{ .Release.Name }}-files
           subPath: repo/runtime-automation
+        - mountPath: /app/qa-automation
+          name: {{ .Release.Name }}-files
+          subPath: repo/qa-automation
         - mountPath: /showroom/repo
           name: {{ .Release.Name }}-files
           subPath: repo

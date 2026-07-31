@@ -47,7 +47,7 @@ runtime_automation:
   imagePullPolicy: Always
   port: 8501
   # Ansible credentials for playbooks that target remote hosts.
-  # Required by zerotouch-automation startup; set to any value for localhost-only playbooks.
+  # Optional; only needed when playbooks SSH to remote hosts.
   ansible_user: ""
   ansible_password: ""
   environment_variables: {}
