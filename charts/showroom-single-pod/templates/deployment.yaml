@@ -114,6 +114,8 @@ spec:
           value: "true"
         - name: SHOWROOM_UI_CONFIG
           value: {{ .Values.content.uiConfig | quote }}
+        - name: SHOWROOM_ENABLE_DEV_MODE
+          value: {{ .Values.content.nookbagEnableDevMode | quote }}
         - name: DOMAIN
           value: {{ .Values.deployer.domain | quote }}
         - name: GUID
