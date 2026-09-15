@@ -344,6 +344,7 @@ spec:
         args:
         - --base="/{{ .Values.wetty.base }}/"
         - --port={{ .Values.wetty.port }}
+        - --allow-iframe=true
 {{-   if eq .Values.wetty.ssh.autoSshToBastion "true" }}
         - --ssh-host={{ .Values.wetty.ssh.sshHost }}
         - --ssh-port={{ .Values.wetty.ssh.sshPort }}
@@ -370,6 +371,7 @@ spec:
         args:
         - --base="/{{ $.Values.wetty.base }}/"
         - --port={{ add $.Values.wetty.port 1 $i }}
+        - --allow-iframe=true
 {{-   if eq $.Values.wetty.ssh.autoSshToBastion "true" }}
         - --ssh-host={{ $host }}
         - --ssh-port={{ $.Values.wetty.ssh.sshPort }}
