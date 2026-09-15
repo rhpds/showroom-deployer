@@ -218,12 +218,17 @@ spec:
           - mountPath: /app/runtime-automation
             name: {{ include "zerotouch.fullname" . }}-files
             subPath: repo/runtime-automation
+          - mountPath: /app/qa-automation
+            name: {{ include "zerotouch.fullname" . }}-files
+            subPath: repo/qa-automation
           - mountPath: /app/artifacts
             name: {{ include "zerotouch.fullname" . }}-files
             subPath: artifacts
           - mountPath: /app/logs
             name: {{ include "zerotouch.fullname" . }}-files
             subPath: logs
+          - name: user-data
+            mountPath: /user_data/
         terminationMessagePolicy: File
         image: {{ .Values.runtime_automation.image }}
 {{- end }}
