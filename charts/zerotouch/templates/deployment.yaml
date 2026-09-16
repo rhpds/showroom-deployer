@@ -221,6 +221,9 @@ spec:
           - mountPath: /app/qa-automation
             name: {{ include "zerotouch.fullname" . }}-files
             subPath: repo/qa-automation
+          - mountPath: /app/ui-config.yml
+            name: {{ include "zerotouch.fullname" . }}-files
+            subPath: repo/ui-config.yml
           - mountPath: /app/artifacts
             name: {{ include "zerotouch.fullname" . }}-files
             subPath: artifacts
