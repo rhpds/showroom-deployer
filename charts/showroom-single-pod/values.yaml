@@ -77,6 +77,25 @@ terminal:
     pvcSize: 5Gi
     # Use default Storage Class when empty
     storageClass: ""
+  # Full podman (pull/run, with real networking) inside the terminal
+  # container, via OpenShift's Kubernetes-native pod-level user namespaces
+  # (hostUsers: false) plus a narrowly-scoped custom SCC -- confirmed
+  # working by live testing against OpenShift 4.20 (Sept 2026), see
+  # showroom-images/ocp-terminal/README.adoc for the full writeup.
+  #
+  # Requires sccName to already exist on the cluster (cluster-scoped,
+  # created once per cluster -- see rhpds/showroom's
+  # ocp4_workload_showroom_terminal_podman_enable) and requires the
+  # deploying credentials to have cluster-admin (dedicated/ephemeral
+  # clusters only -- this SCC binding will fail on shared clusters where
+  # that isn't the case). Leave disabled unless a specific lab needs it;
+  # most labs are fine with skopeo copy under the default SCC.
+  podman:
+    enabled: "false"
+    # Cloned from OpenShift's built-in nested-container SCC with SYS_ADMIN,
+    # SYS_CHROOT, NET_ADMIN, NET_RAW added to allowedCapabilities -- not a
+    # change to nested-container itself.
+    sccName: showroom-terminal-podman
 
 wetty:
   setup: "true"

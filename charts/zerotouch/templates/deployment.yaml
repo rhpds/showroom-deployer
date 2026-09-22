@@ -18,10 +18,20 @@ spec:
       labels:
         {{- include "zerotouch.selectorLabels" . | nindent 8 }}
     spec:
+{{- if and (eq .Values.terminal.setup "true") (eq .Values.terminal.podman.enabled "true") }}
+      # Kubernetes-native pod-level user namespace, required for the
+      # terminal container's podman capabilities below to be safely scoped
+      # (see terminal.podman.enabled in values.yaml). Applies to the whole
+      # pod -- the other sidecars here don't use hostNetwork/hostPID/hostIPC,
+      # so this doesn't affect them.
+      hostUsers: false
+{{- end }}
       serviceAccountName: {{ include "zerotouch.fullname" . }}
       initContainers:
       - name: git-cloner
         image: {{ .Values.git_cloner.image }}
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" . | nindent 10 }}
         env:
         - name: GIT_REPO_URL
           value: {{ .Values.content.repoUrl | quote }}
@@ -37,6 +47,8 @@ spec:
           {{- toYaml .Values.git_cloner.resources | nindent 10 }}
       - name: antora-builder
         image: {{ .Values.antora.image }}
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" . | nindent 10 }}
         env:
         - name: FILES_DIR
           value: "/showroom/repo"
@@ -68,6 +80,8 @@ spec:
           {{- toYaml .Values.setup_automation.resources | nindent 10 }}
         terminationMessagePath: /dev/termination-log
         name: setup
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" . | nindent 10 }}
         env:
           - name: GIT_REPO_URL
             value: {{ .Values.content.repoUrl | quote }}
@@ -149,6 +163,8 @@ spec:
           {{- toYaml .Values.runtime_automation.resources | nindent 10 }}
         terminationMessagePath: /dev/termination-log
         name: runner
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" . | nindent 10 }}
         env:
           - name: DEBUG
             value: "true"
@@ -238,6 +254,8 @@ spec:
       - name: nginx
         image: {{ .Values.proxy.image }}
         imagePullPolicy: IfNotPresent
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" . | nindent 10 }}
         volumeMounts:
         - mountPath: /etc/nginx/nginx.conf
           name: nginx-config
@@ -264,6 +282,8 @@ spec:
       - name: content
         image: {{ .Values.content.image }}
         imagePullPolicy: IfNotPresent
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" . | nindent 10 }}
         env:
         - name: ANTORA_PLAYBOOK
           value: {{ .Values.content.antoraPlaybook | quote }}
@@ -302,6 +322,24 @@ spec:
       - name: terminal
         image: {{ .Values.terminal.image }}
         imagePullPolicy: IfNotPresent
+{{- if eq .Values.terminal.podman.enabled "true" }}
+        securityContext:
+          seccompProfile:
+            type: RuntimeDefault
+          # Minimal set confirmed by live testing (one variable at a time)
+          # against OpenShift 4.20 -- SYS_ADMIN alone is not enough; SETUID
+          # and SETGID are not needed. See showroom-images/ocp-terminal/
+          # README.adoc for the full test log. This intentionally violates
+          # PodSecurity "restricted" (which forbids adding any capability
+          # beyond NET_BIND_SERVICE) -- that's expected and unavoidable for
+          # this feature; see the custom SCC binding in terminal/rbac.yaml.
+          capabilities:
+            add: ["SYS_ADMIN", "SYS_CHROOT", "NET_ADMIN", "NET_RAW"]
+          allowPrivilegeEscalation: true
+{{- else }}
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" . | nindent 10 }}
+{{- end }}
         env:
         - name: NAMESPACE
           valueFrom:
@@ -312,6 +350,13 @@ spec:
         volumeMounts:
         - name: terminal-lab-user-home
           mountPath: /home/lab-user
+{{- if eq .Values.terminal.podman.enabled "true" }}
+        - name: terminal-containers-storage
+          # podman's storage dir can't live on this container's own root
+          # filesystem -- it's already overlay (via CRI-O), and the kernel
+          # doesn't support overlay-on-overlay. Needs its own volume.
+          mountPath: /var/lib/containers
+{{- end }}
         ports:
         - containerPort: {{ .Values.terminal.port }}
           protocol: TCP
@@ -323,6 +368,8 @@ spec:
       - name: terminal-{{ $terminal.name }}
         image: {{ $.Values.terminal.image }}
         imagePullPolicy: IfNotPresent
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" $ | nindent 10 }}
         env:
         - name: NAMESPACE
           valueFrom:
@@ -349,6 +396,8 @@ spec:
       - name: wetty
         image: {{ .Values.wetty.image }}
         imagePullPolicy: IfNotPresent
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" . | nindent 10 }}
         args:
         - --base="/{{ .Values.wetty.base }}/"
         - --port={{ .Values.wetty.port }}
@@ -376,6 +425,8 @@ spec:
       - name: wetty-{{ $host }}
         image: {{ $.Values.wetty.image }}
         imagePullPolicy: IfNotPresent
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" $ | nindent 10 }}
         args:
         - --base="/{{ $.Values.wetty.base }}/"
         - --port={{ add $.Values.wetty.port 1 $i }}
@@ -406,6 +457,8 @@ spec:
       - name: wetty-{{ $terminal.name | replace "_" "-" }}
         image: {{ $.Values.wetty.image }}
         imagePullPolicy: IfNotPresent
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" $ | nindent 10 }}
         args:
         - --base="/{{ $.Values.wetty.base }}/"
         - --port={{ add $.Values.wetty.port ($.Values.wetty.ssh.sshOtherHosts | len) 1 $i }}
@@ -437,6 +490,8 @@ spec:
       - name: novnc
         image: {{ .Values.novnc.image }}
         imagePullPolicy: IfNotPresent
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" . | nindent 10 }}
         args:
         - websockify
         - --web=/www
@@ -453,6 +508,8 @@ spec:
       - name: cloud
         image: {{ .Values.cloud.image }}
         imagePullPolicy: IfNotPresent
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" . | nindent 10 }}
         env:
         - name: CLOUD_PROVIDER
           value: {{ .Values.cloud.auth_cloud_provider | quote }}
@@ -493,6 +550,8 @@ spec:
       - name: ironrdp
         image: {{ .Values.ironrdp.image }}
         imagePullPolicy: IfNotPresent
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" . | nindent 10 }}
         env:
         - name: RDPSERVER
           value: {{ .Values.ironrdp.server | quote }}
@@ -517,6 +576,8 @@ spec:
       - name: monitoring
         image: {{ .Values.monitoring.image }}
         imagePullPolicy: IfNotPresent
+        securityContext:
+          {{- include "zerotouch.restrictedSecurityContext" . | nindent 10 }}
         env:
         - name: BASTION_HOST
           value: {{ .Values.wetty.ssh.sshHost | quote }}
@@ -561,6 +622,10 @@ spec:
         persistentVolumeClaim:
           claimName: {{ include "zerotouch.fullname" . }}-terminal-lab-user-home
 {{-   else }}
+        emptyDir: {}
+{{-   end }}
+{{-   if eq .Values.terminal.podman.enabled "true" }}
+      - name: terminal-containers-storage
         emptyDir: {}
 {{-   end }}
 {{- end }}
