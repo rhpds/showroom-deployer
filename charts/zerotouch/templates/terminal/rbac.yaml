@@ -14,3 +14,25 @@ subjects:
 - kind: ServiceAccount
   name: {{ include "zerotouch.fullname" . }}
   namespace: {{ .Release.Namespace }}
+{{- if and (eq .Values.terminal.setup "true") (eq .Values.terminal.podman.enabled "true") }}
+---
+# Grants the terminal container's ServiceAccount use of the custom SCC
+# (terminal.podman.sccName) that enables full podman under hostUsers:false.
+# The SCC itself is cluster-scoped and must already exist -- this chart
+# does not (and cannot, via a namespace-scoped Helm release) create it.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Values.terminal.podman.sccName }}-{{ include "zerotouch.fullname" . }}-sa
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "zerotouch.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:openshift:scc:{{ .Values.terminal.podman.sccName }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "zerotouch.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+{{- end }}

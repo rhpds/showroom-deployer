@@ -20,6 +20,14 @@ spec:
         checksum/traefik-dynamic: {{ include (print $.Template.BasePath "/proxy/configmap-traefik-dynamic.yaml") . | sha256sum }}
         checksum/userdata: {{ include (print $.Template.BasePath "/proxy/configmap-user-data.yaml") . | sha256sum }}
     spec:
+{{- if and (eq .Values.terminal.setup "true") (eq .Values.terminal.podman.enabled "true") }}
+      # Kubernetes-native pod-level user namespace, required for the
+      # terminal container's podman capabilities below to be safely scoped
+      # (see terminal.podman.enabled in values.yaml). Applies to the whole
+      # pod -- the other sidecars here don't use hostNetwork/hostPID/hostIPC,
+      # so this doesn't affect them.
+      hostUsers: false
+{{- end }}
       serviceAccountName: {{ .Release.Name }}
       initContainers:
       - name: git-cloner
@@ -208,6 +216,18 @@ spec:
       - name: terminal
         image: {{ .Values.terminal.image | quote }}
         imagePullPolicy: {{ .Values.terminal.imagePullPolicy | quote }}
+{{- if eq .Values.terminal.podman.enabled "true" }}
+        securityContext:
+          seccompProfile:
+            type: RuntimeDefault
+          # Minimal set confirmed by live testing (one variable at a time)
+          # against OpenShift 4.20 -- SYS_ADMIN alone is not enough; SETUID
+          # and SETGID are not needed. See showroom-images/ocp-terminal/
+          # README.adoc for the full test log.
+          capabilities:
+            add: ["SYS_ADMIN", "SYS_CHROOT", "NET_ADMIN", "NET_RAW"]
+          allowPrivilegeEscalation: true
+{{- end }}
         env:
         - name: NAMESPACE
           valueFrom:
@@ -220,6 +240,13 @@ spec:
           mountPath: /home/lab-user
         - name: terminal-data-ssh # to enable ssh out of the container
           mountPath: /data/.ssh
+{{- if eq .Values.terminal.podman.enabled "true" }}
+        - name: terminal-containers-storage
+          # podman's storage dir can't live on this container's own root
+          # filesystem -- it's already overlay (via CRI-O), and the kernel
+          # doesn't support overlay-on-overlay. Needs its own volume.
+          mountPath: /var/lib/containers
+{{- end }}
         ports:
         - containerPort: {{ .Values.terminal.port }}
           protocol: TCP
@@ -292,6 +319,10 @@ spec:
         persistentVolumeClaim:
           claimName: {{ .Release.Name }}-terminal-lab-user-home
 {{-   else }}
+        emptyDir: {}
+{{-   end }}
+{{-   if eq .Values.terminal.podman.enabled "true" }}
+      - name: terminal-containers-storage
         emptyDir: {}
 {{-   end }}
 {{- end }}
