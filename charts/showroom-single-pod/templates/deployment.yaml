@@ -32,6 +32,8 @@ spec:
       initContainers:
       - name: git-cloner
         image: {{ .Values.git_cloner.image | quote }}
+        securityContext:
+          {{- include "showroom-single-pod.restrictedSecurityContext" . | nindent 10 }}
         env:
         - name: GIT_REPO_URL
           value: {{ .Values.content.repoUrl | quote }}
@@ -45,6 +47,8 @@ spec:
           subPath: repo
       - name: antora-builder
         image: {{ .Values.antora.image | quote }}
+        securityContext:
+          {{- include "showroom-single-pod.restrictedSecurityContext" . | nindent 10 }}
         env:
         - name: FILES_DIR
           value: "/showroom/repo"
@@ -75,6 +79,8 @@ spec:
       - name: traefik
         image: {{ .Values.proxy.image | quote }}
         imagePullPolicy: {{ .Values.proxy.imagePullPolicy | quote }}
+        securityContext:
+          {{- include "showroom-single-pod.restrictedSecurityContext" . | nindent 10 }}
         args:
         - "--configFile=/etc/traefik/traefik.yml"
         volumeMounts:
@@ -109,6 +115,8 @@ spec:
       - name: content
         image: {{ .Values.content.image | quote }}
         imagePullPolicy: {{ .Values.content.imagePullPolicy | quote }}
+        securityContext:
+          {{- include "showroom-single-pod.restrictedSecurityContext" . | nindent 10 }}
         env:
         - name: GIT_REPO_URL
           value: {{ .Values.content.repoUrl | quote  }}
@@ -161,6 +169,8 @@ spec:
       - name: runner
         image: {{ .Values.runtime_automation.image | quote }}
         imagePullPolicy: {{ .Values.runtime_automation.imagePullPolicy | quote }}
+        securityContext:
+          {{- include "showroom-single-pod.restrictedSecurityContext" . | nindent 10 }}
         env:
         - name: PORT
           value: {{ .Values.runtime_automation.port | quote }}
@@ -223,10 +233,16 @@ spec:
           # Minimal set confirmed by live testing (one variable at a time)
           # against OpenShift 4.20 -- SYS_ADMIN alone is not enough; SETUID
           # and SETGID are not needed. See showroom-images/ocp-terminal/
-          # README.adoc for the full test log.
+          # README.adoc for the full test log. This intentionally violates
+          # PodSecurity "restricted" (which forbids adding any capability
+          # beyond NET_BIND_SERVICE) -- that's expected and unavoidable for
+          # this feature; see the custom SCC binding in terminal/rbac.yaml.
           capabilities:
             add: ["SYS_ADMIN", "SYS_CHROOT", "NET_ADMIN", "NET_RAW"]
           allowPrivilegeEscalation: true
+{{- else }}
+        securityContext:
+          {{- include "showroom-single-pod.restrictedSecurityContext" . | nindent 10 }}
 {{- end }}
         env:
         - name: NAMESPACE
@@ -258,6 +274,8 @@ spec:
       - name: wetty
         image: {{ .Values.wetty.image | quote }}
         imagePullPolicy: {{ .Values.wetty.imagePullPolicy | quote }}
+        securityContext:
+          {{- include "showroom-single-pod.restrictedSecurityContext" . | nindent 10 }}
         args:
         - --base="/{{ .Values.wetty.base }}/"
         - --port={{ .Values.wetty.port }}
@@ -287,6 +305,8 @@ spec:
       - name: novnc
         image: {{ .Values.novnc.image | quote }}
         imagePullPolicy: {{ .Values.novnc.imagePullPolicy | quote }}
+        securityContext:
+          {{- include "showroom-single-pod.restrictedSecurityContext" . | nindent 10 }}
         args:
         - websockify
         - --web=/www
