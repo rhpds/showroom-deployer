@@ -21,7 +21,7 @@ proxy:
       memory: 16Mi
 
 content:
-  image: quay.io/rhpds/showroom-content:v1.4.2
+  image: quay.io/rhpds/showroom-content:v1.4.3
   imagePullPolicy: IfNotPresent
   repoUrl: https://github.com/rhpds/showroom-template.git
   repoRef: main
@@ -29,8 +29,9 @@ content:
   antoraUiBundleUrl: ""
   antoraNavbarLogo: ""
   enableDevMode: "false"
+  nookbagEnableDevMode: "false"
   uiConfig: ""
-  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.4.0/nookbag-v0.4.0.zip"
+  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.5.1/nookbag-v0.5.1.zip"
   resources:
     limits:
       cpu: 100m
