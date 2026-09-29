@@ -31,7 +31,7 @@ content:
   enableDevMode: "false"
   nookbagEnableDevMode: "false"
   uiConfig: ""
-  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.4.0/nookbag-v0.4.0.zip"
+  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.5.1/nookbag-v0.5.1.zip"
   resources:
     limits:
       cpu: 100m
