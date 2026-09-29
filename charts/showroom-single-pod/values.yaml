@@ -21,7 +21,7 @@ proxy:
       memory: 16Mi
 
 content:
-  image: quay.io/rhpds/showroom-content:v1.4.2
+  image: quay.io/rhpds/showroom-content:v1.4.3
   imagePullPolicy: IfNotPresent
   repoUrl: https://github.com/rhpds/showroom-template.git
   repoRef: main
