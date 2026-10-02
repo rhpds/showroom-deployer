@@ -213,6 +213,22 @@ spec:
           - name: runner
             containerPort: 8501
             protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: runner
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: runner
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
         imagePullPolicy: IfNotPresent
         volumeMounts:
           - mountPath: /app/runtime-automation
