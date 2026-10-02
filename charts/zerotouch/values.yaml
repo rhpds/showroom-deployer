@@ -177,7 +177,7 @@ setup_automation:
 
 runtime_automation:
   setup: "true"
-  image: quay.io/rhpds/zerotouch-automation:v1.3.1
+  image: quay.io/rhpds/zerotouch-automation:v1.3.4
   environment_variables: {}
   resources:
     limits:
