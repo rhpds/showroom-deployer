@@ -33,12 +33,14 @@ satellite:
   activationkey: ''
 
 content:
-  image: quay.io/rhpds/showroom-content:v1.4.2
+  image: quay.io/rhpds/showroom-content:v1.4.3
   repoUrl: https://github.com/rhpds/showroom_template_default.git
   repoRef: main
   antoraPlaybook: site.yml
   zero_touch_ui_enabled: "true"
-  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.4.0/nookbag-v0.4.0.zip"
+  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.5.1/nookbag-v0.5.1.zip"
+  enableDevMode: "false"
+  nookbagEnableDevMode: "false"
   resources:
     limits:
       cpu: 500m
