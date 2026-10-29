@@ -31,6 +31,11 @@ spec:
           value: {{ .Values.content.repoRef | quote }}
         - name: CLONE_DIR
           value: "/showroom/repo"
+{{- if .Values.git_cloner.envFromSecret }}
+        envFrom:
+        - secretRef:
+            name: {{ .Values.git_cloner.envFromSecret | quote }}
+{{- end }}
         volumeMounts:
         - mountPath: /showroom/repo
           name: {{ .Release.Name }}-files

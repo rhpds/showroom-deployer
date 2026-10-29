@@ -95,6 +95,8 @@ wetty:
 
 git_cloner:
   image: quay.io/rhpds/git-cloner:v1.1.5
+  # Secret name whose keys become env vars for git-cloner only (for example GIT_CONFIG_* for private repos)
+  envFromSecret: ""
 
 antora:
   image: quay.io/rhpds/antora:v1.3.0
