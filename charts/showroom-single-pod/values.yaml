@@ -60,6 +60,22 @@ runtime_automation:
       cpu: 100m
       memory: 256Mi
 
+authguard:
+  setup: "false"
+  image: quay.io/rhpds/authguard:v0.1.0
+  imagePullPolicy: IfNotPresent
+  port: 8080
+  authToken: ""
+  sessionSecret: ""
+  sessionTtlSeconds: 43200
+  resources:
+    limits:
+      cpu: 100m
+      memory: 64Mi
+    requests:
+      cpu: 10m
+      memory: 32Mi
+
 terminal:
   setup: "true"
   image: quay.io/rhpds/openshift-showroom-terminal-ocp:latest

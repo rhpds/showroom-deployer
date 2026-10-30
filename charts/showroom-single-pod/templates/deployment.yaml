@@ -151,6 +151,41 @@ spec:
         resources:
           {{- toYaml .Values.content.resources | nindent 10 }}
 
+{{- if eq .Values.authguard.setup "true" }}
+      - name: authguard
+        image: {{ .Values.authguard.image | quote }}
+        imagePullPolicy: {{ .Values.authguard.imagePullPolicy | quote }}
+        env:
+        - name: PORT
+          value: {{ .Values.authguard.port | quote }}
+        - name: AUTH_TOKEN
+          value: {{ .Values.authguard.authToken | quote }}
+        - name: SESSION_SECRET
+          value: {{ .Values.authguard.sessionSecret | quote }}
+        - name: SESSION_TTL_SECONDS
+          value: {{ .Values.authguard.sessionTtlSeconds | quote }}
+        ports:
+        - name: authguard
+          containerPort: {{ .Values.authguard.port }}
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /login
+            port: authguard
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /login
+            port: authguard
+          initialDelaySeconds: 2
+          periodSeconds: 5
+          timeoutSeconds: 2
+        resources:
+          {{- toYaml .Values.authguard.resources | nindent 10 }}
+{{- end }}
+
 {{- if eq .Values.runtime_automation.setup "true" }}
       - name: runner
         image: {{ .Values.runtime_automation.image | quote }}

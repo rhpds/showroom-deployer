@@ -13,6 +13,10 @@ data:
           entryPoints:
             - web
           service: showroom
+{{- if eq .Values.authguard.setup "true" }}
+          middlewares:
+            - authguard
+{{- end }}
           priority: 1
 {{- if eq .Values.terminal.setup "true" }}
         terminal:
@@ -21,6 +25,9 @@ data:
             - web
           service: terminal
           middlewares:
+{{- if eq .Values.authguard.setup "true" }}
+            - authguard
+{{- end }}
             - terminal-stripprefix
           priority: 10
 {{- end }}
@@ -30,6 +37,10 @@ data:
           entryPoints:
             - web
           service: wetty
+{{- if eq .Values.authguard.setup "true" }}
+          middlewares:
+            - authguard
+{{- end }}
           priority: 10
 {{- end }}
 {{- if eq .Values.runtime_automation.setup "true" }}
@@ -38,6 +49,10 @@ data:
           entryPoints:
             - web
           service: runner
+{{- if eq .Values.authguard.setup "true" }}
+          middlewares:
+            - authguard
+{{- end }}
           priority: 50
         runner-api:
           rule: "PathPrefix(`/runner`)"
@@ -45,6 +60,9 @@ data:
             - web
           service: runner
           middlewares:
+{{- if eq .Values.authguard.setup "true" }}
+            - authguard
+{{- end }}
             - runner-api-stripprefix
           priority: 50
 {{- end }}
@@ -55,6 +73,9 @@ data:
             - web
           service: novnc
           middlewares:
+{{- if eq .Values.authguard.setup "true" }}
+            - authguard
+{{- end }}
             - novnc-stripprefix
           priority: 10
         websockify:
@@ -62,7 +83,19 @@ data:
           entryPoints:
             - web
           service: novnc
+{{- if eq .Values.authguard.setup "true" }}
+          middlewares:
+            - authguard
+{{- end }}
           priority: 10
+{{- end }}
+{{- if eq .Values.authguard.setup "true" }}
+        authguard-login:
+          rule: "PathPrefix(`/login`)"
+          entryPoints:
+            - web
+          service: authguard
+          priority: 100
 {{- end }}
 
       services:
@@ -96,9 +129,24 @@ data:
             servers:
               - url: "http://127.0.0.1:{{ .Values.novnc.port }}"
 {{- end }}
+{{- if eq .Values.authguard.setup "true" }}
+        authguard:
+          loadBalancer:
+            servers:
+              - url: "http://127.0.0.1:{{ .Values.authguard.port }}"
+{{- end }}
 
-{{- if or (eq .Values.terminal.setup "true") (eq .Values.runtime_automation.setup "true") (eq .Values.novnc.setup "true") }}
+{{- if or (eq .Values.terminal.setup "true") (eq .Values.runtime_automation.setup "true") (eq .Values.novnc.setup "true") (eq .Values.authguard.setup "true") }}
       middlewares:
+{{- if eq .Values.authguard.setup "true" }}
+        authguard:
+          forwardAuth:
+            address: "http://127.0.0.1:{{ .Values.authguard.port }}/verify"
+            trustForwardHeader: true
+            preserveLocationHeader: true
+            addAuthCookiesToResponse:
+              - nookbag_auth
+{{- end }}
 {{- if eq .Values.terminal.setup "true" }}
         terminal-stripprefix:
           stripPrefix:
