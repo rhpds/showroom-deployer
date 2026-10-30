@@ -25,10 +25,10 @@ data:
             - web
           service: terminal
           middlewares:
-            - terminal-stripprefix
 {{- if eq .Values.authguard.setup "true" }}
             - authguard
 {{- end }}
+            - terminal-stripprefix
           priority: 10
 {{- end }}
 {{- if eq .Values.wetty.setup "true" }}
@@ -60,10 +60,10 @@ data:
             - web
           service: runner
           middlewares:
-            - runner-api-stripprefix
 {{- if eq .Values.authguard.setup "true" }}
             - authguard
 {{- end }}
+            - runner-api-stripprefix
           priority: 50
 {{- end }}
 {{- if eq .Values.novnc.setup "true" }}
@@ -73,10 +73,10 @@ data:
             - web
           service: novnc
           middlewares:
-            - novnc-stripprefix
 {{- if eq .Values.authguard.setup "true" }}
             - authguard
 {{- end }}
+            - novnc-stripprefix
           priority: 10
         websockify:
           rule: "PathPrefix(`/websockify`)"
