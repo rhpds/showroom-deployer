@@ -50,6 +50,20 @@ helm install my-showroom rhpds/showroom-single-pod \
   --set documentation.repoUrl=https://github.com/rhpds/showroom_template_default
 ----
 
+=== Private content repositories
+
+Set `git_cloner.envFromSecret` to the name of a Secret in the release namespace.
+Each key in that Secret becomes an env var in the `git-cloner` init container only.
+Use `GIT_CONFIG_*` keys to send an auth header, so the token is not in the repo URL or the pod spec:
+
+[source,yaml]
+----
+stringData:
+  GIT_CONFIG_COUNT: "1"
+  GIT_CONFIG_KEY_0: "http.https://github.com/.extraheader"
+  GIT_CONFIG_VALUE_0: "Authorization: Basic <base64 of x-access-token:TOKEN>"
+----
+
 == Container Images
 
 All Showroom container images are maintained in https://github.com/rhpds/showroom-images[rhpds/showroom-images] and published to https://quay.io/organization/rhpds[quay.io/rhpds].
