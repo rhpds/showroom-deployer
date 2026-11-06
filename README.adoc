@@ -50,6 +50,55 @@ helm install my-showroom rhpds/showroom-single-pod \
   --set documentation.repoUrl=https://github.com/rhpds/showroom_template_default
 ----
 
+=== Private content repositories
+
+Create a Secret in the release namespace holding the git token, then point
+`git_cloner.tokenSecret` at it:
+
+[source,bash]
+----
+oc create secret generic my-git-token \
+  --from-literal=GIT_TOKEN=ghp_xxxxxxxxxxxx \
+  -n my-showroom-namespace
+
+helm install my-showroom rhpds/showroom-single-pod \
+  --set content.repoUrl=https://github.com/myorg/private-content.git \
+  --set git_cloner.tokenSecret=my-git-token
+----
+
+The token is injected into the `git-cloner` init container as `GIT_TOKEN` via
+`secretKeyRef`, and `git-cloner` sends it as an HTTP auth header scoped to the
+repository's origin. The token never appears in the repo URL, in the pod spec,
+or in the cloned repository's git config.
+
+|===
+| Value | Description | Default
+
+| `git_cloner.tokenSecret`
+| Name of an existing Secret holding the token. Empty disables token auth.
+| `""`
+
+| `git_cloner.tokenSecretKey`
+| Key within that Secret.
+| `GIT_TOKEN`
+
+| `git_cloner.tokenUsername`
+| Username paired with the token. Empty lets `git-cloner` choose per forge
+  (`x-access-token` for GitHub, `oauth2` for GitLab, `x-token-auth` for
+  Bitbucket, `token` for Gitea/Forgejo).
+| `""`
+
+| `git_cloner.envFromSecret`
+| Escape hatch: every key in the named Secret becomes an env var on
+  `git-cloner`, for raw `GIT_CONFIG_*` injection. Prefer `tokenSecret`.
+| `""`
+|===
+
+Authentication failures are not retried, so an invalid or expired token fails
+the init container immediately rather than after the full retry budget. Leave
+`tokenSecret` unset for public repositories: a malformed credential causes the
+forge to reject requests that would otherwise have succeeded anonymously.
+
 == Container Images
 
 All Showroom container images are maintained in https://github.com/rhpds/showroom-images[rhpds/showroom-images] and published to https://quay.io/organization/rhpds[quay.io/rhpds].

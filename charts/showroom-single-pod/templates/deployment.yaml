@@ -31,6 +31,22 @@ spec:
           value: {{ .Values.content.repoRef | quote }}
         - name: CLONE_DIR
           value: "/showroom/repo"
+{{- if .Values.git_cloner.tokenSecret }}
+        - name: GIT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.git_cloner.tokenSecret | quote }}
+              key: {{ .Values.git_cloner.tokenSecretKey | default "GIT_TOKEN" | quote }}
+{{-   if .Values.git_cloner.tokenUsername }}
+        - name: GIT_USERNAME
+          value: {{ .Values.git_cloner.tokenUsername | quote }}
+{{-   end }}
+{{- end }}
+{{- if .Values.git_cloner.envFromSecret }}
+        envFrom:
+        - secretRef:
+            name: {{ .Values.git_cloner.envFromSecret | quote }}
+{{- end }}
         volumeMounts:
         - mountPath: /showroom/repo
           name: {{ .Release.Name }}-files
