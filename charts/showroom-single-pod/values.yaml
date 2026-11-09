@@ -102,13 +102,17 @@ git_cloner:
   tokenSecret: ""
   # Key within tokenSecret that holds the token.
   tokenSecretKey: "GIT_TOKEN"
+  # How the token reaches git-cloner:
+  #   "env"  - set as a literal env var via secretKeyRef. Visible in
+  #            `oc get pod -o yaml` / `kubectl describe pod`.
+  #   "file" - tokenSecret is mounted as a read-only volume and
+  #            GIT_TOKEN_FILE points at it instead, so the token never
+  #            appears in the pod spec (git-cloner v1.2.0+ required).
+  tokenMountMode: "env"
   # Username paired with the token. Leave empty to let git-cloner pick the
   # convention for the detected forge (x-access-token for GitHub, oauth2 for
   # GitLab, x-token-auth for Bitbucket, token for Gitea/Forgejo).
   tokenUsername: ""
-  # Escape hatch: name of a Secret whose keys all become env vars on git-cloner
-  # (for example raw GIT_CONFIG_* pairs). Prefer tokenSecret for private repos.
-  envFromSecret: ""
 
 antora:
   image: quay.io/rhpds/antora:v1.3.0
