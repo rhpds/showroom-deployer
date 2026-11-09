@@ -66,11 +66,11 @@ helm install my-showroom rhpds/showroom-single-pod \
   --set git_cloner.tokenSecret=my-git-token
 ----
 
-By default the token is injected into the `git-cloner` init container as a
-literal `GIT_TOKEN` env var via `secretKeyRef`. Set `git_cloner.tokenMountMode`
-to `file` to instead mount the Secret as a read-only volume and pass
-`GIT_TOKEN_FILE` pointing at it, so the token never appears in
-`oc get pod -o yaml` / `kubectl describe pod` (requires `git-cloner` v1.2.0+).
+By default the Secret is mounted into the `git-cloner` init container as a
+read-only volume and `GIT_TOKEN_FILE` points at it, so the token never
+appears in `oc get pod -o yaml` / `kubectl describe pod` (requires
+`git-cloner` v1.2.0+). Set `git_cloner.tokenMountMode` to `env` to instead
+inject the token as a literal `GIT_TOKEN` env var via `secretKeyRef`.
 Either way, `git-cloner` sends the token as an HTTP auth header scoped to the
 repository's origin -- it never appears in the repo URL or in the cloned
 repository's git config.
@@ -80,7 +80,7 @@ repository's git config.
 helm install my-showroom rhpds/showroom-single-pod \
   --set content.repoUrl=https://github.com/myorg/private-content.git \
   --set git_cloner.tokenSecret=my-git-token \
-  --set git_cloner.tokenMountMode=file
+  --set git_cloner.tokenMountMode=env
 ----
 
 |===
@@ -96,10 +96,10 @@ helm install my-showroom rhpds/showroom-single-pod \
 | `GIT_TOKEN`
 
 | `git_cloner.tokenMountMode`
-| `env` sets the token as a literal env var. `file` mounts the Secret as a
-  volume and passes `GIT_TOKEN_FILE` instead, keeping the token out of the
-  pod spec.
-| `env`
+| `file` mounts the Secret as a volume and passes `GIT_TOKEN_FILE`, keeping
+  the token out of the pod spec. `env` sets the token as a literal env var
+  instead.
+| `file`
 
 | `git_cloner.tokenUsername`
 | Username paired with the token. Empty lets `git-cloner` choose per forge
