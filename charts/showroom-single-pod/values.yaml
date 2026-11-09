@@ -94,7 +94,25 @@ wetty:
       memory: 256Mi
 
 git_cloner:
-  image: quay.io/rhpds/git-cloner:v1.1.5
+  image: quay.io/rhpds/git-cloner:v1.2.0
+  # Private content repositories.
+  # Name of an existing Secret in the release namespace holding the git token.
+  # The token is sent by git-cloner as an HTTP auth header; it is never placed
+  # in the repo URL, so it does not appear in the pod spec or in `git remote -v`.
+  tokenSecret: ""
+  # Key within tokenSecret that holds the token.
+  tokenSecretKey: "GIT_TOKEN"
+  # How the token reaches git-cloner:
+  #   "file" - tokenSecret is mounted as a read-only volume and
+  #            GIT_TOKEN_FILE points at it instead, so the token never
+  #            appears in the pod spec (git-cloner v1.2.0+ required).
+  #   "env"  - set as a literal env var via secretKeyRef. Visible in
+  #            `oc get pod -o yaml` / `kubectl describe pod`.
+  tokenMountMode: "file"
+  # Username paired with the token. Leave empty to let git-cloner pick the
+  # convention for the detected forge (x-access-token for GitHub, oauth2 for
+  # GitLab, x-token-auth for Bitbucket, token for Gitea/Forgejo).
+  tokenUsername: ""
 
 antora:
   image: quay.io/rhpds/antora:v1.3.0

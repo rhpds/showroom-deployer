@@ -50,6 +50,69 @@ helm install my-showroom rhpds/showroom-single-pod \
   --set documentation.repoUrl=https://github.com/rhpds/showroom_template_default
 ----
 
+=== Private content repositories
+
+Create a Secret in the release namespace holding the git token, then point
+`git_cloner.tokenSecret` at it:
+
+[source,bash]
+----
+oc create secret generic my-git-token \
+  --from-literal=GIT_TOKEN=ghp_xxxxxxxxxxxx \
+  -n my-showroom-namespace
+
+helm install my-showroom rhpds/showroom-single-pod \
+  --set content.repoUrl=https://github.com/myorg/private-content.git \
+  --set git_cloner.tokenSecret=my-git-token
+----
+
+By default the Secret is mounted into the `git-cloner` init container as a
+read-only volume and `GIT_TOKEN_FILE` points at it, so the token never
+appears in `oc get pod -o yaml` / `kubectl describe pod` (requires
+`git-cloner` v1.2.0+). Set `git_cloner.tokenMountMode` to `env` to instead
+inject the token as a literal `GIT_TOKEN` env var via `secretKeyRef`.
+Either way, `git-cloner` sends the token as an HTTP auth header scoped to the
+repository's origin -- it never appears in the repo URL or in the cloned
+repository's git config.
+
+[source,bash]
+----
+helm install my-showroom rhpds/showroom-single-pod \
+  --set content.repoUrl=https://github.com/myorg/private-content.git \
+  --set git_cloner.tokenSecret=my-git-token \
+  --set git_cloner.tokenMountMode=env
+----
+
+|===
+| Value | Description | Default
+
+| `git_cloner.tokenSecret`
+| Name of an existing Secret holding the token. Empty disables token auth
+  entirely -- this is the only way to authenticate `git-cloner`.
+| `""`
+
+| `git_cloner.tokenSecretKey`
+| Key within that Secret.
+| `GIT_TOKEN`
+
+| `git_cloner.tokenMountMode`
+| `file` mounts the Secret as a volume and passes `GIT_TOKEN_FILE`, keeping
+  the token out of the pod spec. `env` sets the token as a literal env var
+  instead.
+| `file`
+
+| `git_cloner.tokenUsername`
+| Username paired with the token. Empty lets `git-cloner` choose per forge
+  (`x-access-token` for GitHub, `oauth2` for GitLab, `x-token-auth` for
+  Bitbucket, `token` for Gitea/Forgejo).
+| `""`
+|===
+
+Authentication failures are not retried, so an invalid or expired token fails
+the init container immediately rather than after the full retry budget. Leave
+`tokenSecret` unset for public repositories: a malformed credential causes the
+forge to reject requests that would otherwise have succeeded anonymously.
+
 == Container Images
 
 All Showroom container images are maintained in https://github.com/rhpds/showroom-images[rhpds/showroom-images] and published to https://quay.io/organization/rhpds[quay.io/rhpds].
