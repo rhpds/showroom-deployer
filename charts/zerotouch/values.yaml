@@ -38,7 +38,7 @@ content:
   repoRef: main
   antoraPlaybook: site.yml
   zero_touch_ui_enabled: "true"
-  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.5.1/nookbag-v0.5.1.zip"
+  zero_touch_bundle: "https://github.com/rhpds/nookbag/releases/download/nookbag-v0.6.0/nookbag-v0.6.0.zip"
   enableDevMode: "false"
   nookbagEnableDevMode: "false"
   resources:
@@ -71,7 +71,7 @@ terminal:
 
 wetty:
   setup: "true"
-  image: quay.io/rhpds/wetty:v2.5
+  image: quay.io/rhpds/wetty:v3.2.1
   name: wetty
   display_name: "Login Terminal 1"
   port: 8001
@@ -179,7 +179,7 @@ setup_automation:
 
 runtime_automation:
   setup: "true"
-  image: quay.io/rhpds/zerotouch-automation:v1.3.4
+  image: quay.io/rhpds/zerotouch-automation:v1.4.0
   environment_variables: {}
   resources:
     limits:
@@ -201,7 +201,7 @@ monitoring:
       memory: 128Mi
 
 git_cloner:
-  image: quay.io/rhpds/git-cloner:v1.1.5
+  image: quay.io/rhpds/git-cloner:v1.2.0
   resources:
     limits:
       cpu: 500m
